@@ -1,0 +1,8 @@
+{
+  "name": "Repair OS Showcase",
+  "description": "The world's first and only full operating system dedicated to repair shops. A high-tech browser-based desktop environment featuring inventory management, ticket tracking, and AI-powered diagnostics.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
