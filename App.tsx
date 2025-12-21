@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { 
   LayoutDashboard, 
   Ticket, 
@@ -30,7 +30,13 @@ import {
   Users,
   FileText,
   DollarSign,
-  Search
+  Search,
+  Command,
+  ShoppingCart,
+  Megaphone,
+  BarChart3,
+  BookOpen,
+  Truck
 } from 'lucide-react';
 import { GoogleGenAI } from "@google/genai";
 
@@ -52,8 +58,17 @@ interface AppDefinition {
   component: React.FC<{ onClose: () => void }>;
 }
 
+interface IconPos {
+  id: string;
+  col: number;
+  row: number;
+}
+
 // --- Constants ---
 const PATENT_NOTICE = "Patent Pending: US 10/2025/08429-DAEMON";
+const GRID_SIZE_X = 100;
+const GRID_SIZE_Y = 110;
+const PADDING = 24;
 
 const IMAGES = {
   logo: "https://cutlzlouwruvvdldospp.supabase.co/storage/v1/object/public/marketing/repairoslogo.png",
@@ -68,7 +83,8 @@ const IMAGES = {
   tickets2: "https://cutlzlouwruvvdldospp.supabase.co/storage/v1/object/public/marketing/ticketdatabase.png",
   tickets4: "https://cutlzlouwruvvdldospp.supabase.co/storage/v1/object/public/marketing/ticketmodal.png",
   estimates: "https://cutlzlouwruvvdldospp.supabase.co/storage/v1/object/public/marketing/estimates.png",
-  buyback: "https://cutlzlouwruvvdldospp.supabase.co/storage/v1/object/public/marketing/buyback.png"
+  buyback: "https://cutlzlouwruvvdldospp.supabase.co/storage/v1/object/public/marketing/buyback.png",
+  analytics: "https://cutlzlouwruvvdldospp.supabase.co/storage/v1/object/public/marketing/analytics.png"
 };
 
 const LEMON_SQUEEZY_LINK = "https://daemoncore.lemonsqueezy.com/checkout/buy/460d2a55-e651-4839-bd7c-3bab72437301";
@@ -79,7 +95,6 @@ const Lightbox: React.FC<{ src: string; onClose: () => void; label?: string }> =
     className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/95 backdrop-blur-3xl p-4 md:p-8 animate-in fade-in duration-300 overflow-hidden"
     onClick={onClose}
   >
-    {/* Dynamic Close Button */}
     <button 
       onClick={onClose}
       className="absolute top-6 right-6 md:top-10 md:right-10 z-[100001] p-5 bg-white/10 hover:bg-red-500/80 text-white rounded-3xl transition-all border border-white/20 group shadow-2xl"
@@ -97,11 +112,9 @@ const Lightbox: React.FC<{ src: string; onClose: () => void; label?: string }> =
           className="w-full h-auto max-h-[85vh] object-contain" 
           alt="System Preview" 
         />
-        {/* Technical Hud Overlay */}
         <div className="absolute top-0 left-0 w-full h-full pointer-events-none border-[20px] border-black/10"></div>
       </div>
       
-      {/* Label Metadata */}
       <div className="mt-8 flex flex-col items-center gap-3">
         <span className="text-[12px] font-black text-white/50 uppercase tracking-[0.8em] animate-pulse text-center">
           {label || "SYSTEM INTERFACE PIPELINE // ADMINISTRATOR VIEW"}
@@ -116,20 +129,75 @@ const Lightbox: React.FC<{ src: string; onClose: () => void; label?: string }> =
   </div>
 );
 
-// --- UI Helper Components ---
+// --- Draggable Icon Component ---
+const DesktopIcon: React.FC<{ 
+  app: AppDefinition; 
+  pos: { col: number; row: number };
+  onDragEnd: (id: string, col: number, row: number) => void;
+  onClick: () => void;
+}> = ({ app, pos, onDragEnd, onClick }) => {
+  const [dragging, setDragging] = useState(false);
+  const [offset, setOffset] = useState({ x: 0, y: 0 });
 
-const DesktopIcon: React.FC<{ app: AppDefinition; onClick: () => void }> = ({ app, onClick }) => (
-  <button 
-    onClick={onClick}
-    className="group flex flex-col items-center gap-1 w-20 p-2 transition-all hover:bg-white/10 rounded-xl border border-transparent hover:border-white/20"
-  >
-    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-white transition-transform group-active:scale-95 shadow-lg bg-gradient-to-br ${app.color}`}>
-      {React.cloneElement(app.icon as React.ReactElement<any>, { size: 24 })}
+  const handleMouseDown = (e: React.MouseEvent) => {
+    setDragging(true);
+    const rect = e.currentTarget.getBoundingClientRect();
+    setOffset({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    });
+    e.preventDefault();
+  };
+
+  useEffect(() => {
+    if (!dragging) return;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      // Handled visually by translation if we wanted real-time follow, 
+      // but snap-to-grid on release is cleaner for Windows behavior.
+    };
+
+    const handleMouseUp = (e: MouseEvent) => {
+      setDragging(false);
+      const col = Math.round((e.clientX - PADDING - offset.x) / GRID_SIZE_X);
+      const row = Math.round((e.clientY - PADDING - offset.y) / GRID_SIZE_Y);
+      onDragEnd(app.id, Math.max(0, col), Math.max(0, row));
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', handleMouseUp);
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [dragging, offset, app.id, onDragEnd]);
+
+  return (
+    <div 
+      onMouseDown={handleMouseDown}
+      onClick={(e) => {
+        // If we were dragging, don't trigger click
+        if (dragging) return;
+        onClick();
+      }}
+      className={`absolute transition-all duration-300 group flex flex-col items-center gap-1 w-20 p-2 cursor-pointer select-none rounded-xl border border-transparent hover:bg-white/10 hover:border-white/20 active:scale-95 ${dragging ? 'opacity-50 z-[1000] scale-110 !transition-none' : 'z-10'}`}
+      style={{
+        left: PADDING + pos.col * GRID_SIZE_X,
+        top: PADDING + pos.row * GRID_SIZE_Y,
+        width: 80,
+      }}
+    >
+      <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-white transition-transform shadow-lg bg-gradient-to-br ${app.color}`}>
+        {React.cloneElement(app.icon as React.ReactElement<any>, { size: 24 })}
+      </div>
+      <span className="text-[10px] font-semibold text-white/90 text-center drop-shadow-md font-poppins pointer-events-none">
+        {app.name}
+      </span>
     </div>
-    <span className="text-[10px] font-semibold text-white/90 text-center drop-shadow-md select-none font-poppins">{app.name}</span>
-  </button>
-);
+  );
+};
 
+// --- Window Component ---
 const Window: React.FC<{
   window: WindowState;
   app: AppDefinition;
@@ -262,6 +330,71 @@ const DashboardInfo: React.FC = () => (
         Command your entire shop from a single, high-fidelity dashboard. Track revenue, active tickets, and client volume with native-speed analytics. 
       </p>
     </div>
+  </FeatureSplitView>
+);
+
+const POSInfo: React.FC = () => (
+  <FeatureSplitView 
+    title="Omnichannel POS" 
+    icon={<ShoppingCart />} 
+    colorClass="from-amber-500 to-orange-600" 
+    screenshots={[IMAGES.multitask]} 
+    highlights={["Split Payment Logic", "Integrated Card Reader API", "Offline Mode Redundancy"]}
+  >
+    <p>Our Point of Sale terminal is designed for high-velocity environments. Process cash, card, and finance payments with zero friction.</p>
+    <p>Automatically calculates taxes based on region and syncs directly with your Inventory Vault for live stock deductions.</p>
+  </FeatureSplitView>
+);
+
+const MarketingInfo: React.FC = () => (
+  <FeatureSplitView 
+    title="Marketing Hub" 
+    icon={<Megaphone />} 
+    colorClass="from-indigo-600 to-purple-600" 
+    screenshots={[IMAGES.nexus]} 
+    highlights={["Automated Google Review Triggers", "SMS Blast Pipeline", "Email Retention Campaigns"]}
+  >
+    <p>Grow your business while you sleep. Set automated SMS triggers to ask for reviews the moment a repair is picked up.</p>
+    <p>Manage your entire customer database and run retention campaigns based on repair history and device type.</p>
+  </FeatureSplitView>
+);
+
+const AnalyticsInfo: React.FC = () => (
+  <FeatureSplitView 
+    title="Analytics DeepDive" 
+    icon={<BarChart3 />} 
+    colorClass="from-emerald-500 to-cyan-600" 
+    screenshots={[IMAGES.analytics]} 
+    highlights={["Profitability Heatmaps", "Labor Margin Tracking", "Technician Efficiency Metrics"]}
+  >
+    <p>Turn your shop data into a competitive advantage. Visualize your margins and find exactly where your shop is losing money.</p>
+    <p>Track technician performance in real-time and identify your most profitable repair categories using the high-fidelity analytics dashboard.</p>
+  </FeatureSplitView>
+);
+
+const WikiInfo: React.FC = () => (
+  <FeatureSplitView 
+    title="The Vault: Guides" 
+    icon={<BookOpen />} 
+    colorClass="from-slate-600 to-slate-800" 
+    screenshots={[IMAGES.nexus]} 
+    highlights={["Proprietary Motherboard Schematics", "Internal Repair Protocols", "Interactive Part Search"]}
+  >
+    <p>Centralize your shop's knowledge. Store repair guides, schematics, and internal SOPs in a secure, searchable wiki.</p>
+    <p>Perfect for onboarding new technicians and ensuring every repair meets your shop's premium standards.</p>
+  </FeatureSplitView>
+);
+
+const SupplierInfo: React.FC = () => (
+  <FeatureSplitView 
+    title="Supplier Portal" 
+    icon={<Truck />} 
+    colorClass="from-rose-600 to-pink-600" 
+    screenshots={[IMAGES.inventory]} 
+    highlights={["Global Price Comparison", "Instant Bulk Orders", "Defect Return Tracking"]}
+  >
+    <p>Connect directly to major parts suppliers. Compare prices across multiple vendors and order restocks with a single click.</p>
+    <p>Track RMAs and defective parts directly from the dashboard to ensure you never pay for bad stock.</p>
   </FeatureSplitView>
 );
 
@@ -412,9 +545,14 @@ const APPS: AppDefinition[] = [
   { id: 'dashboard', name: 'Dashboard', icon: <LayoutDashboard />, color: 'from-blue-600 to-indigo-600', component: DashboardInfo },
   { id: 'tickets', name: 'Tickets', icon: <Ticket />, color: 'from-pink-600 to-rose-600', component: TicketInfo },
   { id: 'inventory', name: 'Inventory', icon: <Package />, color: 'from-emerald-600 to-teal-600', component: InventoryInfo },
+  { id: 'pos', name: 'Terminal POS', icon: <ShoppingCart />, color: 'from-amber-400 to-orange-600', component: POSInfo },
+  { id: 'marketing', name: 'Marketing', icon: <Megaphone />, color: 'from-indigo-600 to-purple-600', component: MarketingInfo },
+  { id: 'analytics', name: 'Analytics', icon: <BarChart3 />, color: 'from-emerald-500 to-cyan-600', component: AnalyticsInfo },
   { id: 'employees', name: 'Personnel', icon: <Users />, color: 'from-slate-600 to-indigo-800', component: EmployeeConsoleInfo },
   { id: 'estimates', name: 'Estimates', icon: <FileText />, color: 'from-amber-600 to-orange-700', component: EstimatesInfo },
   { id: 'buyback', name: 'Buy Back', icon: <DollarSign />, color: 'from-teal-600 to-cyan-700', component: BuyBackInfo },
+  { id: 'wiki', name: 'Repair Wiki', icon: <BookOpen />, color: 'from-slate-600 to-slate-800', component: WikiInfo },
+  { id: 'suppliers', name: 'Supplier Hub', icon: <Truck />, color: 'from-rose-600 to-pink-600', component: SupplierInfo },
   { id: 'daemon', name: 'Daemon AI', icon: <Bot />, color: 'from-purple-600 to-fuchsia-600', component: DaemonAI },
   { id: 'nexus', name: 'Nexus Store', icon: <Store />, color: 'from-cyan-600 to-blue-600', component: NexusInfo },
   { id: 'settings', name: 'Setup', icon: <Settings />, color: 'from-gray-600 to-slate-600', component: PersonnelInfo },
@@ -620,7 +758,51 @@ const App: React.FC = () => {
   const [nextZIndex, setNextZIndex] = useState(10);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [isBooting, setIsBooting] = useState(false);
+  const [showImmersiveModal, setShowImmersiveModal] = useState(false);
+  const [viewportSize, setViewportSize] = useState({ width: window.innerWidth, height: window.innerHeight });
+  const [iconPositions, setIconPositions] = useState<IconPos[]>([]);
   
+  // Track window resize for reflow
+  useEffect(() => {
+    const handleResize = () => setViewportSize({ width: window.innerWidth, height: window.innerHeight });
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Compute Grid Capacity
+  const maxRows = useMemo(() => Math.floor((viewportSize.height - PADDING * 2) / GRID_SIZE_Y), [viewportSize.height]);
+  
+  // Initialize and Reflow Icons
+  useEffect(() => {
+    if (viewMode !== 'os') return;
+
+    setIconPositions(prev => {
+      const newPositions = [...prev];
+      let col = 0;
+      let row = 0;
+
+      APPS.forEach((app) => {
+        const existing = newPositions.find(p => p.id === app.id);
+        if (!existing) {
+          newPositions.push({ id: app.id, col, row });
+          row++;
+          if (row >= maxRows) {
+            row = 0;
+            col++;
+          }
+        } else {
+          // Check if icon is out of bounds due to resize
+          // If we want Windows-like reflow, we could force them back into valid rows/cols here
+        }
+      });
+      return newPositions;
+    });
+  }, [viewMode, maxRows]);
+
+  const handleDragEnd = (id: string, col: number, row: number) => {
+    setIconPositions(prev => prev.map(p => p.id === id ? { ...p, col, row } : p));
+  };
+
   useEffect(() => { 
     const timer = setInterval(() => setCurrentTime(new Date()), 1000); 
     return () => clearInterval(timer); 
@@ -631,6 +813,7 @@ const App: React.FC = () => {
     setTimeout(() => { 
       setIsBooting(false); 
       setViewMode('os'); 
+      setShowImmersiveModal(true);
       openApp('dashboard'); 
     }, 2500); 
   };
@@ -673,40 +856,80 @@ const App: React.FC = () => {
     <div className="h-screen w-screen relative overflow-hidden bg-[#050505] font-poppins">
       <div className="absolute inset-0 bg-gradient-to-br from-blue-950/40 via-black to-purple-950/40 z-0"></div>
       
-      <div className="absolute top-16 right-16 z-10 text-right pointer-events-none">
+      {/* Immersive Experience Modal (REFINED) */}
+      {showImmersiveModal && (
+        <div className="fixed inset-0 z-[100000] flex items-center justify-center bg-black/40 backdrop-blur-3xl animate-in fade-in duration-500">
+           <div className="max-w-xl w-full mx-6 glass p-12 rounded-[48px] border border-white/20 shadow-[0_0_100px_rgba(59,130,246,0.3)] flex flex-col items-center text-center animate-in zoom-in slide-in-from-bottom-10 duration-700">
+              <div className="w-24 h-24 rounded-[32px] bg-blue-600 flex items-center justify-center mb-10 shadow-2xl shadow-blue-500/50">
+                <Monitor size={48} className="text-white" />
+              </div>
+              <h3 className="text-4xl font-black text-white uppercase tracking-tighter mb-6 leading-none">NATIVE DESKTOP<br/><span className="text-blue-500">ENGAGED</span></h3>
+              <p className="text-xl text-white/40 font-light leading-relaxed mb-10">
+                For the ultimate command center experience, we recommend entering <span className="text-white font-bold italic">Immersive Mode.</span>
+              </p>
+              
+              <div className="flex flex-col items-center gap-4 mb-12">
+                 <div className="bg-white text-black px-10 py-6 rounded-3xl font-black text-5xl shadow-xl border-b-8 border-gray-300">F11</div>
+                 <p className="text-[12px] font-black uppercase tracking-[0.5em] text-blue-400 mt-4">UNLEASH FULL PIXEL DENSITY</p>
+              </div>
+
+              <button 
+                onClick={() => setShowImmersiveModal(false)}
+                className="w-full bg-white text-black py-6 rounded-3xl font-black uppercase text-lg tracking-[0.2em] hover:bg-blue-600 hover:text-white transition-all shadow-2xl active:scale-95"
+              >
+                READY TO OPERATE
+              </button>
+           </div>
+        </div>
+      )}
+
+      {/* Clock Display */}
+      <div className="absolute top-16 right-16 z-10 text-right pointer-events-none select-none">
         <div className="text-[120px] font-black leading-none tracking-tighter text-white/90 uppercase">
           {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false })}
         </div>
         <div className="text-lg font-bold tracking-[0.4em] text-white/20 uppercase mt-4 mb-10">
           {currentTime.toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric' })}
         </div>
-
         <div className="pointer-events-auto flex flex-col items-end gap-4 animate-in fade-in slide-in-from-right duration-1000 delay-500">
            <a 
             href={LEMON_SQUEEZY_LINK}
             target="_blank"
             rel="noopener noreferrer"
-            className="group relative flex flex-col items-center gap-1 bg-white text-black px-10 py-5 rounded-2xl font-black text-2xl tracking-tighter uppercase transition-all hover:bg-blue-600 hover:text-white hover:-translate-y-1 shadow-[0_0_50px_rgba(255,255,255,0.2)] hover:shadow-blue-500/50"
+            className="group relative flex flex-col items-center gap-1 bg-white text-black px-10 py-5 rounded-2xl font-black text-2xl tracking-tighter uppercase transition-all hover:bg-blue-600 hover:text-white hover:-translate-y-1 shadow-[0_0_50px_rgba(255,255,255,0.2)]"
            >
-              <span className="flex items-center gap-3">
-                <Gift className="group-hover:rotate-12 transition-transform" size={28} />
-                UPGRADE YOUR SHOP
-              </span>
-              <div className="absolute -top-3 -left-3 bg-red-600 text-white text-[10px] font-black px-3 py-1 rounded-full border-2 border-black rotate-[-10deg] animate-bounce">
-                OFFER
-              </div>
+              <span className="flex items-center gap-3"><Gift className="group-hover:rotate-12 transition-transform" size={28} />UPGRADE YOUR SHOP</span>
            </a>
         </div>
       </div>
 
-      <div className="absolute top-16 left-16 z-10 grid grid-cols-2 gap-x-12 gap-y-4">
-        {APPS.map(app => ( <DesktopIcon key={app.id} app={app} onClick={() => openApp(app.id)} /> ))}
-        <button onClick={() => setViewMode('showcase')} className="group flex flex-col items-center gap-2 w-20 p-2 transition-all hover:bg-white/10 rounded-2xl text-white/20 hover:text-white col-span-2 mt-4">
+      {/* Movable Desktop Icons Container */}
+      <div className="absolute inset-0 z-10 overflow-hidden">
+        {iconPositions.map(pos => {
+          const app = APPS.find(a => a.id === pos.id);
+          if (!app) return null;
+          return (
+            <DesktopIcon 
+              key={app.id} 
+              app={app} 
+              pos={pos} 
+              onDragEnd={handleDragEnd}
+              onClick={() => openApp(app.id)}
+            />
+          );
+        })}
+        
+        {/* Fixed Exit Icon Bottom-Left of Grid or manually placed */}
+        <div 
+          onClick={() => setViewMode('showcase')}
+          className="absolute bottom-16 left-16 z-10 group flex flex-col items-center gap-2 w-20 p-2 transition-all hover:bg-white/10 rounded-2xl text-white/20 hover:text-white cursor-pointer"
+        >
           <div className="w-12 h-12 rounded-2xl border border-white/10 flex items-center justify-center"><LogOut size={24} /></div>
-          <span className="text-[10px] font-bold uppercase tracking-widest">Exit Terminal</span>
-        </button>
+          <span className="text-[10px] font-bold uppercase tracking-widest">Exit OS</span>
+        </div>
       </div>
 
+      {/* Windows Layer */}
       <div className="absolute inset-0 pointer-events-none z-20">
         {windows.map(win => {
           const app = APPS.find(a => a.id === win.id);
@@ -721,23 +944,20 @@ const App: React.FC = () => {
         })}
       </div>
 
+      {/* Footer Branding */}
       <div className="absolute bottom-4 left-6 z-[100] pointer-events-none opacity-40 flex flex-col gap-1">
-        <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-white/30">
-          * Simulated dummy environment meant to look like Repair OS. In the real version the icons are moveable.
-        </p>
-        <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-white/50">
-          {PATENT_NOTICE}
-        </p>
+        <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-white/50">{PATENT_NOTICE}</p>
       </div>
 
-      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-50">
+      {/* Taskbar Dock */}
+      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-[500]">
         <div className="glass px-6 py-4 rounded-[32px] flex items-center gap-3 lg:gap-6 border border-white/10 shadow-2xl overflow-x-auto max-w-[90vw]">
           <div className="flex items-center gap-2">
              {APPS.map(app => (
                <button 
                 key={app.id} 
                 onClick={() => openApp(app.id)} 
-                className={`p-3 lg:p-4 rounded-2xl transition-all relative group ${windows.some(w => w.id === app.id) ? 'bg-white/10 text-white' : 'text-white/40 hover:bg-white/5 hover:text-white'}`}
+                className={`p-3 lg:p-4 rounded-2xl transition-all relative group shrink-0 ${windows.some(w => w.id === app.id) ? 'bg-white/10 text-white' : 'text-white/40 hover:bg-white/5 hover:text-white'}`}
                >
                  {React.cloneElement(app.icon as React.ReactElement<any>, { size: 22 })}
                  {windows.some(w => w.id === app.id) && <div className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-white rounded-full"></div>}
@@ -746,7 +966,7 @@ const App: React.FC = () => {
           </div>
           <div className="w-px h-10 bg-white/10 shrink-0"></div>
           <div className="flex items-center gap-3 lg:gap-6 px-2">
-             <button className="text-white/40 hover:text-white transition-colors"><Maximize2 size={22} /></button>
+             <button className="text-white/40 hover:text-white transition-colors" onClick={() => setShowImmersiveModal(true)}><Maximize2 size={22} /></button>
              <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center font-black text-[11px] shadow-lg shrink-0">TO</div>
           </div>
         </div>
