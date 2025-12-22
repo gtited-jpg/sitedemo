@@ -38,7 +38,12 @@ import {
   Truck,
   Library,
   Coins,
-  Scale
+  Scale,
+  Award,
+  ShieldCheck,
+  Star,
+  Trophy,
+  Medal
 } from 'lucide-react';
 import { GoogleGenAI } from "@google/genai";
 
@@ -128,9 +133,9 @@ const Lightbox: React.FC<{ src: string; onClose: () => void; label?: string }> =
           {label || "SYSTEM INTERFACE PIPELINE // ADMINISTRATOR VIEW"}
         </span>
         <div className="flex items-center gap-6">
-           <div className="w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.8)]"></div>
+           <div className="w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_100px_rgba(59,130,246,0.3)]"></div>
            <div className="w-48 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
-           <div className="w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.8)]"></div>
+           <div className="w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_100px_rgba(59,130,246,0.3)]"></div>
         </div>
       </div>
     </div>
@@ -557,6 +562,14 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
   const [activeLightbox, setActiveLightbox] = useState<string | null>(null);
   const [isDisclaimerOpen, setIsDisclaimerOpen] = useState(false);
 
+  const awards = [
+    { icon: <ShieldCheck size={20} />, label: "Security Verified 2025" },
+    { icon: <Trophy size={20} />, label: "Shop Choice Award" },
+    { icon: <Star size={20} />, label: "Elite Tech Choice" },
+    { icon: <Medal size={20} />, label: "Industry Gold Standard" },
+    { icon: <Globe size={20} />, label: "Universal Compliance" }
+  ];
+
   return (
     <div className="w-full bg-[#050505] text-white selection:bg-blue-500/30 overflow-y-auto h-screen scroll-smooth font-poppins">
       <nav className="fixed top-0 w-full z-[100] border-b border-white/5 bg-black/50 backdrop-blur-xl px-12 py-6 md:py-8 flex items-center justify-between">
@@ -574,7 +587,7 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
       </nav>
 
       {/* Hero */}
-      <section className="relative min-h-screen flex flex-col items-center justify-center px-10 pt-40 pb-96 overflow-hidden text-center">
+      <section className="relative min-h-screen flex flex-col items-center justify-center px-10 pt-40 pb-40 overflow-hidden text-center">
         <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.1),transparent_60%)]"></div>
         <div className="relative z-10 max-w-7xl flex flex-col items-center">
           <div className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[11px] font-bold uppercase tracking-[0.4em] mb-8 animate-pulse">
@@ -593,15 +606,25 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
             Not just another POS. Repair OS is a complete desktop ecosystem that replaces your fragmented tools with a single, high-fidelity operating environment.
           </p>
           
-          <div className="flex flex-col md:flex-row items-center justify-center gap-8 mb-20">
-            <button onClick={onLaunch} className="w-full md:w-auto bg-blue-600 hover:bg-blue-500 text-white px-14 py-6 rounded-3xl font-extrabold text-xl transition-all flex items-center justify-center gap-5 group shadow-2xl shadow-blue-500/20 uppercase">
+          <div className="flex flex-col items-center gap-14">
+            <button onClick={onLaunch} className="w-full md:w-auto bg-blue-600 hover:bg-blue-500 text-white px-14 py-7 rounded-[32px] font-extrabold text-xl transition-all flex items-center justify-center gap-5 group shadow-2xl shadow-blue-500/20 uppercase active:scale-95">
               LAUNCH DEMO <ArrowRight className="group-hover:translate-x-2 transition-transform" />
             </button>
+
+            {/* Awards Row - Explicitly Visible */}
+            <div className="flex flex-wrap justify-center items-center gap-4 md:gap-6 max-w-5xl pt-8 border-t border-white/5">
+              {awards.map((award, idx) => (
+                <div key={idx} className="flex items-center gap-3 px-5 py-3 glass rounded-2xl border border-white/5 group hover:border-white/20 transition-all hover:-translate-y-1 bg-white/5 backdrop-blur-md">
+                  <div className="text-blue-500 group-hover:scale-110 transition-transform">{award.icon}</div>
+                  <span className="text-[11px] font-black uppercase tracking-[0.2em] text-white/60 group-hover:text-white transition-colors whitespace-nowrap">{award.label}</span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* One Membership Section (Restored) */}
+      {/* One Membership Section */}
       <section id="everything" className="py-40 border-y border-white/5 bg-white/[0.01]">
         <div className="max-w-7xl mx-auto px-10">
           <div className="grid md:grid-cols-2 gap-24 items-center">
@@ -639,7 +662,7 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
         </div>
       </section>
 
-      {/* Compatibility Section (Restored) */}
+      {/* Compatibility Section */}
       <section id="compatibility" className="py-40 relative overflow-hidden bg-black text-center">
          <div className="max-w-6xl mx-auto px-10">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-bold uppercase tracking-widest mb-10">
@@ -907,7 +930,7 @@ const App: React.FC = () => {
           {currentTime.toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric' })}
         </div>
 
-        {/* RESTORED UPGRADE BUTTON */}
+        {/* UPGRADE BUTTON */}
         <div className="pointer-events-auto flex flex-col items-end gap-4 animate-in fade-in slide-in-from-right duration-1000 delay-500">
            <a 
             href={LEMON_SQUEEZY_LINK}
