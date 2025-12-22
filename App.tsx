@@ -37,7 +37,8 @@ import {
   BookOpen,
   Truck,
   Library,
-  Coins
+  Coins,
+  Scale
 } from 'lucide-react';
 import { GoogleGenAI } from "@google/genai";
 
@@ -554,6 +555,7 @@ const APPS: AppDefinition[] = [
 
 const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
   const [activeLightbox, setActiveLightbox] = useState<string | null>(null);
+  const [isDisclaimerOpen, setIsDisclaimerOpen] = useState(false);
 
   return (
     <div className="w-full bg-[#050505] text-white selection:bg-blue-500/30 overflow-y-auto h-screen scroll-smooth font-poppins">
@@ -588,7 +590,7 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
           </h2>
 
           <p className="text-xl md:text-2xl text-white/40 max-w-3xl mx-auto mb-16 font-light leading-relaxed">
-            Not just another POS. Repair OS is a complete desktop ecosystem that replaces your disparate tools with a single, high-fidelity operating environment.
+            Not just another POS. Repair OS is a complete desktop ecosystem that replaces your fragmented tools with a single, high-fidelity operating environment.
           </p>
           
           <div className="flex flex-col md:flex-row items-center justify-center gap-8 mb-20">
@@ -709,12 +711,73 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
               </div>
             </div>
           </div>
-          <p className="text-center text-white/20 text-[11px] font-bold uppercase tracking-[0.5em] mt-32">© 2025 Repair OS by DaemonCore • {PATENT_NOTICE}</p>
+          
+          <div className="max-w-7xl mx-auto border-t border-white/5 pt-16 mt-32">
+            <div className="flex flex-col md:flex-row justify-between items-center gap-8">
+              <div className="flex flex-col items-center md:items-start gap-4">
+                <button 
+                  onClick={() => setIsDisclaimerOpen(true)}
+                  className="text-[10px] text-white/20 hover:text-white transition-colors uppercase tracking-[0.2em] font-bold flex items-center gap-2"
+                >
+                  <Scale size={14} /> Legal Disclaimer
+                </button>
+              </div>
+              <div className="flex flex-col items-center md:items-end gap-2 shrink-0">
+                <a href="https://daemoncore.app" target="_blank" className="text-blue-500 hover:text-white transition-colors font-black text-[11px] uppercase tracking-[0.3em]">DaemonCore.app</a>
+                <a href="mailto:contact@daemoncore.app" className="text-white/40 hover:text-white transition-colors text-[10px] font-bold uppercase tracking-widest">Inquiries: contact@daemoncore.app</a>
+              </div>
+            </div>
+            <p className="text-center text-white/20 text-[11px] font-bold uppercase tracking-[0.5em] mt-16">
+              © 2025 Repair OS by DaemonCore • {PATENT_NOTICE}
+            </p>
+          </div>
         </div>
       </section>
 
       {/* Showcase Lightbox */}
       {activeLightbox && <Lightbox src={activeLightbox} onClose={() => setActiveLightbox(null)} label="SYSTEM CORE PREVIEW // CLICK TO DISMISS" />}
+
+      {/* Legal Disclaimer Modal */}
+      {isDisclaimerOpen && (
+        <div 
+          className="fixed inset-0 z-[1000000] flex items-center justify-center bg-black/90 backdrop-blur-3xl p-6 animate-in fade-in duration-300"
+          onClick={() => setIsDisclaimerOpen(false)}
+        >
+          <div 
+            className="max-w-2xl w-full glass p-10 md:p-14 rounded-[48px] border border-white/20 shadow-[0_0_100px_rgba(255,255,255,0.05)] relative animate-in zoom-in slide-in-from-bottom-10 duration-500"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button 
+              onClick={() => setIsDisclaimerOpen(false)}
+              className="absolute top-8 right-8 p-3 hover:bg-white/10 rounded-2xl text-white/40 hover:text-white transition-all"
+            >
+              <X size={24} />
+            </button>
+            <div className="flex flex-col items-center text-center">
+              <div className="w-16 h-16 rounded-3xl bg-white/5 border border-white/10 flex items-center justify-center mb-8">
+                <Scale className="text-white/50" size={32} />
+              </div>
+              <h3 className="text-3xl font-black text-white uppercase tracking-tighter mb-8 leading-none">OPERATOR<br/><span className="text-white/40">AGREEMENT</span></h3>
+              <div className="w-12 h-px bg-gradient-to-r from-transparent via-blue-500 to-transparent mb-8"></div>
+              <p className="text-[11px] md:text-[13px] text-white/60 uppercase tracking-[0.15em] leading-[2] font-medium text-justify">
+                Legal Disclaimer: Repair OS is a proprietary interface for professional repair environments. 
+                DaemonCore provides this platform "as is" without express or implied warranties. 
+                Mission-critical operations and hardware handling remain the sole responsibility of the technician. 
+                DaemonCore is not liable for business interruptions, data integrity issues, or hardware outcomes resulting from software utilization. 
+                Usage of this OS constitutes acceptance of these operational boundaries.
+              </p>
+              <div className="mt-12 w-full">
+                <button 
+                  onClick={() => setIsDisclaimerOpen(false)}
+                  className="w-full bg-white text-black py-5 rounded-2xl font-black uppercase text-xs tracking-[0.3em] hover:bg-blue-600 hover:text-white transition-all shadow-2xl active:scale-95"
+                >
+                  Acknowledge & Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
