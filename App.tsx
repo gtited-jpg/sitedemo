@@ -36,7 +36,8 @@ import {
   BarChart3,
   BookOpen,
   Truck,
-  Library
+  Library,
+  Coins
 } from 'lucide-react';
 import { GoogleGenAI } from "@google/genai";
 
@@ -83,10 +84,14 @@ const IMAGES = {
   tickets1: "https://cutlzlouwruvvdldospp.supabase.co/storage/v1/object/public/marketing/tickets.png",
   tickets2: "https://cutlzlouwruvvdldospp.supabase.co/storage/v1/object/public/marketing/ticketdatabase.png",
   tickets4: "https://cutlzlouwruvvdldospp.supabase.co/storage/v1/object/public/marketing/ticketmodal.png",
-  estimates: "https://cutlzlouwruvvdldospp.supabase.co/storage/v1/object/public/marketing/estimates.png",
+  estimates: "https://cutlzlouwruvvdldospp.supabase.co/storage/v1/object/public/marketing/estimates2.png",
   buyback: "https://cutlzlouwruvvdldospp.supabase.co/storage/v1/object/public/marketing/buyback.png",
   analytics: "https://cutlzlouwruvvdldospp.supabase.co/storage/v1/object/public/marketing/analytics.png",
-  guide: "https://cutlzlouwruvvdldospp.supabase.co/storage/v1/object/public/marketing/guide.png"
+  guide: "https://cutlzlouwruvvdldospp.supabase.co/storage/v1/object/public/marketing/guide.png",
+  payroll1: "https://cutlzlouwruvvdldospp.supabase.co/storage/v1/object/public/marketing/payrollROS.png",
+  payroll2: "https://cutlzlouwruvvdldospp.supabase.co/storage/v1/object/public/marketing/payroll2ROS.png",
+  payroll3: "https://cutlzlouwruvvdldospp.supabase.co/storage/v1/object/public/marketing/payroll3ROS.png",
+  pos: "https://cutlzlouwruvvdldospp.supabase.co/storage/v1/object/public/marketing/posROS.png"
 };
 
 const LEMON_SQUEEZY_LINK = "https://daemoncore.lemonsqueezy.com/checkout/buy/460d2a55-e651-4839-bd7c-3bab72437301";
@@ -311,7 +316,7 @@ const POSInfo: React.FC = () => (
     title="Terminal POS" 
     icon={<ShoppingCart />} 
     colorClass="from-amber-500 to-orange-600" 
-    screenshots={[IMAGES.multitask]} 
+    screenshots={[IMAGES.pos]} 
     highlights={["Split Payment Logic", "Integrated Card Reader API", "Offline Mode Redundancy"]}
   >
     <p>Our Point of Sale terminal is designed for high-velocity environments. Process cash, card, and finance payments with zero friction.</p>
@@ -463,6 +468,18 @@ const PersonnelInfo: React.FC = () => (
   </FeatureSplitView>
 );
 
+const PayrollInfo: React.FC = () => (
+  <FeatureSplitView 
+    title="Payroll" 
+    icon={<Coins />} 
+    colorClass="from-green-600 to-emerald-700" 
+    screenshots={[IMAGES.payroll1, IMAGES.payroll2, IMAGES.payroll3]} 
+    highlights={["Automated Tax Calculations", "Direct Deposit Integration", "Employee Commission Tracking", "Timesheet Verification Matrix"]}
+  >
+    <p>Manage your shop's payroll with surgical precision. Track commissions, bonuses, and hourly rates automatically based on ticket completions and clock-in logs.</p>
+  </FeatureSplitView>
+);
+
 const DaemonAI: React.FC = () => {
   const [messages, setMessages] = useState<{ role: string; content: string }[]>([{ role: 'ai', content: 'Greetings, Administrator. I am DAEMON, your neural interface for RepairOS. How may I assist with shop operations today?' }]);
   const [input, setInput] = useState('');
@@ -519,13 +536,14 @@ const APPS: AppDefinition[] = [
   { id: 'tickets', name: 'Tickets', icon: <Ticket />, color: 'from-pink-600 to-rose-600', component: TicketInfo },
   { id: 'inventory', name: 'Inventory', icon: <Package />, color: 'from-emerald-600 to-teal-600', component: InventoryInfo },
   { id: 'pos', name: 'Terminal POS', icon: <ShoppingCart />, color: 'from-amber-400 to-orange-600', component: POSInfo },
+  { id: 'payroll', name: 'Payroll', icon: <Coins />, color: 'from-green-600 to-emerald-700', component: PayrollInfo },
   { id: 'marketing', name: 'Marketing', icon: <Megaphone />, color: 'from-indigo-600 to-purple-600', component: MarketingInfo },
   { id: 'analytics', name: 'Analytics', icon: <BarChart3 />, color: 'from-emerald-500 to-cyan-600', component: AnalyticsInfo },
   { id: 'employees', name: 'Personnel', icon: <Users />, color: 'from-slate-600 to-indigo-800', component: EmployeeConsoleInfo },
   { id: 'estimates', name: 'Estimates', icon: <FileText />, color: 'from-amber-600 to-orange-700', component: EstimatesInfo },
   { id: 'buyback', name: 'Buy Back', icon: <DollarSign />, color: 'from-teal-600 to-cyan-700', component: BuyBackInfo },
   { id: 'wiki', name: 'Repair Wiki', icon: <BookOpen />, color: 'from-slate-600 to-slate-800', component: WikiInfo },
-  { id: 'guide', name: 'RepairOS Guide', icon: <Library />, imageIcon: IMAGES.guide, color: 'from-blue-700 to-blue-900', component: GuideInfo },
+  { id: 'guide', name: 'RepairOS Guide', icon: <Library />, color: 'from-blue-700 to-blue-900', component: GuideInfo },
   { id: 'suppliers', name: 'Supplier Hub', icon: <Truck />, color: 'from-rose-600 to-pink-600', component: SupplierInfo },
   { id: 'daemon', name: 'Daemon AI', icon: <Bot />, color: 'from-purple-600 to-fuchsia-600', component: DaemonAI },
   { id: 'nexus', name: 'Nexus Store', icon: <Store />, color: 'from-cyan-600 to-blue-600', component: NexusInfo },
