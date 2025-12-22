@@ -757,6 +757,16 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
         </div>
       </section>
 
+      {/* Demonstration Sandbox Notice */}
+      <div className="fixed bottom-10 left-10 z-[100] pointer-events-none select-none hidden lg:block">
+        <div className="flex items-center gap-3 bg-black/50 backdrop-blur-md px-4 py-2 rounded-full border border-white/5">
+          <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></div>
+          <span className="text-[9px] font-black uppercase tracking-[0.4em] text-white/30 whitespace-nowrap">
+            SYSTEM SANDBOX // DEMONSTRATION ENVIRONMENT ONLY
+          </span>
+        </div>
+      </div>
+
       {/* Showcase Lightbox */}
       {activeLightbox && <Lightbox src={activeLightbox} onClose={() => setActiveLightbox(null)} label="SYSTEM CORE PREVIEW // CLICK TO DISMISS" />}
 
