@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { 
   LayoutDashboard, 
@@ -37,7 +36,6 @@ import {
   BarChart3,
   BookOpen,
   Truck,
-  HelpCircle,
   Library
 } from 'lucide-react';
 import { GoogleGenAI } from "@google/genai";
@@ -156,10 +154,6 @@ const DesktopIcon: React.FC<{
   useEffect(() => {
     if (!dragging) return;
 
-    const handleMouseMove = (e: MouseEvent) => {
-      // Snap-to-grid preview logic could go here
-    };
-
     const handleMouseUp = (e: MouseEvent) => {
       setDragging(false);
       const col = Math.round((e.clientX - PADDING - offset.x) / GRID_SIZE_X);
@@ -167,10 +161,8 @@ const DesktopIcon: React.FC<{
       onDragEnd(app.id, Math.max(0, col), Math.max(0, row));
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('mouseup', handleMouseUp);
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
     };
   }, [dragging, offset, app.id, onDragEnd]);
@@ -518,14 +510,6 @@ const DaemonAI: React.FC = () => {
           <button onClick={handleSend} disabled={isTyping} className="p-4 bg-purple-600 rounded-2xl text-white hover:bg-purple-500 transition-colors"><ArrowRight size={20} /></button>
         </div>
       </div>
-      <div className="hidden lg:flex w-1/2 p-6 items-center justify-center bg-black">
-        <div className="relative w-full h-full rounded-2xl overflow-hidden border border-purple-500/20 shadow-2xl">
-          <img src={IMAGES.neural} className="w-full h-full object-contain" alt="DAEMON AI System Interface" />
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/20 pointer-events-none">
-            <Bot size={100} className="text-purple-500/20 animate-pulse mb-6" />
-          </div>
-        </div>
-      </div>
     </div>
   );
 };
@@ -548,7 +532,7 @@ const APPS: AppDefinition[] = [
   { id: 'settings', name: 'Setup', icon: <Settings />, color: 'from-gray-600 to-slate-600', component: PersonnelInfo },
 ];
 
-// --- Landing Page ---
+// --- Showcase Component ---
 
 const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
   const [activeLightbox, setActiveLightbox] = useState<string | null>(null);
@@ -556,16 +540,10 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
   return (
     <div className="w-full bg-[#050505] text-white selection:bg-blue-500/30 overflow-y-auto h-screen scroll-smooth font-poppins">
       <nav className="fixed top-0 w-full z-[100] border-b border-white/5 bg-black/50 backdrop-blur-xl px-12 py-6 md:py-8 flex items-center justify-between">
-        <div className="flex items-center gap-3 group cursor-pointer">
-          <div className="flex flex-col">
-            <span className="text-2xl md:text-3xl font-black tracking-tighter leading-none uppercase">
-              REPAIR<span className="text-blue-500">OS</span>
-            </span>
-            <span className="text-[10px] font-bold tracking-[0.5em] text-white/20 uppercase mt-1 group-hover:text-blue-500/50 transition-colors">
-              Command Center
-            </span>
-          </div>
-          <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse self-start mt-2"></div>
+        <div className="flex items-center gap-3 group">
+          <span className="text-2xl md:text-3xl font-black tracking-tighter leading-none uppercase cursor-default">
+            REPAIR<span className="text-blue-500">OS</span>
+          </span>
         </div>
         <div className="hidden md:flex items-center gap-10 text-xs font-bold uppercase tracking-[0.3em] text-white/40">
           <a href="#everything" className="hover:text-white transition-colors">Membership</a>
@@ -578,7 +556,7 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
       {/* Hero */}
       <section className="relative min-h-screen flex flex-col items-center justify-center px-10 pt-40 pb-96 overflow-hidden text-center">
         <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.1),transparent_60%)]"></div>
-        <div className="relative z-10 max-w-7xl">
+        <div className="relative z-10 max-w-7xl flex flex-col items-center">
           <div className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[11px] font-bold uppercase tracking-[0.4em] mb-8 animate-pulse">
             <Zap size={14} /> NEW APPS ADDED WEEKLY // NO UPSELLS
           </div>
@@ -588,7 +566,7 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
           </h1>
           
           <h2 className="text-3xl md:text-6xl font-extrabold text-white/90 tracking-tight mb-12 max-w-5xl mx-auto leading-tight uppercase">
-            THE WORLD'S FIRST <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500">COMMAND CENTER</span> <br/>BUILT EXCLUSIVELY FOR REPAIR SHOPS.
+            THE WORLD'S FIRST <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500">OPERATING SYSTEM</span> <br/>BUILT EXCLUSIVELY FOR REPAIR SHOPS.
           </h2>
 
           <p className="text-xl md:text-2xl text-white/40 max-w-3xl mx-auto mb-16 font-light leading-relaxed">
@@ -597,13 +575,13 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
           
           <div className="flex flex-col md:flex-row items-center justify-center gap-8 mb-20">
             <button onClick={onLaunch} className="w-full md:w-auto bg-blue-600 hover:bg-blue-500 text-white px-14 py-6 rounded-3xl font-extrabold text-xl transition-all flex items-center justify-center gap-5 group shadow-2xl shadow-blue-500/20 uppercase">
-              LAUNCH DEMO TERMINAL <ArrowRight className="group-hover:translate-x-2 transition-transform" />
+              LAUNCH DEMO <ArrowRight className="group-hover:translate-x-2 transition-transform" />
             </button>
           </div>
         </div>
       </section>
 
-      {/* Membership Section */}
+      {/* One Membership Section (Restored) */}
       <section id="everything" className="py-40 border-y border-white/5 bg-white/[0.01]">
         <div className="max-w-7xl mx-auto px-10">
           <div className="grid md:grid-cols-2 gap-24 items-center">
@@ -641,17 +619,18 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
         </div>
       </section>
 
-      {/* Global Standard Lightbox Display */}
-      {activeLightbox && <Lightbox src={activeLightbox} onClose={() => setActiveLightbox(null)} label="SYSTEM CORE PREVIEW // CLICK TO DISMISS" />}
-
-      {/* Compatibility Section */}
+      {/* Compatibility Section (Restored) */}
       <section id="compatibility" className="py-40 relative overflow-hidden bg-black text-center">
          <div className="max-w-6xl mx-auto px-10">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-bold uppercase tracking-widest mb-10">
+              <Check size={12} /> Universal Runtime
+            </div>
             <h2 className="text-6xl md:text-[5rem] font-black mb-10 tracking-tight leading-none uppercase">Runs on 99.9% of devices.</h2>
             <p className="text-white/40 text-xl md:text-2xl max-w-4xl mx-auto mb-20 font-light leading-relaxed">
-              Native-like performance on whatever hardware you already own. No installation required.
+              If it has a browser, it runs your shop. No installers. No drivers. No IT headaches. Repair OS brings native-like performance to whatever hardware you already own.
             </p>
-            <div className="grid grid-cols-2 md:grid-cols-6 gap-6">
+            
+            <div className="grid grid-cols-2 md:grid-cols-6 gap-6 mb-20">
                {[
                  { icon: <Monitor size={32} />, name: "Windows" },
                  { icon: <MonitorCheck size={32} />, name: "macOS" },
@@ -672,27 +651,52 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
       {/* Pricing Section */}
       <section id="pricing" className="py-40 bg-[#050505] relative z-10 px-10 border-t border-white/5">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-[10rem] font-black leading-none tracking-tighter mb-4">$199<span className="text-4xl text-white/30 tracking-normal font-medium ml-4">/mo</span></h2>
-          <p className="text-2xl text-white font-medium mb-12">Unlimited users. Every tool included. No hidden costs.</p>
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="flex flex-col items-start mb-16">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/20 text-[10px] font-bold uppercase tracking-widest text-white/60 mb-8">
+              <div className="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></div> ONE MEMBERSHIP • EVERYTHING INCLUDED
+            </div>
+            <h2 className="text-[10rem] font-black leading-none tracking-tighter mb-4">$199<span className="text-4xl text-white/30 tracking-normal font-medium ml-4">/mo</span></h2>
+            <div className="space-y-4">
+              <p className="text-2xl text-white font-medium mb-2">Unlimited users. All current apps. All future apps.</p>
+              <p className="text-2xl font-black text-white uppercase tracking-tight">Price locked for 5 years.</p>
+            </div>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8 mt-20">
             <div className="glass p-12 rounded-[32px] border border-white/10 shadow-2xl">
-              <h3 className="text-2xl font-bold mb-10 text-white uppercase tracking-tight underline decoration-blue-500">Included in the box:</h3>
+              <h3 className="text-2xl font-bold mb-10 text-white uppercase tracking-tight">Included in the box:</h3>
               <ul className="space-y-6">
-                {["Full Desktop OS Environment", "Daemon AI Neural Core", "Omnichannel Ticketing", "Warehouse Stock Vault", "Employee Pay & Tax Sync"].map((item, idx) => (
+                {[
+                  "Full Desktop OS Environment",
+                  "Daemon AI Neural Core",
+                  "Omnichannel Ticketing",
+                  "Warehouse Stock Vault",
+                  "App Store Access (All future modules included)"
+                ].map((item, idx) => (
                   <li key={idx} className="flex items-center gap-4 text-white/80 font-medium">
-                    <Check size={20} className="text-emerald-500" strokeWidth={3} /> {item}
+                    <Check size={20} className="text-emerald-500 shrink-0" strokeWidth={3} />
+                    <span>{item}</span>
                   </li>
                 ))}
               </ul>
             </div>
+
             <div className="glass p-12 rounded-[32px] border border-white/10 shadow-2xl flex flex-col justify-between">
-              <p className="text-white/50 text-lg font-light leading-relaxed">Upgrade your shop flow today. No credit card required for 14-day evaluation.</p>
-              <a href={LEMON_SQUEEZY_LINK} className="w-full bg-white text-black font-black uppercase py-6 rounded-2xl text-center hover:bg-blue-600 hover:text-white transition-all text-lg shadow-2xl">Start Free Trial</a>
+              <div>
+                <h3 className="text-3xl font-bold mb-6 text-white uppercase tracking-tight">Ready to upgrade?</h3>
+                <p className="text-white/50 text-lg leading-relaxed font-light">Join the shops running on the world's first Repair Operating System. Try it in your shop for 14 days, completely free.</p>
+              </div>
+              <div className="mt-12 text-center">
+                <a href={LEMON_SQUEEZY_LINK} target="_blank" rel="noopener noreferrer" className="w-full bg-white text-black font-black uppercase py-6 rounded-2xl tracking-[0.2em] hover:bg-blue-600 hover:text-white transition-all text-lg shadow-2xl block">Start Free Trial</a>
+              </div>
             </div>
           </div>
-          <p className="text-center text-white/20 text-[10px] font-bold uppercase tracking-[0.5em] mt-32">© 2025 Repair OS by DaemonCore • {PATENT_NOTICE}</p>
+          <p className="text-center text-white/20 text-[11px] font-bold uppercase tracking-[0.5em] mt-32">© 2025 Repair OS by DaemonCore • {PATENT_NOTICE}</p>
         </div>
       </section>
+
+      {/* Showcase Lightbox */}
+      {activeLightbox && <Lightbox src={activeLightbox} onClose={() => setActiveLightbox(null)} label="SYSTEM CORE PREVIEW // CLICK TO DISMISS" />}
     </div>
   );
 };
@@ -730,7 +734,6 @@ const App: React.FC = () => {
           row++;
           if (row >= maxRows) { row = 0; col++; }
         } else if (existing.row >= maxRows) {
-           // Basic reflow if screen shrinks too much
            existing.row = 0;
            existing.col++;
         }
@@ -798,10 +801,18 @@ const App: React.FC = () => {
       {showImmersiveModal && (
         <div className="fixed inset-0 z-[100000] flex items-center justify-center bg-black/40 backdrop-blur-3xl animate-in fade-in duration-500">
            <div className="max-w-xl w-full mx-6 glass p-12 rounded-[48px] border border-white/20 shadow-[0_0_100px_rgba(59,130,246,0.3)] flex flex-col items-center text-center animate-in zoom-in slide-in-from-bottom-10 duration-700">
-              <Monitor size={48} className="text-blue-500 mb-8" />
-              <h3 className="text-4xl font-black text-white uppercase tracking-tighter mb-4">NATIVE IMMERSION</h3>
-              <p className="text-xl text-white/40 font-light leading-relaxed mb-10">Press <span className="text-white font-bold italic">F11</span> for a true full-screen command center experience.</p>
-              <button onClick={() => setShowImmersiveModal(false)} className="w-full bg-white text-black py-6 rounded-3xl font-black uppercase text-lg tracking-[0.2em] hover:bg-blue-600 hover:text-white transition-all shadow-2xl">OPERATE TERMINAL</button>
+              <div className="w-24 h-24 rounded-[32px] bg-blue-600 flex items-center justify-center mb-10 shadow-2xl shadow-blue-500/50">
+                <Monitor size={48} className="text-white" />
+              </div>
+              <h3 className="text-4xl font-black text-white uppercase tracking-tighter mb-6 leading-none">NATIVE DESKTOP<br/><span className="text-blue-500">ENGAGED</span></h3>
+              <p className="text-xl text-white/40 font-light leading-relaxed mb-10">
+                For the ultimate command center experience, we recommend entering <span className="text-white font-bold italic">Immersive Mode.</span>
+              </p>
+              <div className="flex flex-col items-center gap-4 mb-12">
+                 <div className="bg-white text-black px-10 py-6 rounded-3xl font-black text-5xl shadow-xl border-b-8 border-gray-300">F11</div>
+                 <p className="text-[12px] font-black uppercase tracking-[0.5em] text-blue-400 mt-4">UNLEASH FULL PIXEL DENSITY</p>
+              </div>
+              <button onClick={() => setShowImmersiveModal(false)} className="w-full bg-white text-black py-6 rounded-3xl font-black uppercase text-lg tracking-[0.2em] hover:bg-blue-600 hover:text-white transition-all shadow-2xl active:scale-95">READY TO OPERATE</button>
            </div>
         </div>
       )}
@@ -811,8 +822,26 @@ const App: React.FC = () => {
         <div className="text-[120px] font-black leading-none tracking-tighter text-white/90 uppercase">
           {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false })}
         </div>
-        <div className="text-lg font-bold tracking-[0.4em] text-white/20 uppercase mt-4">
+        <div className="text-lg font-bold tracking-[0.4em] text-white/20 uppercase mt-4 mb-10">
           {currentTime.toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric' })}
+        </div>
+
+        {/* RESTORED UPGRADE BUTTON */}
+        <div className="pointer-events-auto flex flex-col items-end gap-4 animate-in fade-in slide-in-from-right duration-1000 delay-500">
+           <a 
+            href={LEMON_SQUEEZY_LINK}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group relative flex flex-col items-center gap-1 bg-white text-black px-10 py-5 rounded-2xl font-black text-2xl tracking-tighter uppercase transition-all hover:bg-blue-600 hover:text-white hover:-translate-y-1 shadow-[0_0_50px_rgba(255,255,255,0.2)] hover:shadow-blue-500/50"
+           >
+              <span className="flex items-center gap-3">
+                <Gift className="group-hover:rotate-12 transition-transform" size={28} />
+                UPGRADE YOUR SHOP
+              </span>
+              <div className="absolute -top-3 -left-3 bg-red-600 text-white text-[10px] font-black px-3 py-1 rounded-full border-2 border-black rotate-[-10deg] animate-bounce">
+                OFFER
+              </div>
+           </a>
         </div>
       </div>
 
@@ -833,7 +862,7 @@ const App: React.FC = () => {
         })}
         <div 
           onClick={() => setViewMode('showcase')}
-          className="absolute bottom-16 left-16 z-10 group flex flex-col items-center gap-2 w-20 p-2 transition-all hover:bg-white/10 rounded-2xl text-white/20 hover:text-white cursor-pointer"
+          className="absolute bottom-16 right-16 z-10 group flex flex-col items-center gap-2 w-20 p-2 transition-all hover:bg-white/10 rounded-2xl text-white/20 hover:text-white cursor-pointer"
         >
           <div className="w-12 h-12 rounded-2xl border border-white/10 flex items-center justify-center"><LogOut size={24} /></div>
           <span className="text-[10px] font-bold uppercase tracking-widest">Exit OS</span>
