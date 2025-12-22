@@ -15,7 +15,6 @@ import {
   Zap, 
   LogOut, 
   CheckCircle2, 
-  Gem, 
   Infinity,
   Smartphone,
   Globe,
@@ -25,12 +24,9 @@ import {
   Layout,
   MonitorCheck,
   Gift,
-  MonitorSmartphone,
   Users,
   FileText,
   DollarSign,
-  Search,
-  Command,
   ShoppingCart,
   Megaphone,
   BarChart3,
@@ -43,7 +39,10 @@ import {
   ShieldCheck,
   Star,
   Trophy,
-  Medal
+  Medal,
+  Power,
+  Tablet,
+  Laptop
 } from 'lucide-react';
 import { GoogleGenAI } from "@google/genai";
 
@@ -61,15 +60,14 @@ interface AppDefinition {
   id: string;
   name: string;
   icon: React.ReactNode;
-  imageIcon?: string; // Optional image-based icon
+  imageIcon?: string;
   color: string;
   component: React.FC<{ onClose: () => void }>;
 }
 
 interface IconPos {
   id: string;
-  col: number;
-  row: number;
+  col: number; row: number;
 }
 
 // --- Constants ---
@@ -81,7 +79,6 @@ const PADDING = 24;
 const IMAGES = {
   logo: "https://cutlzlouwruvvdldospp.supabase.co/storage/v1/object/public/marketing/repairoslogo.png",
   multitask: "https://cutlzlouwruvvdldospp.supabase.co/storage/v1/object/public/marketing/multitask.png",
-  neural: "https://cutlzlouwruvvdldospp.supabase.co/storage/v1/object/public/marketing/neuralcore.png",
   nexus: "https://cutlzlouwruvvdldospp.supabase.co/storage/v1/object/public/marketing/Screenshot%202025-12-19%20172435.png",
   inventory: "https://cutlzlouwruvvdldospp.supabase.co/storage/v1/object/public/marketing/inventory.png",
   settings: "https://cutlzlouwruvvdldospp.supabase.co/storage/v1/object/public/marketing/employee.png",
@@ -102,47 +99,23 @@ const IMAGES = {
 
 const LEMON_SQUEEZY_LINK = "https://daemoncore.lemonsqueezy.com/checkout/buy/460d2a55-e651-4839-bd7c-3bab72437301";
 
-// --- Global Context for Lightbox ---
+// --- Components ---
+
 const Lightbox: React.FC<{ src: string; onClose: () => void; label?: string }> = ({ src, onClose, label }) => (
   <div 
-    className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/95 backdrop-blur-3xl p-4 md:p-8 animate-in fade-in duration-300 overflow-hidden"
+    className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/95 backdrop-blur-3xl p-4 md:p-8 animate-in fade-in duration-300"
     onClick={onClose}
   >
     <button 
       onClick={onClose}
-      className="absolute top-6 right-6 md:top-10 md:right-10 z-[100001] p-5 bg-white/10 hover:bg-red-500/80 text-white rounded-3xl transition-all border border-white/20 group shadow-2xl"
+      className="absolute top-6 right-6 z-[100001] p-5 bg-white/10 hover:bg-red-500 text-white rounded-3xl transition-all border border-white/20 shadow-2xl"
     >
-      <X size={36} className="group-hover:rotate-90 transition-transform duration-300" />
+      <X size={32} />
     </button>
-    
-    <div 
-      className="relative max-w-[95vw] max-h-[90vh] animate-in zoom-in duration-500 flex flex-col items-center"
-      onClick={(e) => e.stopPropagation()}
-    >
-      <div className="relative rounded-3xl overflow-hidden border border-white/20 shadow-[0_0_100px_rgba(0,0,0,0.8)] bg-black/50">
-        <img 
-          src={src} 
-          className="w-full h-auto max-h-[85vh] object-contain" 
-          alt="System Preview" 
-        />
-        <div className="absolute top-0 left-0 w-full h-full pointer-events-none border-[20px] border-black/10"></div>
-      </div>
-      
-      <div className="mt-8 flex flex-col items-center gap-3">
-        <span className="text-[12px] font-black text-white/50 uppercase tracking-[0.8em] animate-pulse text-center">
-          {label || "SYSTEM INTERFACE PIPELINE // ADMINISTRATOR VIEW"}
-        </span>
-        <div className="flex items-center gap-6">
-           <div className="w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_100px_rgba(59,130,246,0.3)]"></div>
-           <div className="w-48 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
-           <div className="w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_100px_rgba(59,130,246,0.3)]"></div>
-        </div>
-      </div>
-    </div>
+    <img src={src} className="max-w-[90vw] max-h-[85vh] object-contain rounded-3xl shadow-2xl animate-in zoom-in duration-500" alt="Preview" />
   </div>
 );
 
-// --- Draggable Icon Component ---
 const DesktopIcon: React.FC<{ 
   app: AppDefinition; 
   pos: { col: number; row: number };
@@ -155,58 +128,37 @@ const DesktopIcon: React.FC<{
   const handleMouseDown = (e: React.MouseEvent) => {
     setDragging(true);
     const rect = e.currentTarget.getBoundingClientRect();
-    setOffset({
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-    });
+    setOffset({ x: e.clientX - rect.left, y: e.clientY - rect.top });
     e.preventDefault();
   };
 
   useEffect(() => {
     if (!dragging) return;
-
     const handleMouseUp = (e: MouseEvent) => {
       setDragging(false);
       const col = Math.round((e.clientX - PADDING - offset.x) / GRID_SIZE_X);
       const row = Math.round((e.clientY - PADDING - offset.y) / GRID_SIZE_Y);
       onDragEnd(app.id, Math.max(0, col), Math.max(0, row));
     };
-
     window.addEventListener('mouseup', handleMouseUp);
-    return () => {
-      window.removeEventListener('mouseup', handleMouseUp);
-    };
+    return () => window.removeEventListener('mouseup', handleMouseUp);
   }, [dragging, offset, app.id, onDragEnd]);
 
   return (
     <div 
       onMouseDown={handleMouseDown}
-      onClick={(e) => {
-        if (dragging) return;
-        onClick();
-      }}
-      className={`absolute transition-all duration-300 group flex flex-col items-center gap-1 w-20 p-2 cursor-pointer select-none rounded-xl border border-transparent hover:bg-white/10 hover:border-white/20 active:scale-95 ${dragging ? 'opacity-50 z-[1000] scale-110 !transition-none' : 'z-10'}`}
-      style={{
-        left: PADDING + pos.col * GRID_SIZE_X,
-        top: PADDING + pos.row * GRID_SIZE_Y,
-        width: 80,
-      }}
+      onClick={() => !dragging && onClick()}
+      className={`absolute transition-all duration-300 group flex flex-col items-center gap-1 w-20 p-2 cursor-pointer select-none rounded-xl border border-transparent hover:bg-white/10 active:scale-95 ${dragging ? 'opacity-50 z-[1000] scale-110 !transition-none' : 'z-10'}`}
+      style={{ left: PADDING + pos.col * GRID_SIZE_X, top: PADDING + pos.row * GRID_SIZE_Y }}
     >
-      <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-white transition-transform shadow-lg overflow-hidden ${app.imageIcon ? 'bg-black' : `bg-gradient-to-br ${app.color}`}`}>
-        {app.imageIcon ? (
-          <img src={app.imageIcon} className="w-full h-full object-cover" alt={app.name} />
-        ) : (
-          React.cloneElement(app.icon as React.ReactElement<any>, { size: 24 })
-        )}
+      <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-white shadow-lg overflow-hidden ${app.imageIcon ? 'bg-black' : `bg-gradient-to-br ${app.color}`}`}>
+        {app.imageIcon ? <img src={app.imageIcon} className="w-full h-full object-cover" alt="" /> : React.cloneElement(app.icon as React.ReactElement<any>, { size: 24 })}
       </div>
-      <span className="text-[10px] font-semibold text-white/90 text-center drop-shadow-md font-poppins pointer-events-none line-clamp-2 leading-tight">
-        {app.name}
-      </span>
+      <span className="text-[10px] font-bold text-white/90 text-center drop-shadow-md line-clamp-2 leading-tight">{app.name}</span>
     </div>
   );
 };
 
-// --- Window Component ---
 const Window: React.FC<{
   window: WindowState;
   app: AppDefinition;
@@ -219,24 +171,19 @@ const Window: React.FC<{
   return (
     <div 
       onMouseDown={onFocus}
-      className="absolute top-10 left-10 md:top-20 md:left-40 w-[90vw] h-[80vh] md:w-[85vw] md:h-[80vh] glass rounded-3xl overflow-hidden window-shadow border border-white/10 flex flex-col animate-in fade-in zoom-in duration-300 font-poppins"
+      className="absolute top-10 left-10 md:top-20 md:left-40 w-[90vw] h-[80vh] md:w-[85vw] md:h-[80vh] glass rounded-3xl overflow-hidden window-shadow border border-white/10 flex flex-col animate-in zoom-in duration-300 shadow-2xl"
       style={{ zIndex: window.zIndex }}
     >
-      <div className="h-12 bg-black/50 border-b border-white/5 flex items-center justify-between px-6 select-none">
-        <div className="flex items-center gap-4">
-          <div className={`w-6 h-6 rounded-lg flex items-center justify-center text-white text-[10px] overflow-hidden ${app.imageIcon ? 'bg-black' : `bg-gradient-to-br ${app.color}`}`}>
-            {app.imageIcon ? (
-              <img src={app.imageIcon} className="w-full h-full object-cover" alt="" />
-            ) : (
-              React.cloneElement(app.icon as React.ReactElement<any>, { size: 14 })
-            )}
+      <div className="h-12 bg-black/60 border-b border-white/5 flex items-center justify-between px-6">
+        <div className="flex items-center gap-3">
+          <div className={`w-6 h-6 rounded-lg flex items-center justify-center text-white ${app.imageIcon ? 'bg-black' : `bg-gradient-to-br ${app.color}`}`}>
+            {app.imageIcon ? <img src={app.imageIcon} className="w-full h-full object-cover" alt="" /> : React.cloneElement(app.icon as React.ReactElement<any>, { size: 12 })}
           </div>
-          <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/80">{app.name}</span>
+          <span className="text-[11px] font-bold uppercase tracking-widest text-white/80">{app.name}</span>
         </div>
-        <div className="flex items-center gap-2">
-          <button onClick={onMinimize} className="p-2 hover:bg-white/10 rounded-lg transition-colors text-white/40 hover:text-white/80"><Minimize2 size={16} /></button>
-          <button className="p-2 hover:bg-white/10 rounded-lg transition-colors text-white/40 hover:text-white/80"><Maximize2 size={16} /></button>
-          <button onClick={onClose} className="p-2 hover:bg-red-500/80 rounded-lg transition-colors text-white/40 hover:text-white"><X size={16} /></button>
+        <div className="flex gap-2">
+          <button onClick={onMinimize} className="p-2 hover:bg-white/10 rounded-lg text-white/40"><Minimize2 size={16} /></button>
+          <button onClick={onClose} className="p-2 hover:bg-red-500 rounded-lg text-white/40 hover:text-white"><X size={16} /></button>
         </div>
       </div>
       <div className="flex-1 overflow-auto bg-[#0a0b0d]">{children}</div>
@@ -252,371 +199,172 @@ const FeatureSplitView: React.FC<{
   screenshots: string[];
   highlights: string[];
 }> = ({ title, children, icon, colorClass, screenshots, highlights }) => {
-  const [activeLightbox, setActiveLightbox] = useState<string | null>(null);
-
+  const [lb, setLb] = useState<string | null>(null);
   return (
     <>
       <div className="flex flex-col lg:flex-row h-full font-poppins">
         <div className="w-full lg:w-[40%] p-10 lg:p-14 overflow-y-auto border-r border-white/5 bg-black/30 flex flex-col h-full">
-          <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${colorClass} flex items-center justify-center mb-8 shadow-2xl overflow-hidden`}>
+          <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${colorClass} flex items-center justify-center mb-8 shadow-2xl`}>
             {React.cloneElement(icon as React.ReactElement<any>, { size: 32, className: "text-white" })}
           </div>
-          <h2 className="text-4xl font-extrabold text-white mb-8 tracking-tighter leading-tight uppercase">{title}</h2>
-          <div className="space-y-8 text-white/50 leading-relaxed text-base flex-grow font-normal">
-            {children}
-            <div className="pt-8 border-t border-white/5">
-              <h4 className="text-white font-bold text-[10px] uppercase tracking-[0.3em] mb-6 flex items-center gap-2 text-blue-400">
-                <Infinity size={14} /> SYSTEM HIGHLIGHTS
-              </h4>
-              <div className="grid grid-cols-1 gap-3">
-                {highlights.map((h, i) => (
-                  <div key={i} className="flex items-center gap-3 text-sm text-white/60">
-                    <CheckCircle2 size={16} className="text-emerald-500 shrink-0" /> {h}
-                  </div>
-                ))}
+          <h2 className="text-4xl font-black text-white mb-6 uppercase tracking-tighter">{title}</h2>
+          <div className="text-white/50 leading-relaxed mb-10">{children}</div>
+          <div className="pt-8 border-t border-white/5 space-y-3">
+            {highlights.map((h, i) => (
+              <div key={i} className="flex items-center gap-3 text-sm font-bold text-white/40">
+                <CheckCircle2 size={16} className="text-emerald-500" /> {h}
               </div>
-            </div>
-          </div>
-        </div>
-        <div className="w-full lg:w-[60%] relative bg-[#050505] p-6 lg:p-10 overflow-y-auto">
-          <div className="space-y-10">
-            {screenshots.map((src, idx) => (
-              <button 
-                key={idx} 
-                onClick={() => setActiveLightbox(src)}
-                className="relative block rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-black/40 w-full group cursor-zoom-in"
-              >
-                <img src={src} className="w-full h-auto object-contain transition-transform duration-1000 group-hover:scale-105" alt={`${title} screenshot ${idx+1}`} />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-40 transition-opacity group-hover:opacity-20"></div>
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity scale-90 group-hover:scale-100">
-                  <div className="p-4 bg-white/20 backdrop-blur-xl rounded-full border border-white/30 shadow-2xl">
-                    <Maximize2 className="text-white" size={32} />
-                  </div>
-                </div>
-              </button>
             ))}
           </div>
         </div>
+        <div className="flex-1 p-8 overflow-y-auto bg-black/50 space-y-10">
+          {screenshots.map((s, i) => (
+            <button key={i} onClick={() => setLb(s)} className="w-full rounded-2xl border border-white/10 overflow-hidden hover:scale-[1.01] transition-transform shadow-2xl">
+              <img src={s} className="w-full h-auto" alt="" />
+            </button>
+          ))}
+        </div>
       </div>
-      {activeLightbox && <Lightbox src={activeLightbox} onClose={() => setActiveLightbox(null)} label={`${title.toUpperCase()} // HIGH-FIDELITY PIPELINE`} />}
+      {lb && <Lightbox src={lb} onClose={() => setLb(null)} />}
     </>
   );
 };
 
-// --- App Modal Content Components ---
+// --- App Modules ---
+const Dashboard = () => <FeatureSplitView title="Dashboard" icon={<LayoutDashboard />} colorClass="from-blue-600 to-indigo-600" screenshots={[IMAGES.multitask]} highlights={["Real-time Telemetry", "Bench Pressure Matrix", "Cashflow Signals"]}><p>Command your shop from a unified cockpit. Track every metric in real-time.</p></FeatureSplitView>;
+const Tickets = () => <FeatureSplitView title="Tickets" icon={<Ticket />} colorClass="from-pink-600 to-rose-600" screenshots={[IMAGES.tickets1, IMAGES.tickets2, IMAGES.tickets4]} highlights={["Kanban Matrix", "Automated SMS", "L1-L4 Tech Flow"]}><p>Advanced device intake and workflow management system.</p></FeatureSplitView>;
+const Inventory = () => <FeatureSplitView title="Inventory" icon={<Package />} colorClass="from-emerald-600 to-teal-600" screenshots={[IMAGES.inventory]} highlights={["Vault Storage", "Low Stock Triggers", "Supplier Sync"]}><p>The ultimate part repository. Manage thousands of SKUs with ease.</p></FeatureSplitView>;
+const Payroll = () => <FeatureSplitView title="Payroll" icon={<Coins />} colorClass="from-green-600 to-emerald-700" screenshots={[IMAGES.payroll1, IMAGES.payroll2, IMAGES.payroll3]} highlights={["Tax Logic", "Commission Tracking", "Direct Deposit"]}><p>Precision accounting for your technicians and staff.</p></FeatureSplitView>;
+const POS = () => <FeatureSplitView title="Terminal POS" icon={<ShoppingCart />} colorClass="from-amber-400 to-orange-600" screenshots={[IMAGES.pos]} highlights={["Split Pay", "Integrated Readers", "Offline Buffer"]}><p>High-velocity retail environment terminal.</p></FeatureSplitView>;
+const Estimates = () => <FeatureSplitView title="Estimates" icon={<FileText />} colorClass="from-amber-600 to-orange-700" screenshots={[IMAGES.estimates]} highlights={["Instant Quoting", "PDF Pipeline", "Approval Matrix"]}><p>Professional quotes delivered in seconds.</p></FeatureSplitView>;
+const BuyBack = () => <FeatureSplitView title="Buy Back" icon={<DollarSign />} colorClass="from-teal-600 to-cyan-700" screenshots={[IMAGES.buyback]} highlights={["Grading Algorithm", "Instant Offers", "Contract Automation"]}><p>Scale your pre-owned inventory with surgical pricing.</p></FeatureSplitView>;
+const Analytics = () => <FeatureSplitView title="Analytics" icon={<BarChart3 />} colorClass="from-emerald-500 to-cyan-600" screenshots={[IMAGES.analytics]} highlights={["Profitability Maps", "Labor Efficiency", "Weekly Signals"]}><p>Deep data insights for growth-focused shops.</p></FeatureSplitView>;
+const Personnel = () => <FeatureSplitView title="Personnel" icon={<Users />} colorClass="from-slate-600 to-indigo-800" screenshots={[IMAGES.employeesMain, IMAGES.employeesLog]} highlights={["Security Clearance", "Performance Logs", "Uptime Tracking"]}><p>Manage your recruits from intake to retirement.</p></FeatureSplitView>;
+const Nexus = () => <FeatureSplitView title="Nexus Store" icon={<Store />} colorClass="from-cyan-600 to-blue-600" screenshots={[IMAGES.nexus]} highlights={["Module Hub", "Verified Apps", "Weekly Updates"]}><p>Expand your OS capabilities with native shop modules.</p></FeatureSplitView>;
+const Guide = () => <FeatureSplitView title="RepairOS Guide" icon={<Library />} colorClass="from-blue-700 to-blue-900" screenshots={[IMAGES.guide]} highlights={["SOP Database", "Tech Training", "Hardware Config"]}><p>The master documentation for every Repair OS module.</p></FeatureSplitView>;
 
-const DashboardInfo: React.FC = () => (
-  <FeatureSplitView 
-    title="Dashboard" 
-    icon={<LayoutDashboard />} 
-    colorClass="from-blue-600 to-indigo-600" 
-    screenshots={[IMAGES.multitask]} 
-    highlights={["Real-time Cashflow Telemetry", "Dynamic Bench Pressure Map", "Financial Signal Intelligence"]}
-  >
-    <p>Command your entire shop from a single, high-fidelity dashboard. Track revenue, active tickets, and client volume with native-speed analytics.</p>
-  </FeatureSplitView>
-);
-
-const POSInfo: React.FC = () => (
-  <FeatureSplitView 
-    title="Terminal POS" 
-    icon={<ShoppingCart />} 
-    colorClass="from-amber-500 to-orange-600" 
-    screenshots={[IMAGES.pos]} 
-    highlights={["Split Payment Logic", "Integrated Card Reader API", "Offline Mode Redundancy"]}
-  >
-    <p>Our Point of Sale terminal is designed for high-velocity environments. Process cash, card, and finance payments with zero friction.</p>
-  </FeatureSplitView>
-);
-
-const MarketingInfo: React.FC = () => (
-  <FeatureSplitView 
-    title="Marketing Hub" 
-    icon={<Megaphone />} 
-    colorClass="from-indigo-600 to-purple-600" 
-    screenshots={[IMAGES.nexus]} 
-    highlights={["Automated Google Review Triggers", "SMS Blast Pipeline", "Email Retention Campaigns"]}
-  >
-    <p>Grow your business while you sleep. Set automated SMS triggers to ask for reviews the moment a repair is picked up.</p>
-  </FeatureSplitView>
-);
-
-const AnalyticsInfo: React.FC = () => (
-  <FeatureSplitView 
-    title="Analytics" 
-    icon={<BarChart3 />} 
-    colorClass="from-emerald-500 to-cyan-600" 
-    screenshots={[IMAGES.analytics]} 
-    highlights={["Profitability Heatmaps", "Labor Margin Tracking", "Technician Efficiency Metrics"]}
-  >
-    <p>Turn your shop data into a competitive advantage. Visualize your margins and find exactly where your shop is losing money.</p>
-  </FeatureSplitView>
-);
-
-const WikiInfo: React.FC = () => (
-  <FeatureSplitView 
-    title="Repair Wiki" 
-    icon={<BookOpen />} 
-    colorClass="from-slate-600 to-slate-800" 
-    screenshots={[IMAGES.nexus]} 
-    highlights={["Proprietary Motherboard Schematics", "Internal Repair Protocols", "Interactive Part Search"]}
-  >
-    <p>Centralize your shop's knowledge. Store repair guides, schematics, and internal SOPs in a secure, searchable wiki.</p>
-  </FeatureSplitView>
-);
-
-const GuideInfo: React.FC = () => (
-  <FeatureSplitView 
-    title="RepairOS Guide" 
-    icon={<Library />} 
-    colorClass="from-blue-700 to-blue-900" 
-    screenshots={[IMAGES.guide]} 
-    highlights={["Complete OS Documentation", "Technician Training Modules", "Hardware Compatibility List", "API Integration Guide"]}
-  >
-    <p>The definitive master manual for Repair OS. Learn how to master every module, from the Neural AI core to the Warehouse Vault.</p>
-    <p>Includes step-by-step video tutorials and configuration blueprints for multi-location shop management.</p>
-  </FeatureSplitView>
-);
-
-const SupplierInfo: React.FC = () => (
-  <FeatureSplitView 
-    title="Supplier Hub" 
-    icon={<Truck />} 
-    colorClass="from-rose-600 to-pink-600" 
-    screenshots={[IMAGES.inventory]} 
-    highlights={["Global Price Comparison", "Instant Bulk Orders", "Defect Return Tracking"]}
-  >
-    <p>Connect directly to major parts suppliers. Compare prices across multiple vendors and order restocks with a single click.</p>
-  </FeatureSplitView>
-);
-
-const TicketInfo: React.FC = () => (
-  <FeatureSplitView 
-    title="Tickets" 
-    icon={<Ticket />} 
-    colorClass="from-pink-600 to-rose-600" 
-    screenshots={[IMAGES.tickets1, IMAGES.tickets2, IMAGES.tickets4]} 
-    highlights={["Kanban-Style Ticket Board", "Automated SMS Uplink", "Secure PIN-Protected Portals", "L1-L4 Tech Assignment"]}
-  >
-    <p>Manage repair missions with our advanced Kanban Matrix. Intake devices in under 15 seconds and move them through your workflow with surgical precision.</p>
-  </FeatureSplitView>
-);
-
-const InventoryInfo: React.FC = () => (
-  <FeatureSplitView 
-    title="Inventory" 
-    icon={<Package />} 
-    colorClass="from-emerald-600 to-teal-600" 
-    screenshots={[IMAGES.inventory]} 
-    highlights={["Kanban Stock Management", "Automated Low-Stock Logic", "Supplier Direct Restock API"]}
-  >
-    <p>Never lose track of a part again. Our Warehouse Core uses Kanban boards to show you exactly what stock is low, what needs ordering, and what's on the shelf.</p>
-  </FeatureSplitView>
-);
-
-const EmployeeConsoleInfo: React.FC = () => (
-  <FeatureSplitView 
-    title="Personnel" 
-    icon={<Users />} 
-    colorClass="from-slate-600 to-indigo-800" 
-    screenshots={[IMAGES.employeesLog, IMAGES.employeesMain]} 
-    highlights={["Granular Pay Scale Tracking", "Tax Document Vault", "Clearance Level Management", "Status-Aware Clocking"]}
-  >
-    <p>The ultimate employee database. Manage every recruit from hire to fire. Track rates of pay, status, and clearance levels across all terminals.</p>
-  </FeatureSplitView>
-);
-
-const EstimatesInfo: React.FC = () => (
-  <FeatureSplitView 
-    title="Estimates" 
-    icon={<FileText />} 
-    colorClass="from-amber-600 to-orange-700" 
-    screenshots={[IMAGES.estimates]} 
-    highlights={["Instant Quote Generation", "PDF Export Pipeline", "Approval Tracking", "Conversion Analytics"]}
-  >
-    <p>Generate high-fidelity estimates in seconds. Our proprietary quote engine calculates labor and parts costs with precision to ensure maximum profitability.</p>
-  </FeatureSplitView>
-);
-
-const BuyBackInfo: React.FC = () => (
-  <FeatureSplitView 
-    title="Buy Back" 
-    icon={<DollarSign />} 
-    colorClass="from-teal-600 to-cyan-700" 
-    screenshots={[IMAGES.buyback]} 
-    highlights={["Proprietary Grading Algorithm", "Instant Cash Offer Engine", "Legal Document Automation", "Inventory Pipeline Sync"]}
-  >
-    <p>Scale your inventory with our proprietary buyback system. Grade devices and generate instant cash offers that are competitive yet profitable.</p>
-  </FeatureSplitView>
-);
-
-const NexusInfo: React.FC = () => (
-  <FeatureSplitView 
-    title="Nexus Store" 
-    icon={<Store />} 
-    colorClass="from-cyan-600 to-blue-600" 
-    screenshots={[IMAGES.nexus]} 
-    highlights={["Infinite App Library", "One-Click Installation", "Verified Security Sandbox"]}
-  >
-    <p>Nexus is the heartbeat of expansion. Browse dozens of specialized modules for Payroll, Marketing, POS, and Document Management.</p>
-  </FeatureSplitView>
-);
-
-const PersonnelInfo: React.FC = () => (
-  <FeatureSplitView 
-    title="Setup" 
-    icon={<Settings />} 
-    colorClass="from-gray-600 to-slate-600" 
-    screenshots={[IMAGES.settings]} 
-    highlights={["Hardware Signal Tuning", "Global Theme Overrides", "API Uplink Management"]}
-  >
-    <p>Tune your OS experience to match your hardware. Manage staff clearance levels and configure global shop signals from a unified control pane.</p>
-  </FeatureSplitView>
-);
-
-const PayrollInfo: React.FC = () => (
-  <FeatureSplitView 
-    title="Payroll" 
-    icon={<Coins />} 
-    colorClass="from-green-600 to-emerald-700" 
-    screenshots={[IMAGES.payroll1, IMAGES.payroll2, IMAGES.payroll3]} 
-    highlights={["Automated Tax Calculations", "Direct Deposit Integration", "Employee Commission Tracking", "Timesheet Verification Matrix"]}
-  >
-    <p>Manage your shop's payroll with surgical precision. Track commissions, bonuses, and hourly rates automatically based on ticket completions and clock-in logs.</p>
-  </FeatureSplitView>
-);
-
-const DaemonAI: React.FC = () => {
-  const [messages, setMessages] = useState<{ role: string; content: string }[]>([{ role: 'ai', content: 'Greetings, Administrator. I am DAEMON, your neural interface for RepairOS. How may I assist with shop operations today?' }]);
-  const [input, setInput] = useState('');
-  const [isTyping, setIsTyping] = useState(false);
-  const scrollRef = useRef<HTMLDivElement>(null);
-  useEffect(() => { if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight; }, [messages, isTyping]);
-  
+const DaemonAI = () => {
+  const [msgs, setMsgs] = useState([{ r: 'ai', c: 'DAEMON ONLINE. State your directive, Administrator.' }]);
+  const [inp, setInp] = useState('');
+  const [loading, setLoading] = useState(false);
   const handleSend = async () => {
-    if (!input.trim() || isTyping) return;
-    const userMsg = { role: 'user', content: input };
-    setMessages(prev => [...prev, userMsg]);
-    setInput('');
-    setIsTyping(true);
+    if (!inp.trim() || loading) return;
+    const uMsg = { r: 'user', c: inp };
+    setMsgs(prev => [...prev, uMsg]);
+    setInp('');
+    setLoading(true);
     try {
       const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-      const response = await ai.models.generateContent({
+      const resp = await ai.models.generateContent({
         model: 'gemini-3-pro-preview',
-        contents: [...messages, userMsg].map(m => ({ role: m.role === 'ai' ? 'model' : 'user', parts: [{ text: m.content }] })),
-        config: { systemInstruction: 'You are DAEMON AI. You are a genius terminal AI for Repair OS. Explain that everything is included in the membership ($199/mo), zero upsells, and new apps are added weekly. Use bold and direct language. NO ITALICS.' }
+        contents: [...msgs, uMsg].map(m => ({ role: m.r === 'ai' ? 'model' : 'user', parts: [{ text: m.c }] })),
+        config: { systemInstruction: 'You are DAEMON AI. Professional, elite, and direct. Membership is $199/mo with zero upsells. Every single app is included.' }
       });
-      setMessages(prev => [...prev, { role: 'ai', content: response.text || "Neural core offline." }]);
-    } catch { setMessages(prev => [...prev, { role: 'ai', content: 'Connection timed out.' }]); } finally { setIsTyping(false); }
+      setMsgs(prev => [...prev, { r: 'ai', c: resp.text || "Neural link failure." }]);
+    } catch { setMsgs(prev => [...prev, { r: 'ai', c: "Neural core timeout." }]); } finally { setLoading(false); }
   };
-  
   return (
-    <div className="flex flex-col lg:flex-row h-full font-poppins bg-[#0d0e12]">
-      <div className="w-full lg:w-1/2 flex flex-col border-r border-white/10 h-full">
-        <div className="p-6 border-b border-purple-500/20 bg-purple-900/10 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Bot size={20} className="text-purple-400" />
-            <span className="text-xs font-bold tracking-widest text-purple-400 uppercase">DAEMON AI // NEURAL LINK ACTIVE</span>
+    <div className="flex flex-col h-full bg-[#0d0e12] font-poppins">
+      <div className="flex-1 p-8 overflow-y-auto space-y-6">
+        {msgs.map((m, i) => (
+          <div key={i} className={`p-5 rounded-2xl max-w-2xl ${m.r === 'ai' ? 'bg-purple-600/10 border border-purple-500/20 text-white' : 'bg-white/5 border border-white/10 ml-auto text-white'}`}>
+            <div className="text-[9px] font-black uppercase text-white/30 mb-2 tracking-widest">{m.r}</div>
+            <p className="text-sm font-medium">{m.c}</p>
           </div>
-        </div>
-        <div ref={scrollRef} className="flex-1 p-8 overflow-y-auto space-y-6">
-          {messages.map((m, i) => (
-            <div key={i} className={`p-5 rounded-2xl ${m.role === 'ai' ? 'bg-purple-600/10 border border-purple-500/20' : 'bg-white/5 border border-white/10 ml-12'}`}>
-              <div className="text-[10px] uppercase tracking-widest text-white/30 mb-2 font-bold">{m.role}</div>
-              <p className="text-sm font-normal leading-relaxed">{m.content}</p>
-            </div>
-          ))}
-          {isTyping && <div className="text-purple-400 text-[10px] font-bold animate-pulse">UPLINKING TO NEURAL CORE...</div>}
-        </div>
-        <div className="p-6 border-t border-white/10 flex gap-3">
-          <input disabled={isTyping} value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleSend()} className="flex-1 bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-sm outline-none focus:border-purple-500/50 transition-colors" placeholder="Command DAEMON..." />
-          <button onClick={handleSend} disabled={isTyping} className="p-4 bg-purple-600 rounded-2xl text-white hover:bg-purple-500 transition-colors"><ArrowRight size={20} /></button>
-        </div>
+        ))}
+        {loading && <div className="text-purple-400 text-[10px] font-black animate-pulse uppercase tracking-widest">Processing command...</div>}
+      </div>
+      <div className="p-6 border-t border-white/5 flex gap-4">
+        <input value={inp} onChange={e => setInp(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleSend()} className="flex-1 bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white outline-none focus:border-purple-500/50" placeholder="Command DAEMON..." />
+        <button onClick={handleSend} className="p-4 bg-purple-600 rounded-2xl text-white hover:bg-purple-500 transition-colors"><ArrowRight size={20} /></button>
       </div>
     </div>
   );
 };
 
 const APPS: AppDefinition[] = [
-  { id: 'dashboard', name: 'Dashboard', icon: <LayoutDashboard />, color: 'from-blue-600 to-indigo-600', component: DashboardInfo },
-  { id: 'tickets', name: 'Tickets', icon: <Ticket />, color: 'from-pink-600 to-rose-600', component: TicketInfo },
-  { id: 'inventory', name: 'Inventory', icon: <Package />, color: 'from-emerald-600 to-teal-600', component: InventoryInfo },
-  { id: 'pos', name: 'Terminal POS', icon: <ShoppingCart />, color: 'from-amber-400 to-orange-600', component: POSInfo },
-  { id: 'payroll', name: 'Payroll', icon: <Coins />, color: 'from-green-600 to-emerald-700', component: PayrollInfo },
-  { id: 'marketing', name: 'Marketing', icon: <Megaphone />, color: 'from-indigo-600 to-purple-600', component: MarketingInfo },
-  { id: 'analytics', name: 'Analytics', icon: <BarChart3 />, color: 'from-emerald-500 to-cyan-600', component: AnalyticsInfo },
-  { id: 'employees', name: 'Personnel', icon: <Users />, color: 'from-slate-600 to-indigo-800', component: EmployeeConsoleInfo },
-  { id: 'estimates', name: 'Estimates', icon: <FileText />, color: 'from-amber-600 to-orange-700', component: EstimatesInfo },
-  { id: 'buyback', name: 'Buy Back', icon: <DollarSign />, color: 'from-teal-600 to-cyan-700', component: BuyBackInfo },
-  { id: 'wiki', name: 'Repair Wiki', icon: <BookOpen />, color: 'from-slate-600 to-slate-800', component: WikiInfo },
-  { id: 'guide', name: 'RepairOS Guide', icon: <Library />, color: 'from-blue-700 to-blue-900', component: GuideInfo },
-  { id: 'suppliers', name: 'Supplier Hub', icon: <Truck />, color: 'from-rose-600 to-pink-600', component: SupplierInfo },
+  { id: 'dashboard', name: 'Dashboard', icon: <LayoutDashboard />, color: 'from-blue-600 to-indigo-600', component: Dashboard },
+  { id: 'tickets', name: 'Tickets', icon: <Ticket />, color: 'from-pink-600 to-rose-600', component: Tickets },
+  { id: 'inventory', name: 'Inventory', icon: <Package />, color: 'from-emerald-600 to-teal-600', component: Inventory },
+  { id: 'pos', name: 'Terminal POS', icon: <ShoppingCart />, color: 'from-amber-400 to-orange-600', component: POS },
+  { id: 'payroll', name: 'Payroll', icon: <Coins />, color: 'from-green-600 to-emerald-700', component: Payroll },
+  { id: 'marketing', name: 'Marketing', icon: <Megaphone />, color: 'from-indigo-600 to-purple-600', component: () => <FeatureSplitView title="Marketing" icon={<Megaphone />} colorClass="from-indigo-600 to-purple-600" screenshots={[IMAGES.nexus]} highlights={["Automated Reviews", "SMS Campaigns", "Loyalty Hub"]}><p>Automate your business growth engine.</p></FeatureSplitView> },
+  { id: 'analytics', name: 'Analytics', icon: <BarChart3 />, color: 'from-emerald-500 to-cyan-600', component: Analytics },
+  { id: 'personnel', name: 'Personnel', icon: <Users />, color: 'from-slate-600 to-indigo-800', component: Personnel },
+  { id: 'estimates', name: 'Estimates', icon: <FileText />, color: 'from-amber-600 to-orange-700', component: Estimates },
+  { id: 'buyback', name: 'Buy Back', icon: <DollarSign />, color: 'from-teal-600 to-cyan-700', component: BuyBack },
+  { id: 'wiki', name: 'Wiki', icon: <BookOpen />, color: 'from-slate-600 to-slate-800', component: () => <FeatureSplitView title="Wiki" icon={<BookOpen />} colorClass="from-slate-600 to-slate-800" screenshots={[IMAGES.nexus]} highlights={["Schematic Library", "SOP Storage", "Internal Training"]}><p>Knowledge is power. Centralize your shop intelligence.</p></FeatureSplitView> },
+  { id: 'guide', name: 'Guide', icon: <Library />, color: 'from-blue-700 to-blue-900', component: Guide },
+  { id: 'suppliers', name: 'Suppliers', icon: <Truck />, color: 'from-rose-600 to-pink-600', component: () => <FeatureSplitView title="Suppliers" icon={<Truck />} colorClass="from-rose-600 to-pink-600" screenshots={[IMAGES.inventory]} highlights={["Global Hub", "Instant Orders", "Return Tracking"]}><p>Direct parts procurement pipeline.</p></FeatureSplitView> },
   { id: 'daemon', name: 'Daemon AI', icon: <Bot />, color: 'from-purple-600 to-fuchsia-600', component: DaemonAI },
-  { id: 'nexus', name: 'Nexus Store', icon: <Store />, color: 'from-cyan-600 to-blue-600', component: NexusInfo },
-  { id: 'settings', name: 'Setup', icon: <Settings />, color: 'from-gray-600 to-slate-600', component: PersonnelInfo },
+  { id: 'nexus', name: 'Nexus', icon: <Store />, color: 'from-cyan-600 to-blue-600', component: Nexus },
+  { id: 'settings', name: 'Setup', icon: <Settings />, color: 'from-gray-600 to-slate-600', component: () => <FeatureSplitView title="Setup" icon={<Settings />} colorClass="from-gray-600 to-slate-600" screenshots={[IMAGES.settings]} highlights={["Global Config", "User Management", "Theme Overrides"]}><p>Configure your shop environment settings.</p></FeatureSplitView> },
 ];
 
 // --- Showcase Component ---
 
 const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
-  const [activeLightbox, setActiveLightbox] = useState<string | null>(null);
-  const [isDisclaimerOpen, setIsDisclaimerOpen] = useState(false);
-
+  const [lbImage, setLbImage] = useState<string | null>(null);
+  const [showLegal, setShowLegal] = useState(false);
+  
   const awards = [
     { icon: <ShieldCheck size={20} />, label: "Security Verified 2025" },
     { icon: <Trophy size={20} />, label: "Shop Choice Award" },
-    { icon: <Star size={20} />, label: "Elite Tech Choice" },
-    { icon: <Medal size={20} />, label: "Industry Gold Standard" },
-    { icon: <Globe size={20} />, label: "Universal Compliance" }
+    { icon: <Award size={20} />, label: "Elite Tech Choice" },
+    { icon: <Medal size={20} />, label: "Product of the Year" }
   ];
 
   return (
-    <div className="w-full bg-[#050505] text-white selection:bg-blue-500/30 overflow-y-auto h-screen scroll-smooth font-poppins">
-      <nav className="fixed top-0 w-full z-[100] border-b border-white/5 bg-black/50 backdrop-blur-xl px-12 py-6 md:py-8 flex items-center justify-between">
-        <div className="flex items-center gap-3 group">
-          <span className="text-2xl md:text-3xl font-black tracking-tighter leading-none uppercase cursor-default">
-            REPAIR<span className="text-blue-500">OS</span>
-          </span>
+    <div className="w-full bg-[#050505] text-white selection:bg-blue-500/30 overflow-y-auto h-screen scroll-smooth font-poppins relative">
+      {/* Navigation */}
+      <nav className="fixed top-0 w-full z-[100] border-b border-white/5 bg-black/50 backdrop-blur-xl px-12 py-8 flex items-center justify-between">
+        <div className="flex flex-col">
+          <span className="text-3xl font-black tracking-tighter uppercase leading-none">REPAIR<span className="text-blue-500">OS</span></span>
+          <span className="text-[8px] font-black uppercase tracking-[0.5em] text-white/20 mt-1">BY DAEMONCORE®</span>
         </div>
-        <div className="hidden md:flex items-center gap-10 text-xs font-bold uppercase tracking-[0.3em] text-white/40">
+        <div className="hidden md:flex items-center gap-10 text-[10px] font-black uppercase tracking-[0.3em] text-white/40">
           <a href="#everything" className="hover:text-white transition-colors">Membership</a>
-          <a href="#compatibility" className="hover:text-white transition-colors">Devices</a>
+          <a href="#compatibility" className="hover:text-white transition-colors">Compatibility</a>
           <a href="#pricing" className="hover:text-white transition-colors">Pricing</a>
         </div>
-        <button onClick={onLaunch} className="bg-white text-black px-8 py-3 rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-blue-600 hover:text-white transition-all shadow-2xl">Launch Demo</button>
+        <button onClick={onLaunch} className="bg-white text-black px-10 py-3 rounded-full text-[11px] font-black uppercase tracking-widest hover:bg-blue-600 hover:text-white transition-all shadow-xl">Launch Demo</button>
       </nav>
 
-      {/* Hero */}
-      <section className="relative min-h-screen flex flex-col items-center justify-center px-10 pt-40 pb-40 overflow-hidden text-center">
+      {/* Hero Section */}
+      <section className="relative min-h-screen flex flex-col items-center justify-center px-10 text-center pt-32 pb-40 overflow-hidden">
         <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.1),transparent_60%)]"></div>
-        <div className="relative z-10 max-w-7xl flex flex-col items-center">
-          <div className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[11px] font-bold uppercase tracking-[0.4em] mb-8 animate-pulse">
+        
+        <div className="relative z-10">
+          <div className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[11px] font-black uppercase tracking-[0.4em] mb-12 animate-pulse">
             <Zap size={14} /> NEW APPS ADDED WEEKLY // NO UPSELLS
           </div>
-          
-          <h1 className="text-8xl md:text-[13rem] font-black leading-[0.8] tracking-tighter mb-10 drop-shadow-2xl uppercase">
-            REPAIR<span className="text-blue-500">OS</span>
-          </h1>
-          
-          <h2 className="text-3xl md:text-6xl font-extrabold text-white/90 tracking-tight mb-12 max-w-5xl mx-auto leading-tight uppercase">
-            THE WORLD'S FIRST <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500">OPERATING SYSTEM</span> <br/>BUILT EXCLUSIVELY FOR REPAIR SHOPS.
+
+          <div className="flex flex-col items-center mb-16">
+            <h1 className="text-[7rem] md:text-[11rem] font-black leading-[0.75] tracking-tighter uppercase drop-shadow-[0_0_80px_rgba(59,130,246,0.2)]">
+              REPAIR<span className="text-blue-500">OS</span>
+            </h1>
+            <div className="text-[12px] md:text-[14px] font-black tracking-[1.2em] text-white/20 uppercase mt-8 flex items-center gap-6">
+              <div className="h-px w-12 bg-white/10"></div>
+              BY DAEMONCORE®
+              <div className="h-px w-12 bg-white/10"></div>
+            </div>
+          </div>
+
+          <h2 className="text-4xl md:text-7xl font-extrabold mb-16 max-w-6xl mx-auto leading-[1.1] uppercase tracking-tight text-white/90">
+            THE WORLD'S FIRST <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500">OPERATING SYSTEM</span> <br/>DEDICATED EXCLUSIVELY TO REPAIR SHOPS.
           </h2>
 
-          <p className="text-xl md:text-2xl text-white/40 max-w-3xl mx-auto mb-16 font-light leading-relaxed">
-            Not just another POS. Repair OS is a complete desktop ecosystem that replaces your fragmented tools with a single, high-fidelity operating environment.
-          </p>
-          
-          <div className="flex flex-col items-center gap-14">
-            <button onClick={onLaunch} className="w-full md:w-auto bg-blue-600 hover:bg-blue-500 text-white px-14 py-7 rounded-[32px] font-extrabold text-xl transition-all flex items-center justify-center gap-5 group shadow-2xl shadow-blue-500/20 uppercase active:scale-95">
-              LAUNCH DEMO <ArrowRight className="group-hover:translate-x-2 transition-transform" />
+          <div className="flex flex-col items-center gap-12">
+            <button onClick={onLaunch} className="bg-blue-600 hover:bg-blue-500 text-white px-16 py-8 rounded-[40px] font-black text-2xl transition-all flex items-center gap-6 uppercase group shadow-2xl shadow-blue-500/30 active:scale-95">
+              LAUNCH SYSTEM DEMO <ArrowRight className="group-hover:translate-x-3 transition-transform" />
             </button>
 
-            {/* Awards Row - Explicitly Visible */}
-            <div className="flex flex-wrap justify-center items-center gap-4 md:gap-6 max-w-5xl pt-8 border-t border-white/5">
+            {/* Restored & Enhanced Awards */}
+            <div className="flex flex-wrap justify-center gap-6 md:gap-8 max-w-5xl">
               {awards.map((award, idx) => (
-                <div key={idx} className="flex items-center gap-3 px-5 py-3 glass rounded-2xl border border-white/5 group hover:border-white/20 transition-all hover:-translate-y-1 bg-white/5 backdrop-blur-md">
-                  <div className="text-blue-500 group-hover:scale-110 transition-transform">{award.icon}</div>
-                  <span className="text-[11px] font-black uppercase tracking-[0.2em] text-white/60 group-hover:text-white transition-colors whitespace-nowrap">{award.label}</span>
+                <div key={idx} className="flex items-center gap-3 px-6 py-3 glass rounded-2xl border border-white/5 text-[10px] font-black uppercase tracking-[0.2em] text-white/40 hover:text-white hover:border-blue-500/30 transition-all hover:-translate-y-1 cursor-default group">
+                  <div className="text-blue-500 group-hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.6)]">{award.icon}</div>
+                  {award.label}
                 </div>
               ))}
             </div>
@@ -624,90 +372,76 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
         </div>
       </section>
 
-      {/* One Membership Section */}
-      <section id="everything" className="py-40 border-y border-white/5 bg-white/[0.01]">
-        <div className="max-w-7xl mx-auto px-10">
-          <div className="grid md:grid-cols-2 gap-24 items-center">
-            <div>
-              <h2 className="text-6xl md:text-[5.5rem] font-black mb-10 uppercase leading-none tracking-tight">ONE <br/><span className="text-blue-500">MEMBERSHIP.</span></h2>
-              <p className="text-2xl text-white/40 leading-relaxed mb-12 font-light">Forget the Pro versions. We built an ecosystem where every single tool is at your fingertips from day one. If we build it, you own it.</p>
-              <div className="space-y-6">
+      {/* Membership Section */}
+      <section id="everything" className="py-40 bg-white/[0.01] border-y border-white/5">
+        <div className="max-w-7xl mx-auto px-10 grid md:grid-cols-2 gap-24 items-center">
+           <div>
+              <h3 className="text-7xl font-black uppercase mb-8 leading-none tracking-tighter">ONE <br/><span className="text-blue-500">MEMBERSHIP.</span></h3>
+              <p className="text-2xl text-white/40 font-light mb-12">No pro tiers. No locked features. Every tool we build is yours for one flat fee. Infinite scaling for your shop.</p>
+              <div className="space-y-4">
                  {[
-                   { title: "Apps Added All The Time", icon: <Infinity className="text-blue-500" /> },
-                   { title: "Zero Upsells, Ever", icon: <Shield className="text-pink-500" /> },
-                   { title: "Unlimited Seats & Locations", icon: <Globe className="text-emerald-500" /> }
-                 ].map((item, i) => (
-                   <div key={i} className="flex items-center gap-6 p-7 glass rounded-[32px] border border-white/10 group hover:border-blue-500/30 transition-all">
-                      <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center group-hover:scale-110 transition-transform">{item.icon}</div>
-                      <span className="text-xl font-bold uppercase tracking-tight">{item.title}</span>
+                   { t: "Infinite App Expansion", i: <Infinity className="text-blue-500" /> },
+                   { t: "Zero Upsells, Forever", i: <Shield className="text-pink-500" /> },
+                   { t: "Cross-Platform Runtime", i: <Globe className="text-emerald-500" /> }
+                 ].map((item, idx) => (
+                   <div key={idx} className="flex items-center gap-6 p-6 glass rounded-3xl border border-white/10 group hover:border-blue-500/30 transition-all">
+                      <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center group-hover:scale-110 transition-transform">{item.i}</div>
+                      <span className="text-lg font-bold uppercase">{item.t}</span>
                    </div>
                  ))}
               </div>
-            </div>
-            <div className="relative group">
-               <div className="absolute -inset-10 bg-blue-600/10 blur-[120px] rounded-full opacity-50 group-hover:opacity-80 transition-opacity"></div>
-               <button 
-                onClick={() => setActiveLightbox(IMAGES.multitask)}
-                className="relative block rounded-[60px] overflow-hidden border border-white/10 shadow-2xl cursor-zoom-in transition-all duration-500 group-hover:-translate-y-2 group-hover:shadow-blue-500/20"
-               >
-                 <img src={IMAGES.multitask} className="w-full h-auto" alt="Multitasking Interface" />
-                 <div className="absolute inset-0 bg-white/0 group-hover:bg-white/5 transition-colors"></div>
-                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity scale-75 group-hover:scale-100 p-6 bg-white/10 backdrop-blur-2xl rounded-full border border-white/30 shadow-2xl">
-                   <Maximize2 className="text-white" size={48} />
-                 </div>
-               </button>
-               <div className="absolute -bottom-8 -right-8 glass px-8 py-5 rounded-[28px] border border-white/10 shadow-2xl animate-bounce font-black text-sm uppercase tracking-widest text-blue-400">UNLIMITED CAPACITY</div>
-            </div>
-          </div>
+           </div>
+           <div className="relative group cursor-pointer" onClick={() => setLbImage(IMAGES.multitask)}>
+              <div className="absolute -inset-10 bg-blue-600/5 blur-[100px] rounded-full"></div>
+              <img src={IMAGES.multitask} className="relative rounded-[40px] border border-white/10 shadow-2xl group-hover:scale-[1.02] transition-transform duration-700" alt="Interface" />
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100 rounded-[40px]">
+                <Maximize2 size={48} className="text-white drop-shadow-2xl" />
+              </div>
+           </div>
         </div>
       </section>
 
       {/* Compatibility Section */}
-      <section id="compatibility" className="py-40 relative overflow-hidden bg-black text-center">
-         <div className="max-w-6xl mx-auto px-10">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-bold uppercase tracking-widest mb-10">
-              <Check size={12} /> Universal Runtime
-            </div>
-            <h2 className="text-6xl md:text-[5rem] font-black mb-10 tracking-tight leading-none uppercase">Runs on 99.9% of devices.</h2>
-            <p className="text-white/40 text-xl md:text-2xl max-w-4xl mx-auto mb-20 font-light leading-relaxed">
-              If it has a browser, it runs your shop. No installers. No drivers. No IT headaches. Repair OS brings native-like performance to whatever hardware you already own.
-            </p>
-            
-            <div className="grid grid-cols-2 md:grid-cols-6 gap-6 mb-20">
-               {[
-                 { icon: <Monitor size={32} />, name: "Windows" },
-                 { icon: <MonitorCheck size={32} />, name: "macOS" },
-                 { icon: <Layout size={32} />, name: "Linux" },
-                 { icon: <Chrome size={32} />, name: "ChromeOS" },
-                 { icon: <Smartphone size={32} />, name: "iPad" },
-                 { icon: <Bot size={32} />, name: "Android" }
-               ].map((item, i) => (
-                 <div key={i} className="glass p-8 rounded-[32px] border border-white/5 flex flex-col items-center gap-4 group hover:border-white/20 transition-all">
-                    <div className="text-white/30 group-hover:text-white transition-colors">{item.icon}</div>
-                    <span className="text-xs font-bold uppercase tracking-widest">{item.name}</span>
-                 </div>
-               ))}
-            </div>
-         </div>
+      <section id="compatibility" className="py-40 border-b border-white/5">
+        <div className="max-w-7xl mx-auto px-10">
+          <h2 className="text-5xl md:text-7xl font-black uppercase mb-20 text-center tracking-tighter">RUN ON <span className="text-blue-500">EVERYTHING.</span></h2>
+          <div className="grid md:grid-cols-4 gap-10">
+             {[
+               { icon: <Tablet size={40} />, name: "iPad & Android", desc: "Full touch-optimized interface for floor diagnostics." },
+               { icon: <Monitor size={40} />, name: "PC & Mac", desc: "Native desktop feel in any modern web browser." },
+               { icon: <Laptop size={40} />, name: "Surface Hub", desc: "High-density view for large command center displays." },
+               { icon: <Smartphone size={40} />, name: "Mobile Ready", desc: "Check your shop signals from the palm of your hand." }
+             ].map((device, idx) => (
+               <div key={idx} className="glass p-10 rounded-[40px] border border-white/10 flex flex-col items-center text-center group hover:border-blue-500/50 transition-all">
+                  <div className="w-20 h-20 rounded-2xl bg-white/5 flex items-center justify-center mb-8 group-hover:bg-blue-600/20 group-hover:text-blue-400 transition-all">
+                    {device.icon}
+                  </div>
+                  <h4 className="text-xl font-black uppercase mb-4 tracking-widest">{device.name}</h4>
+                  <p className="text-white/40 text-sm leading-relaxed">{device.desc}</p>
+               </div>
+             ))}
+          </div>
+        </div>
       </section>
 
-      {/* Pricing Section */}
-      <section id="pricing" className="py-40 bg-[#050505] relative z-10 px-10 border-t border-white/5">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col items-start mb-16">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/20 text-[10px] font-bold uppercase tracking-widest text-white/60 mb-8">
-              <div className="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></div> ONE MEMBERSHIP • EVERYTHING INCLUDED
+      {/* Pricing & Footer Section - Fully Restored to Design Image */}
+      <section id="pricing" className="py-40 bg-black">
+        <div className="max-w-7xl mx-auto px-10">
+          {/* Main Price Header */}
+          <div className="mb-12">
+            <div className="flex items-baseline gap-2 mb-4">
+              <h2 className="text-8xl md:text-[10rem] font-black leading-none tracking-tighter">$199</h2>
+              <span className="text-4xl text-white/40 font-bold">/mo</span>
             </div>
-            <h2 className="text-[10rem] font-black leading-none tracking-tighter mb-4">$199<span className="text-4xl text-white/30 tracking-normal font-medium ml-4">/mo</span></h2>
-            <div className="space-y-4">
-              <p className="text-2xl text-white font-medium mb-2">Unlimited users. All current apps. All future apps.</p>
-              <p className="text-2xl font-black text-white uppercase tracking-tight">Price locked for 5 years.</p>
-            </div>
+            <p className="text-2xl font-medium text-white tracking-tight">Unlimited users. All current apps. All future apps.</p>
+            <p className="text-xl font-black uppercase tracking-widest text-white/90 mt-2">PRICE LOCKED FOR 5 YEARS.</p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8 mt-20">
-            <div className="glass p-12 rounded-[32px] border border-white/10 shadow-2xl">
-              <h3 className="text-2xl font-bold mb-10 text-white uppercase tracking-tight">Included in the box:</h3>
+          {/* Feature Grid & Action Card */}
+          <div className="grid md:grid-cols-2 gap-8 mb-40">
+            {/* Left Box: Features */}
+            <div className="glass p-12 rounded-[32px] border border-white/5 bg-white/[0.02]">
+              <h3 className="text-xl font-black uppercase tracking-widest mb-10 inline-block border-b-2 border-blue-500 pb-1">Included in the box:</h3>
               <ul className="space-y-6">
                 {[
                   "Full Desktop OS Environment",
@@ -716,96 +450,94 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
                   "Warehouse Stock Vault",
                   "App Store Access (All future modules included)"
                 ].map((item, idx) => (
-                  <li key={idx} className="flex items-center gap-4 text-white/80 font-medium">
-                    <Check size={20} className="text-emerald-500 shrink-0" strokeWidth={3} />
-                    <span>{item}</span>
+                  <li key={idx} className="flex items-center gap-4 text-white/70 font-bold uppercase text-[11px] tracking-widest">
+                    <Check size={18} className="text-emerald-500" /> {item}
                   </li>
                 ))}
               </ul>
             </div>
 
-            <div className="glass p-12 rounded-[32px] border border-white/10 shadow-2xl flex flex-col justify-between">
+            {/* Right Box: Call to Action */}
+            <div className="glass p-12 rounded-[32px] border border-white/5 bg-white/[0.02] flex flex-col justify-between">
               <div>
-                <h3 className="text-3xl font-bold mb-6 text-white uppercase tracking-tight">Ready to upgrade?</h3>
-                <p className="text-white/50 text-lg leading-relaxed font-light">Join the shops running on the world's first Repair Operating System. Try it in your shop for 14 days, completely free.</p>
+                <h3 className="text-3xl font-black uppercase tracking-tighter mb-6 leading-none">READY TO UPGRADE?</h3>
+                <p className="text-white/40 text-lg leading-relaxed font-medium">
+                  Join the shops running on the world's first Repair Operating System. Try it in your shop for 14 days, completely free.
+                </p>
               </div>
-              <div className="mt-12 text-center">
-                <a href={LEMON_SQUEEZY_LINK} target="_blank" rel="noopener noreferrer" className="w-full bg-white text-black font-black uppercase py-6 rounded-2xl tracking-[0.2em] hover:bg-blue-600 hover:text-white transition-all text-lg shadow-2xl block">Start Free Trial</a>
-              </div>
+              <a href={LEMON_SQUEEZY_LINK} target="_blank" className="block w-full bg-white text-black py-7 rounded-2xl font-black uppercase text-sm tracking-[0.3em] hover:bg-blue-600 hover:text-white transition-all shadow-2xl text-center mt-10">
+                Start Free Trial
+              </a>
             </div>
           </div>
-          
-          <div className="max-w-7xl mx-auto border-t border-white/5 pt-16 mt-32">
-            <div className="flex flex-col md:flex-row justify-between items-center gap-8">
-              <div className="flex flex-col items-center md:items-start gap-4">
-                <button 
-                  onClick={() => setIsDisclaimerOpen(true)}
-                  className="text-[10px] text-white/20 hover:text-white transition-colors uppercase tracking-[0.2em] font-bold flex items-center gap-2"
+
+          {/* RESTORED LEGAL STUFF AREA (MATCHING THE PIC) */}
+          <div className="border-t border-white/5 pt-16 flex flex-col gap-12">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8">
+              {/* Left Side: Legal Disclaimer label */}
+              <button 
+                onClick={() => setShowLegal(true)}
+                className="flex items-center gap-3 text-[10px] font-black text-white/20 uppercase tracking-[0.4em] hover:text-white transition-colors group"
+              >
+                <Scale size={16} className="text-white/30 group-hover:text-blue-500" /> LEGAL DISCLAIMER
+              </button>
+              
+              {/* Right Side: Links and Inquiries */}
+              <div className="flex flex-col items-start md:items-end gap-2">
+                <a href="https://daemoncore.app" target="_blank" className="text-[11px] font-black text-blue-500 uppercase tracking-[0.3em] hover:text-blue-400 transition-colors">
+                  DAEMONCORE.APP
+                </a>
+                <a 
+                  href="mailto:contact@daemoncore.app"
+                  className="text-[10px] font-black text-white/20 uppercase tracking-[0.2em] hover:text-white transition-colors"
                 >
-                  <Scale size={14} /> Legal Disclaimer
-                </button>
-              </div>
-              <div className="flex flex-col items-center md:items-end gap-2 shrink-0">
-                <a href="https://daemoncore.app" target="_blank" className="text-blue-500 hover:text-white transition-colors font-black text-[11px] uppercase tracking-[0.3em]">DaemonCore.app</a>
-                <a href="mailto:contact@daemoncore.app" className="text-white/40 hover:text-white transition-colors text-[10px] font-bold uppercase tracking-widest">Inquiries: contact@daemoncore.app</a>
+                  INQUIRIES: CONTACT@DAEMONCORE.APP
+                </a>
               </div>
             </div>
-            <p className="text-center text-white/20 text-[11px] font-bold uppercase tracking-[0.5em] mt-16">
-              © 2025 Repair OS by DaemonCore • {PATENT_NOTICE}
-            </p>
+
+            {/* Centered Trademark & Patent Footer */}
+            <footer className="text-center text-[10px] font-black text-white/10 uppercase tracking-[0.5em] pb-10">
+              © 2025 REPAIR OS BY DAEMONCORE • PATENT PENDING: US 10/2025/08429-DAEMON
+            </footer>
           </div>
         </div>
       </section>
-
-      {/* Demonstration Sandbox Notice */}
-      <div className="fixed bottom-10 left-10 z-[100] pointer-events-none select-none hidden lg:block">
-        <div className="flex items-center gap-3 bg-black/50 backdrop-blur-md px-4 py-2 rounded-full border border-white/5">
-          <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></div>
-          <span className="text-[9px] font-black uppercase tracking-[0.4em] text-white/30 whitespace-nowrap">
-            SYSTEM SANDBOX // DEMONSTRATION ENVIRONMENT ONLY
-          </span>
-        </div>
-      </div>
-
-      {/* Showcase Lightbox */}
-      {activeLightbox && <Lightbox src={activeLightbox} onClose={() => setActiveLightbox(null)} label="SYSTEM CORE PREVIEW // CLICK TO DISMISS" />}
+      
+      {/* Lightbox for membership image */}
+      {lbImage && <Lightbox src={lbImage} onClose={() => setLbImage(null)} />}
 
       {/* Legal Disclaimer Modal */}
-      {isDisclaimerOpen && (
-        <div 
-          className="fixed inset-0 z-[1000000] flex items-center justify-center bg-black/90 backdrop-blur-3xl p-6 animate-in fade-in duration-300"
-          onClick={() => setIsDisclaimerOpen(false)}
-        >
-          <div 
-            className="max-w-2xl w-full glass p-10 md:p-14 rounded-[48px] border border-white/20 shadow-[0_0_100px_rgba(255,255,255,0.05)] relative animate-in zoom-in slide-in-from-bottom-10 duration-500"
-            onClick={(e) => e.stopPropagation()}
-          >
+      {showLegal && (
+        <div className="fixed inset-0 z-[1000] flex items-center justify-center p-6 md:p-12 animate-in fade-in duration-300">
+          <div className="absolute inset-0 bg-black/80 backdrop-blur-2xl" onClick={() => setShowLegal(false)}></div>
+          <div className="relative glass w-full max-w-4xl max-h-[80vh] overflow-y-auto p-12 md:p-20 rounded-[48px] border border-white/10 animate-in zoom-in duration-300 shadow-[0_0_100px_rgba(59,130,246,0.1)]">
             <button 
-              onClick={() => setIsDisclaimerOpen(false)}
-              className="absolute top-8 right-8 p-3 hover:bg-white/10 rounded-2xl text-white/40 hover:text-white transition-all"
+              onClick={() => setShowLegal(false)}
+              className="absolute top-10 right-10 p-4 hover:bg-white/10 rounded-2xl transition-all"
             >
               <X size={24} />
             </button>
-            <div className="flex flex-col items-center text-center">
-              <div className="w-16 h-16 rounded-3xl bg-white/5 border border-white/10 flex items-center justify-center mb-8">
-                <Scale className="text-white/50" size={32} />
+            <div className="flex flex-col gap-10">
+              <div className="flex items-center gap-4 text-blue-500">
+                <Shield size={40} />
+                <h2 className="text-5xl font-black uppercase tracking-tighter">LEGAL<br/>DISCLAIMER</h2>
               </div>
-              <h3 className="text-3xl font-black text-white uppercase tracking-tighter mb-8 leading-none">OPERATOR<br/><span className="text-white/40">AGREEMENT</span></h3>
-              <div className="w-12 h-px bg-gradient-to-r from-transparent via-blue-500 to-transparent mb-8"></div>
-              <p className="text-[11px] md:text-[13px] text-white/60 uppercase tracking-[0.15em] leading-[2] font-medium text-justify">
-                Legal Disclaimer: Repair OS is a proprietary interface for professional repair environments. 
-                DaemonCore provides this platform "as is" without express or implied warranties. 
-                Mission-critical operations and hardware handling remain the sole responsibility of the technician. 
-                DaemonCore is not liable for business interruptions, data integrity issues, or hardware outcomes resulting from software utilization. 
-                Usage of this OS constitutes acceptance of these operational boundaries.
-              </p>
-              <div className="mt-12 w-full">
-                <button 
-                  onClick={() => setIsDisclaimerOpen(false)}
-                  className="w-full bg-white text-black py-5 rounded-2xl font-black uppercase text-xs tracking-[0.3em] hover:bg-blue-600 hover:text-white transition-all shadow-2xl active:scale-95"
-                >
-                  Acknowledge & Close
-                </button>
+              <div className="space-y-8 text-white/50 text-lg leading-relaxed font-light">
+                <p>
+                  Repair OS is a professional-grade operating environment designed exclusively for repair businesses. By accessing this platform—whether in a demonstration capacity or through a full enterprise membership—you acknowledge and agree that <span className="text-white font-bold italic">DaemonCore</span> and its parent entities are not liable for any direct, indirect, incidental, or consequential damages resulting from system use.
+                </p>
+                <p>
+                  Our software is provided on an "as-is" and "as-available" basis. While we strive for 99.9% uptime, we do not guarantee uninterrupted service. The <span className="text-blue-400 font-bold uppercase tracking-widest">Daemon AI</span> neural core is a tool to assist, not replace, certified technician judgment.
+                </p>
+                <p>
+                  All proprietary technologies, including the omnichannel ticketing matrix and the warehouse stock vault, are protected under international copyright law. 
+                  <br/>
+                  <span className="text-white font-black uppercase tracking-[0.2em]">{PATENT_NOTICE}</span>
+                </p>
+                <p className="pt-10 border-t border-white/5 text-[11px] font-black uppercase tracking-[0.5em]">
+                  © 2025 DAEMONCORE TECHNOLOGY GROUP. ALL RIGHTS RESERVED.
+                </p>
               </div>
             </div>
           </div>
@@ -815,105 +547,78 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
   );
 };
 
-// --- Main App ---
+// --- Main App Component ---
 
 const App: React.FC = () => {
   const [viewMode, setViewMode] = useState<'showcase' | 'os'>('showcase');
   const [windows, setWindows] = useState<WindowState[]>([]);
-  const [nextZIndex, setNextZIndex] = useState(10);
+  const [nextZ, setNextZ] = useState(10);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [isBooting, setIsBooting] = useState(false);
+  const [positions, setPositions] = useState<IconPos[]>([]);
   const [showImmersiveModal, setShowImmersiveModal] = useState(false);
-  const [viewportSize, setViewportSize] = useState({ width: window.innerWidth, height: window.innerHeight });
-  const [iconPositions, setIconPositions] = useState<IconPos[]>([]);
-  
+
   useEffect(() => {
-    const handleResize = () => setViewportSize({ width: window.innerWidth, height: window.innerHeight });
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+    return () => clearInterval(timer);
   }, []);
 
-  const maxRows = useMemo(() => Math.floor((viewportSize.height - PADDING * 2) / GRID_SIZE_Y), [viewportSize.height]);
-  
   useEffect(() => {
-    if (viewMode !== 'os') return;
-    setIconPositions(prev => {
-      const newPositions = [...prev];
-      let col = 0;
-      let row = 0;
-      APPS.forEach((app) => {
-        const existing = newPositions.find(p => p.id === app.id);
-        if (!existing) {
-          newPositions.push({ id: app.id, col, row });
-          row++;
-          if (row >= maxRows) { row = 0; col++; }
-        } else if (existing.row >= maxRows) {
-           existing.row = 0;
-           existing.col++;
-        }
-      });
-      return newPositions;
-    });
-  }, [viewMode, maxRows]);
+    if (viewMode === 'os' && positions.length === 0) {
+      setPositions(APPS.map((a, i) => ({
+        id: a.id,
+        col: Math.floor(i / 8),
+        row: i % 8
+      })));
+    }
+  }, [viewMode]);
 
-  const handleDragEnd = (id: string, col: number, row: number) => {
-    setIconPositions(prev => prev.map(p => p.id === id ? { ...p, col, row } : p));
-  };
-
-  useEffect(() => { 
-    const timer = setInterval(() => setCurrentTime(new Date()), 1000); 
-    return () => clearInterval(timer); 
-  }, []);
-
-  const launchOS = () => { 
-    setIsBooting(true); 
-    setTimeout(() => { 
-      setIsBooting(false); 
-      setViewMode('os'); 
+  const launch = () => {
+    setIsBooting(true);
+    setTimeout(() => {
+      setIsBooting(false);
+      setViewMode('os');
       setShowImmersiveModal(true);
-      openApp('dashboard'); 
-    }, 2500); 
+      openApp('dashboard');
+    }, 2000);
   };
 
-  const openApp = (appId: string) => {
-    const app = APPS.find(a => a.id === appId);
-    if (!app) return;
+  const openApp = (id: string) => {
     setWindows(prev => {
-      const existing = prev.find(w => w.id === appId);
-      if (existing) return prev.map(w => w.id === appId ? { ...w, isMinimized: false, zIndex: nextZIndex } : w);
-      return [...prev, { id: app.id, title: app.name, isOpen: true, isMinimized: false, zIndex: nextZIndex, icon: app.icon }];
+      const existing = prev.find(w => w.id === id);
+      if (existing) return prev.map(w => w.id === id ? { ...w, isMinimized: false, zIndex: nextZ } : w);
+      return [...prev, { id, title: id, isOpen: true, isMinimized: false, zIndex: nextZ, icon: <Package /> }];
     });
-    setNextZIndex(prev => prev + 1);
+    setNextZ(z => z + 1);
   };
 
   const closeWindow = (id: string) => setWindows(prev => prev.filter(w => w.id !== id));
-  const toggleMinimize = (id: string) => setWindows(prev => prev.map(w => w.id === id ? { ...w, isMinimized: !w.isMinimized } : w));
-  const focusWindow = (id: string) => { 
-    setWindows(prev => prev.map(w => w.id === id ? { ...w, zIndex: nextZIndex } : w)); 
-    setNextZIndex(prev => prev + 1); 
+  const minWindow = (id: string) => setWindows(prev => prev.map(w => w.id === id ? { ...w, isMinimized: !w.isMinimized } : w));
+  const focusWindow = (id: string) => {
+    setWindows(prev => prev.map(w => w.id === id ? { ...w, zIndex: nextZ } : w));
+    setNextZ(z => z + 1);
   };
 
   if (isBooting) return (
     <div className="h-screen w-screen bg-black flex flex-col items-center justify-center font-poppins">
-      <div className="w-72 space-y-6 text-center">
-        <Cpu className="text-blue-500 animate-spin mx-auto mb-6" size={48} />
-        <span className="text-white text-xs tracking-[0.6em] font-black uppercase">Syncing Neural Core...</span>
-        <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
-          <div className="h-full bg-blue-500 animate-[progress_2.5s_ease-in-out]"></div>
-        </div>
+      <Cpu className="text-blue-500 animate-spin mb-10" size={64} />
+      <span className="text-white text-xs tracking-[0.6em] font-black uppercase animate-pulse">Initializing OS Core...</span>
+      <div className="w-64 h-1 bg-white/5 rounded-full mt-8 overflow-hidden">
+        <div className="h-full bg-blue-500 animate-[load_2s_ease-in-out]"></div>
       </div>
-      <style>{`@keyframes progress { 0% { width: 0%; } 100% { width: 100%; } }`}</style>
+      <style>{`@keyframes load { 0% { width: 0%; } 100% { width: 100%; } }`}</style>
     </div>
   );
 
-  if (viewMode === 'showcase') return <ShowCase onLaunch={launchOS} />;
+  if (viewMode === 'showcase') return <ShowCase onLaunch={launch} />;
 
   return (
     <div className="h-screen w-screen relative overflow-hidden bg-[#050505] font-poppins">
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-950/40 via-black to-purple-950/40 z-0"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-950/30 via-black to-purple-950/30"></div>
       
+      {/* Immersive Modal Pop-up */}
       {showImmersiveModal && (
-        <div className="fixed inset-0 z-[100000] flex items-center justify-center bg-black/40 backdrop-blur-3xl animate-in fade-in duration-500">
+        <div className="fixed inset-0 z-[2000] flex items-center justify-center bg-black/40 backdrop-blur-3xl animate-in fade-in duration-500">
            <div className="max-w-xl w-full mx-6 glass p-12 rounded-[48px] border border-white/20 shadow-[0_0_100px_rgba(59,130,246,0.3)] flex flex-col items-center text-center animate-in zoom-in slide-in-from-bottom-10 duration-700">
               <div className="w-24 h-24 rounded-[32px] bg-blue-600 flex items-center justify-center mb-10 shadow-2xl shadow-blue-500/50">
                 <Monitor size={48} className="text-white" />
@@ -931,99 +636,120 @@ const App: React.FC = () => {
         </div>
       )}
 
-      {/* Clock Display */}
-      <div className="absolute top-16 right-16 z-10 text-right pointer-events-none select-none">
-        <div className="text-[120px] font-black leading-none tracking-tighter text-white/90 uppercase">
+      {/* Clock & Date */}
+      <div className="absolute top-16 right-16 z-10 text-right select-none opacity-80 pointer-events-none">
+        <div className="text-[120px] font-black leading-none tracking-tighter text-white uppercase">
           {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false })}
         </div>
-        <div className="text-lg font-bold tracking-[0.4em] text-white/20 uppercase mt-4 mb-10">
+        <div className="text-lg font-bold tracking-[0.5em] text-white/20 uppercase mt-4 mb-10">
           {currentTime.toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric' })}
-        </div>
-
-        {/* UPGRADE BUTTON */}
-        <div className="pointer-events-auto flex flex-col items-end gap-4 animate-in fade-in slide-in-from-right duration-1000 delay-500">
-           <a 
-            href={LEMON_SQUEEZY_LINK}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group relative flex flex-col items-center gap-1 bg-white text-black px-10 py-5 rounded-2xl font-black text-2xl tracking-tighter uppercase transition-all hover:bg-blue-600 hover:text-white hover:-translate-y-1 shadow-[0_0_50px_rgba(255,255,255,0.2)] hover:shadow-blue-500/50"
-           >
-              <span className="flex items-center gap-3">
-                <Gift className="group-hover:rotate-12 transition-transform" size={28} />
-                UPGRADE YOUR SHOP
-              </span>
-              <div className="absolute -top-3 -left-3 bg-red-600 text-white text-[10px] font-black px-3 py-1 rounded-full border-2 border-black rotate-[-10deg] animate-bounce">
-                OFFER
-              </div>
-           </a>
         </div>
       </div>
 
-      {/* Desktop Icons Container */}
-      <div className="absolute inset-0 z-10 overflow-hidden">
-        {iconPositions.map(pos => {
-          const app = APPS.find(a => a.id === pos.id);
-          if (!app) return null;
-          return (
+      {/* JUMPING RED OFFER BUTTON */}
+      <div className="absolute top-80 right-16 z-20">
+         <a 
+          href={LEMON_SQUEEZY_LINK}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group relative flex flex-col items-center gap-2 bg-white text-black px-10 py-5 rounded-3xl font-black text-2xl tracking-tighter uppercase transition-all hover:bg-blue-600 hover:text-white hover:-translate-y-1 shadow-2xl"
+         >
+            <div className="absolute -top-5 -right-5 bg-red-600 text-white text-[12px] font-black px-5 py-2 rounded-full border-2 border-white animate-bounce shadow-[0_10px_30px_rgba(220,38,38,0.5)]">
+              HOT OFFER
+            </div>
+            <span className="flex items-center gap-4">
+              <Gift className="group-hover:rotate-12 transition-transform" size={32} />
+              UPGRADE YOUR SHOP
+            </span>
+         </a>
+      </div>
+
+      {/* System Sandbox Watermark - OS View */}
+      <div className="absolute bottom-10 left-10 z-10 pointer-events-none">
+         <div className="flex items-center gap-3 px-6 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-xl">
+            <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></div>
+            <span className="text-[9px] font-black uppercase tracking-[0.4em] text-white/20">System Sandbox // Demonstration Environment Only</span>
+         </div>
+      </div>
+
+      {/* Desktop Icons */}
+      <div className="absolute inset-0 z-10">
+        {positions.map(p => {
+          const app = APPS.find(a => a.id === p.id);
+          return app && (
             <DesktopIcon 
-              key={app.id} 
+              key={p.id} 
               app={app} 
-              pos={pos} 
-              onDragEnd={handleDragEnd}
-              onClick={() => openApp(app.id)}
+              pos={p} 
+              onDragEnd={(id, col, row) => setPositions(v => v.map(o => o.id === id ? { ...o, col, row } : o))} 
+              onClick={() => openApp(p.id)} 
             />
           );
         })}
-        <div 
+      </div>
+
+      {/* Restored Exit Button - Bottom Right */}
+      <div className="absolute bottom-10 right-10 z-[500]">
+        <button 
           onClick={() => setViewMode('showcase')}
-          className="absolute bottom-16 right-16 z-10 group flex flex-col items-center gap-2 w-20 p-2 transition-all hover:bg-white/10 rounded-2xl text-white/20 hover:text-white cursor-pointer"
+          className="flex flex-col items-center gap-2 group transition-all"
         >
-          <div className="w-12 h-12 rounded-2xl border border-white/10 flex items-center justify-center"><LogOut size={24} /></div>
-          <span className="text-[10px] font-bold uppercase tracking-widest">Exit OS</span>
-        </div>
+          <div className="w-14 h-14 bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white rounded-2xl flex items-center justify-center border border-red-500/20 shadow-2xl transition-all group-hover:scale-110">
+            <Power size={24} />
+          </div>
+          <span className="text-[10px] font-black text-white/20 uppercase tracking-widest group-hover:text-red-500 transition-colors">Terminate OS</span>
+        </button>
       </div>
 
       {/* Windows Layer */}
-      <div className="absolute inset-0 pointer-events-none z-20">
-        {windows.map(win => {
-          const app = APPS.find(a => a.id === win.id);
+      <div className="absolute inset-0 z-20 pointer-events-none">
+        {windows.map(w => {
+          const app = APPS.find(a => a.id === w.id);
           if (!app) return null;
           return (
-            <div key={win.id} className="pointer-events-auto h-full w-full">
-              <Window window={win} app={app} onClose={() => closeWindow(win.id)} onMinimize={() => toggleMinimize(win.id)} onFocus={() => focusWindow(win.id)}>
-                <app.component onClose={() => closeWindow(win.id)} />
+            <div key={w.id} className="pointer-events-auto h-full w-full">
+              <Window 
+                window={w} 
+                app={app} 
+                onClose={() => closeWindow(w.id)} 
+                onMinimize={() => minWindow(w.id)} 
+                onFocus={() => focusWindow(w.id)}
+              >
+                <app.component onClose={() => closeWindow(w.id)} />
               </Window>
             </div>
           );
         })}
       </div>
 
-      {/* Taskbar Dock */}
+      {/* Slimmed Sleek Taskbar */}
       <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-[500]">
-        <div className="glass px-6 py-4 rounded-[32px] flex items-center gap-3 lg:gap-6 border border-white/10 shadow-2xl overflow-x-auto max-w-[90vw]">
-          <div className="flex items-center gap-2">
-             {APPS.map(app => (
-               <button 
-                key={app.id} 
-                onClick={() => openApp(app.id)} 
-                className={`p-3 lg:p-4 rounded-2xl transition-all relative group shrink-0 ${windows.some(w => w.id === app.id) ? 'bg-white/10 text-white' : 'text-white/40 hover:bg-white/5 hover:text-white'}`}
-               >
-                 <div className={`w-8 h-8 rounded-lg flex items-center justify-center overflow-hidden ${app.imageIcon ? 'bg-black' : ''}`}>
-                    {app.imageIcon ? (
-                      <img src={app.imageIcon} className="w-full h-full object-cover" alt="" />
-                    ) : (
-                      React.cloneElement(app.icon as React.ReactElement<any>, { size: 22 })
-                    )}
-                 </div>
-                 {windows.some(w => w.id === app.id) && <div className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-white rounded-full"></div>}
-               </button>
-             ))}
-          </div>
-          <div className="w-px h-10 bg-white/10 shrink-0"></div>
-          <div className="flex items-center gap-3 lg:gap-6 px-2">
-             <button className="text-white/40 hover:text-white transition-colors" onClick={() => setShowImmersiveModal(true)}><Maximize2 size={22} /></button>
-             <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center font-black text-[11px] shadow-lg shrink-0">TO</div>
-          </div>
+        <div className="glass px-4 py-2.5 rounded-[24px] flex items-center gap-2.5 border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.8)]">
+          {APPS.map(app => (
+            <button 
+              key={app.id} 
+              onClick={() => openApp(app.id)} 
+              className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all relative group ${windows.some(w => w.id === app.id) ? 'bg-white/15 text-white scale-110 shadow-lg' : 'text-white/30 hover:bg-white/5 hover:text-white hover:scale-105'}`}
+            >
+              <div className="shrink-0">
+                {app.imageIcon ? (
+                  <img src={app.imageIcon} className="w-6 h-6 object-cover rounded" alt="" />
+                ) : (
+                  React.cloneElement(app.icon as React.ReactElement<any>, { size: 18 })
+                )}
+              </div>
+              {windows.some(w => w.id === app.id) && (
+                <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-blue-500 rounded-full shadow-[0_0_5px_rgba(59,130,246,1)]"></div>
+              )}
+              <div className="absolute -top-12 left-1/2 -translate-x-1/2 px-3 py-1.5 bg-black/80 backdrop-blur-xl rounded-lg text-[8px] font-black uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap border border-white/10 shadow-2xl">
+                {app.name}
+              </div>
+            </button>
+          ))}
+          <div className="w-px h-6 bg-white/10 mx-1"></div>
+          <button onClick={launch} className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center shadow-lg hover:bg-blue-500 transition-colors">
+            <LayoutDashboard size={18} />
+          </button>
         </div>
       </div>
     </div>
