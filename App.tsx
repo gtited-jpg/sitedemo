@@ -36,7 +36,9 @@ import {
   Megaphone,
   BarChart3,
   BookOpen,
-  Truck
+  Truck,
+  HelpCircle,
+  Library
 } from 'lucide-react';
 import { GoogleGenAI } from "@google/genai";
 
@@ -54,6 +56,7 @@ interface AppDefinition {
   id: string;
   name: string;
   icon: React.ReactNode;
+  imageIcon?: string; // Optional image-based icon
   color: string;
   component: React.FC<{ onClose: () => void }>;
 }
@@ -84,7 +87,8 @@ const IMAGES = {
   tickets4: "https://cutlzlouwruvvdldospp.supabase.co/storage/v1/object/public/marketing/ticketmodal.png",
   estimates: "https://cutlzlouwruvvdldospp.supabase.co/storage/v1/object/public/marketing/estimates.png",
   buyback: "https://cutlzlouwruvvdldospp.supabase.co/storage/v1/object/public/marketing/buyback.png",
-  analytics: "https://cutlzlouwruvvdldospp.supabase.co/storage/v1/object/public/marketing/analytics.png"
+  analytics: "https://cutlzlouwruvvdldospp.supabase.co/storage/v1/object/public/marketing/analytics.png",
+  guide: "https://cutlzlouwruvvdldospp.supabase.co/storage/v1/object/public/marketing/guide.png"
 };
 
 const LEMON_SQUEEZY_LINK = "https://daemoncore.lemonsqueezy.com/checkout/buy/460d2a55-e651-4839-bd7c-3bab72437301";
@@ -153,8 +157,7 @@ const DesktopIcon: React.FC<{
     if (!dragging) return;
 
     const handleMouseMove = (e: MouseEvent) => {
-      // Handled visually by translation if we wanted real-time follow, 
-      // but snap-to-grid on release is cleaner for Windows behavior.
+      // Snap-to-grid preview logic could go here
     };
 
     const handleMouseUp = (e: MouseEvent) => {
@@ -176,7 +179,6 @@ const DesktopIcon: React.FC<{
     <div 
       onMouseDown={handleMouseDown}
       onClick={(e) => {
-        // If we were dragging, don't trigger click
         if (dragging) return;
         onClick();
       }}
@@ -187,10 +189,14 @@ const DesktopIcon: React.FC<{
         width: 80,
       }}
     >
-      <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-white transition-transform shadow-lg bg-gradient-to-br ${app.color}`}>
-        {React.cloneElement(app.icon as React.ReactElement<any>, { size: 24 })}
+      <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-white transition-transform shadow-lg overflow-hidden ${app.imageIcon ? 'bg-black' : `bg-gradient-to-br ${app.color}`}`}>
+        {app.imageIcon ? (
+          <img src={app.imageIcon} className="w-full h-full object-cover" alt={app.name} />
+        ) : (
+          React.cloneElement(app.icon as React.ReactElement<any>, { size: 24 })
+        )}
       </div>
-      <span className="text-[10px] font-semibold text-white/90 text-center drop-shadow-md font-poppins pointer-events-none">
+      <span className="text-[10px] font-semibold text-white/90 text-center drop-shadow-md font-poppins pointer-events-none line-clamp-2 leading-tight">
         {app.name}
       </span>
     </div>
@@ -215,8 +221,12 @@ const Window: React.FC<{
     >
       <div className="h-12 bg-black/50 border-b border-white/5 flex items-center justify-between px-6 select-none">
         <div className="flex items-center gap-4">
-          <div className={`w-6 h-6 rounded-lg flex items-center justify-center text-white text-[10px] bg-gradient-to-br ${app.color}`}>
-            {React.cloneElement(app.icon as React.ReactElement<any>, { size: 14 })}
+          <div className={`w-6 h-6 rounded-lg flex items-center justify-center text-white text-[10px] overflow-hidden ${app.imageIcon ? 'bg-black' : `bg-gradient-to-br ${app.color}`}`}>
+            {app.imageIcon ? (
+              <img src={app.imageIcon} className="w-full h-full object-cover" alt="" />
+            ) : (
+              React.cloneElement(app.icon as React.ReactElement<any>, { size: 14 })
+            )}
           </div>
           <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/80">{app.name}</span>
         </div>
@@ -245,10 +255,10 @@ const FeatureSplitView: React.FC<{
     <>
       <div className="flex flex-col lg:flex-row h-full font-poppins">
         <div className="w-full lg:w-[40%] p-10 lg:p-14 overflow-y-auto border-r border-white/5 bg-black/30 flex flex-col h-full">
-          <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${colorClass} flex items-center justify-center mb-8 shadow-2xl`}>
+          <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${colorClass} flex items-center justify-center mb-8 shadow-2xl overflow-hidden`}>
             {React.cloneElement(icon as React.ReactElement<any>, { size: 32, className: "text-white" })}
           </div>
-          <h2 className="text-4xl font-extrabold text-white mb-8 tracking-tighter leading-tight">{title}</h2>
+          <h2 className="text-4xl font-extrabold text-white mb-8 tracking-tighter leading-tight uppercase">{title}</h2>
           <div className="space-y-8 text-white/50 leading-relaxed text-base flex-grow font-normal">
             {children}
             <div className="pt-8 border-t border-white/5">
@@ -263,12 +273,6 @@ const FeatureSplitView: React.FC<{
                 ))}
               </div>
             </div>
-          </div>
-          <div className="mt-10 p-5 rounded-2xl bg-white/[0.03] border border-white/10">
-            <p className="text-[10px] text-blue-400 font-bold uppercase tracking-widest mb-2 flex items-center gap-2">
-              <Gem size={12} /> THE MEMBERSHIP PROMISE
-            </p>
-            <p className="text-xs text-white/40 font-medium">New modules added weekly. Always included. Zero upsells.</p>
           </div>
         </div>
         <div className="w-full lg:w-[60%] relative bg-[#050505] p-6 lg:p-10 overflow-y-auto">
@@ -286,10 +290,6 @@ const FeatureSplitView: React.FC<{
                     <Maximize2 className="text-white" size={32} />
                   </div>
                 </div>
-                <div className="absolute bottom-5 left-5 flex items-center gap-3 px-3 py-1.5 bg-black/60 backdrop-blur-md rounded-xl border border-white/10">
-                  <div className="w-2.5 h-2.5 rounded-full bg-blue-500 animate-pulse"></div>
-                  <span className="text-[10px] font-black text-white/60 uppercase tracking-widest">OS VIEWPORT {idx + 1} // FULL RESOLUTION PREVIEW</span>
-                </div>
               </button>
             ))}
           </div>
@@ -304,45 +304,25 @@ const FeatureSplitView: React.FC<{
 
 const DashboardInfo: React.FC = () => (
   <FeatureSplitView 
-    title="System Overview" 
+    title="Dashboard" 
     icon={<LayoutDashboard />} 
     colorClass="from-blue-600 to-indigo-600" 
     screenshots={[IMAGES.multitask]} 
     highlights={["Real-time Cashflow Telemetry", "Dynamic Bench Pressure Map", "Financial Signal Intelligence"]}
   >
-    <div className="p-5 bg-blue-500/10 border border-blue-500/20 rounded-2xl mb-8 group transition-all hover:bg-blue-500/20">
-      <div className="flex items-start gap-4">
-        <MonitorSmartphone className="text-blue-400 shrink-0" size={24} />
-        <div>
-          <p className="text-xs font-black uppercase tracking-[0.2em] text-blue-400 mb-2">OS PRO TIP: NATIVE IMMERSION</p>
-          <p className="text-sm text-white/90 font-bold mb-3 leading-tight">Press <span className="bg-white text-black px-1.5 py-0.5 rounded text-[10px] mx-1">F11</span> for Full Screen.</p>
-          <p className="text-xs text-white/60 leading-relaxed font-medium">
-            This mode transforms your browser into a true native command center. It is what makes Repair OS truly unique.
-          </p>
-        </div>
-      </div>
-    </div>
-    <div className="space-y-6">
-      <p className="text-white/80 font-bold">
-        Repair OS already features nearly <span className="text-blue-400">30 specialized apps</span> and counting. 
-      </p>
-      <p>
-        Command your entire shop from a single, high-fidelity dashboard. Track revenue, active tickets, and client volume with native-speed analytics. 
-      </p>
-    </div>
+    <p>Command your entire shop from a single, high-fidelity dashboard. Track revenue, active tickets, and client volume with native-speed analytics.</p>
   </FeatureSplitView>
 );
 
 const POSInfo: React.FC = () => (
   <FeatureSplitView 
-    title="Omnichannel POS" 
+    title="Terminal POS" 
     icon={<ShoppingCart />} 
     colorClass="from-amber-500 to-orange-600" 
     screenshots={[IMAGES.multitask]} 
     highlights={["Split Payment Logic", "Integrated Card Reader API", "Offline Mode Redundancy"]}
   >
     <p>Our Point of Sale terminal is designed for high-velocity environments. Process cash, card, and finance payments with zero friction.</p>
-    <p>Automatically calculates taxes based on region and syncs directly with your Inventory Vault for live stock deductions.</p>
   </FeatureSplitView>
 );
 
@@ -355,52 +335,61 @@ const MarketingInfo: React.FC = () => (
     highlights={["Automated Google Review Triggers", "SMS Blast Pipeline", "Email Retention Campaigns"]}
   >
     <p>Grow your business while you sleep. Set automated SMS triggers to ask for reviews the moment a repair is picked up.</p>
-    <p>Manage your entire customer database and run retention campaigns based on repair history and device type.</p>
   </FeatureSplitView>
 );
 
 const AnalyticsInfo: React.FC = () => (
   <FeatureSplitView 
-    title="Analytics DeepDive" 
+    title="Analytics" 
     icon={<BarChart3 />} 
     colorClass="from-emerald-500 to-cyan-600" 
     screenshots={[IMAGES.analytics]} 
     highlights={["Profitability Heatmaps", "Labor Margin Tracking", "Technician Efficiency Metrics"]}
   >
     <p>Turn your shop data into a competitive advantage. Visualize your margins and find exactly where your shop is losing money.</p>
-    <p>Track technician performance in real-time and identify your most profitable repair categories using the high-fidelity analytics dashboard.</p>
   </FeatureSplitView>
 );
 
 const WikiInfo: React.FC = () => (
   <FeatureSplitView 
-    title="The Vault: Guides" 
+    title="Repair Wiki" 
     icon={<BookOpen />} 
     colorClass="from-slate-600 to-slate-800" 
     screenshots={[IMAGES.nexus]} 
     highlights={["Proprietary Motherboard Schematics", "Internal Repair Protocols", "Interactive Part Search"]}
   >
     <p>Centralize your shop's knowledge. Store repair guides, schematics, and internal SOPs in a secure, searchable wiki.</p>
-    <p>Perfect for onboarding new technicians and ensuring every repair meets your shop's premium standards.</p>
+  </FeatureSplitView>
+);
+
+const GuideInfo: React.FC = () => (
+  <FeatureSplitView 
+    title="RepairOS Guide" 
+    icon={<Library />} 
+    colorClass="from-blue-700 to-blue-900" 
+    screenshots={[IMAGES.guide]} 
+    highlights={["Complete OS Documentation", "Technician Training Modules", "Hardware Compatibility List", "API Integration Guide"]}
+  >
+    <p>The definitive master manual for Repair OS. Learn how to master every module, from the Neural AI core to the Warehouse Vault.</p>
+    <p>Includes step-by-step video tutorials and configuration blueprints for multi-location shop management.</p>
   </FeatureSplitView>
 );
 
 const SupplierInfo: React.FC = () => (
   <FeatureSplitView 
-    title="Supplier Portal" 
+    title="Supplier Hub" 
     icon={<Truck />} 
     colorClass="from-rose-600 to-pink-600" 
     screenshots={[IMAGES.inventory]} 
     highlights={["Global Price Comparison", "Instant Bulk Orders", "Defect Return Tracking"]}
   >
     <p>Connect directly to major parts suppliers. Compare prices across multiple vendors and order restocks with a single click.</p>
-    <p>Track RMAs and defective parts directly from the dashboard to ensure you never pay for bad stock.</p>
   </FeatureSplitView>
 );
 
 const TicketInfo: React.FC = () => (
   <FeatureSplitView 
-    title="Mission Control: Tickets" 
+    title="Tickets" 
     icon={<Ticket />} 
     colorClass="from-pink-600 to-rose-600" 
     screenshots={[IMAGES.tickets1, IMAGES.tickets2, IMAGES.tickets4]} 
@@ -412,7 +401,7 @@ const TicketInfo: React.FC = () => (
 
 const InventoryInfo: React.FC = () => (
   <FeatureSplitView 
-    title="Inventory Vault" 
+    title="Inventory" 
     icon={<Package />} 
     colorClass="from-emerald-600 to-teal-600" 
     screenshots={[IMAGES.inventory]} 
@@ -424,7 +413,7 @@ const InventoryInfo: React.FC = () => (
 
 const EmployeeConsoleInfo: React.FC = () => (
   <FeatureSplitView 
-    title="Human Capital Core" 
+    title="Personnel" 
     icon={<Users />} 
     colorClass="from-slate-600 to-indigo-800" 
     screenshots={[IMAGES.employeesLog, IMAGES.employeesMain]} 
@@ -436,7 +425,7 @@ const EmployeeConsoleInfo: React.FC = () => (
 
 const EstimatesInfo: React.FC = () => (
   <FeatureSplitView 
-    title="The Quote Engine" 
+    title="Estimates" 
     icon={<FileText />} 
     colorClass="from-amber-600 to-orange-700" 
     screenshots={[IMAGES.estimates]} 
@@ -448,7 +437,7 @@ const EstimatesInfo: React.FC = () => (
 
 const BuyBackInfo: React.FC = () => (
   <FeatureSplitView 
-    title="Re-Commerce Hub" 
+    title="Buy Back" 
     icon={<DollarSign />} 
     colorClass="from-teal-600 to-cyan-700" 
     screenshots={[IMAGES.buyback]} 
@@ -472,7 +461,7 @@ const NexusInfo: React.FC = () => (
 
 const PersonnelInfo: React.FC = () => (
   <FeatureSplitView 
-    title="Terminal Config" 
+    title="Setup" 
     icon={<Settings />} 
     colorClass="from-gray-600 to-slate-600" 
     screenshots={[IMAGES.settings]} 
@@ -552,6 +541,7 @@ const APPS: AppDefinition[] = [
   { id: 'estimates', name: 'Estimates', icon: <FileText />, color: 'from-amber-600 to-orange-700', component: EstimatesInfo },
   { id: 'buyback', name: 'Buy Back', icon: <DollarSign />, color: 'from-teal-600 to-cyan-700', component: BuyBackInfo },
   { id: 'wiki', name: 'Repair Wiki', icon: <BookOpen />, color: 'from-slate-600 to-slate-800', component: WikiInfo },
+  { id: 'guide', name: 'RepairOS Guide', icon: <Library />, imageIcon: IMAGES.guide, color: 'from-blue-700 to-blue-900', component: GuideInfo },
   { id: 'suppliers', name: 'Supplier Hub', icon: <Truck />, color: 'from-rose-600 to-pink-600', component: SupplierInfo },
   { id: 'daemon', name: 'Daemon AI', icon: <Bot />, color: 'from-purple-600 to-fuchsia-600', component: DaemonAI },
   { id: 'nexus', name: 'Nexus Store', icon: <Store />, color: 'from-cyan-600 to-blue-600', component: NexusInfo },
@@ -654,24 +644,20 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
       {/* Global Standard Lightbox Display */}
       {activeLightbox && <Lightbox src={activeLightbox} onClose={() => setActiveLightbox(null)} label="SYSTEM CORE PREVIEW // CLICK TO DISMISS" />}
 
-      {/* "Runs on 99.9% of devices" Section */}
+      {/* Compatibility Section */}
       <section id="compatibility" className="py-40 relative overflow-hidden bg-black text-center">
          <div className="max-w-6xl mx-auto px-10">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-bold uppercase tracking-widest mb-10">
-              <Check size={12} /> Universal Runtime
-            </div>
             <h2 className="text-6xl md:text-[5rem] font-black mb-10 tracking-tight leading-none uppercase">Runs on 99.9% of devices.</h2>
             <p className="text-white/40 text-xl md:text-2xl max-w-4xl mx-auto mb-20 font-light leading-relaxed">
-              If it has a browser, it runs your shop. No installers. No drivers. No IT headaches. Repair OS brings native-like performance to whatever hardware you already own.
+              Native-like performance on whatever hardware you already own. No installation required.
             </p>
-            
-            <div className="grid grid-cols-2 md:grid-cols-6 gap-6 mb-20">
+            <div className="grid grid-cols-2 md:grid-cols-6 gap-6">
                {[
                  { icon: <Monitor size={32} />, name: "Windows" },
                  { icon: <MonitorCheck size={32} />, name: "macOS" },
                  { icon: <Layout size={32} />, name: "Linux" },
                  { icon: <Chrome size={32} />, name: "ChromeOS" },
-                 { icon: <Smartphone size={32} />, name: "iPad / Tablet" },
+                 { icon: <Smartphone size={32} />, name: "iPad" },
                  { icon: <Bot size={32} />, name: "Android" }
                ].map((item, i) => (
                  <div key={i} className="glass p-8 rounded-[32px] border border-white/5 flex flex-col items-center gap-4 group hover:border-white/20 transition-all">
@@ -686,64 +672,25 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
       {/* Pricing Section */}
       <section id="pricing" className="py-40 bg-[#050505] relative z-10 px-10 border-t border-white/5">
         <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col items-start mb-16">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/20 text-[10px] font-bold uppercase tracking-widest text-white/60 mb-8">
-              <div className="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></div> ONE MEMBERSHIP • EVERYTHING INCLUDED
-            </div>
-            <h2 className="text-[10rem] font-black leading-none tracking-tighter mb-4">$199<span className="text-4xl text-white/30 tracking-normal font-medium ml-4">/mo</span></h2>
-            <div className="space-y-4">
-              <p className="text-2xl text-white font-medium mb-2">Unlimited users. All current apps. All future apps.</p>
-              <p className="text-sm text-white/30 font-bold uppercase tracking-[0.2em]">Note: Excessive use may require a custom plan.</p>
-              <p className="text-2xl font-black text-white uppercase tracking-tight">Price locked for 5 years.</p>
-            </div>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-8 mt-20">
+          <h2 className="text-[10rem] font-black leading-none tracking-tighter mb-4">$199<span className="text-4xl text-white/30 tracking-normal font-medium ml-4">/mo</span></h2>
+          <p className="text-2xl text-white font-medium mb-12">Unlimited users. Every tool included. No hidden costs.</p>
+          <div className="grid md:grid-cols-2 gap-8">
             <div className="glass p-12 rounded-[32px] border border-white/10 shadow-2xl">
-              <h3 className="text-2xl font-bold mb-10 text-white uppercase tracking-tight">The Full Ecosystem</h3>
-              <div className="space-y-6">
-                {[
-                  "Desktop OS Shell & Window Management",
-                  "Unlimited Employee Accounts",
-                  "Ticketing, Invoicing, Inventory, CRM",
-                  "Daemon Neural AI (Unlimited usage)",
-                  "App Store Access (All future modules included)"
-                ].map((item, idx) => (
-                  <div key={idx} className="flex items-center gap-4 text-white/80 font-medium">
-                    <Check size={20} className="text-emerald-500 shrink-0" strokeWidth={3} />
-                    <span>{item}</span>
-                  </div>
+              <h3 className="text-2xl font-bold mb-10 text-white uppercase tracking-tight underline decoration-blue-500">Included in the box:</h3>
+              <ul className="space-y-6">
+                {["Full Desktop OS Environment", "Daemon AI Neural Core", "Omnichannel Ticketing", "Warehouse Stock Vault", "Employee Pay & Tax Sync"].map((item, idx) => (
+                  <li key={idx} className="flex items-center gap-4 text-white/80 font-medium">
+                    <Check size={20} className="text-emerald-500" strokeWidth={3} /> {item}
+                  </li>
                 ))}
-              </div>
+              </ul>
             </div>
-
             <div className="glass p-12 rounded-[32px] border border-white/10 shadow-2xl flex flex-col justify-between">
-              <div>
-                <h3 className="text-3xl font-bold mb-6 text-white uppercase tracking-tight">Ready to upgrade your shop?</h3>
-                <p className="text-white/50 text-lg leading-relaxed font-light">Join the shops running on the world's first Repair Operating System. Try it in your shop for 14 days, completely free.</p>
-              </div>
-              <div className="mt-12 text-center">
-                <a 
-                  href={LEMON_SQUEEZY_LINK} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="w-full bg-white text-black font-black uppercase py-6 rounded-2xl tracking-[0.2em] hover:bg-blue-600 hover:text-white transition-all text-lg shadow-2xl mb-6 inline-block"
-                >
-                  Start 14-Day Free Trial
-                </a>
-                <p className="text-xs text-white/30 font-medium tracking-widest uppercase">Secure payment via LemonSqueezy • Cancel anytime</p>
-              </div>
+              <p className="text-white/50 text-lg font-light leading-relaxed">Upgrade your shop flow today. No credit card required for 14-day evaluation.</p>
+              <a href={LEMON_SQUEEZY_LINK} className="w-full bg-white text-black font-black uppercase py-6 rounded-2xl text-center hover:bg-blue-600 hover:text-white transition-all text-lg shadow-2xl">Start Free Trial</a>
             </div>
           </div>
-
-          <div className="mt-40 pt-12 border-t border-white/5 text-center flex flex-col items-center gap-4">
-            <p className="text-white/20 text-[11px] font-bold uppercase tracking-[0.5em]">© 2025 Repair OS by DaemonCore • {PATENT_NOTICE}</p>
-            <div className="flex gap-8 text-[11px] font-bold uppercase tracking-widest text-white/20">
-              <a href="#" className="hover:text-white transition-colors">Privacy</a>
-              <a href="#" className="hover:text-white transition-colors">Terms</a>
-              <a href="#" className="hover:text-white transition-colors">Status</a>
-            </div>
-          </div>
+          <p className="text-center text-white/20 text-[10px] font-bold uppercase tracking-[0.5em] mt-32">© 2025 Repair OS by DaemonCore • {PATENT_NOTICE}</p>
         </div>
       </section>
     </div>
@@ -762,37 +709,30 @@ const App: React.FC = () => {
   const [viewportSize, setViewportSize] = useState({ width: window.innerWidth, height: window.innerHeight });
   const [iconPositions, setIconPositions] = useState<IconPos[]>([]);
   
-  // Track window resize for reflow
   useEffect(() => {
     const handleResize = () => setViewportSize({ width: window.innerWidth, height: window.innerHeight });
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Compute Grid Capacity
   const maxRows = useMemo(() => Math.floor((viewportSize.height - PADDING * 2) / GRID_SIZE_Y), [viewportSize.height]);
   
-  // Initialize and Reflow Icons
   useEffect(() => {
     if (viewMode !== 'os') return;
-
     setIconPositions(prev => {
       const newPositions = [...prev];
       let col = 0;
       let row = 0;
-
       APPS.forEach((app) => {
         const existing = newPositions.find(p => p.id === app.id);
         if (!existing) {
           newPositions.push({ id: app.id, col, row });
           row++;
-          if (row >= maxRows) {
-            row = 0;
-            col++;
-          }
-        } else {
-          // Check if icon is out of bounds due to resize
-          // If we want Windows-like reflow, we could force them back into valid rows/cols here
+          if (row >= maxRows) { row = 0; col++; }
+        } else if (existing.row >= maxRows) {
+           // Basic reflow if screen shrinks too much
+           existing.row = 0;
+           existing.col++;
         }
       });
       return newPositions;
@@ -840,11 +780,10 @@ const App: React.FC = () => {
     <div className="h-screen w-screen bg-black flex flex-col items-center justify-center font-poppins">
       <div className="w-72 space-y-6 text-center">
         <Cpu className="text-blue-500 animate-spin mx-auto mb-6" size={48} />
-        <span className="text-white text-xs tracking-[0.6em] font-black uppercase">Establishing Link...</span>
+        <span className="text-white text-xs tracking-[0.6em] font-black uppercase">Syncing Neural Core...</span>
         <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
           <div className="h-full bg-blue-500 animate-[progress_2.5s_ease-in-out]"></div>
         </div>
-        <p className="text-[10px] text-white/20 uppercase tracking-[0.4em] font-bold">Establishing Neural Link</p>
       </div>
       <style>{`@keyframes progress { 0% { width: 0%; } 100% { width: 100%; } }`}</style>
     </div>
@@ -856,29 +795,13 @@ const App: React.FC = () => {
     <div className="h-screen w-screen relative overflow-hidden bg-[#050505] font-poppins">
       <div className="absolute inset-0 bg-gradient-to-br from-blue-950/40 via-black to-purple-950/40 z-0"></div>
       
-      {/* Immersive Experience Modal (REFINED) */}
       {showImmersiveModal && (
         <div className="fixed inset-0 z-[100000] flex items-center justify-center bg-black/40 backdrop-blur-3xl animate-in fade-in duration-500">
            <div className="max-w-xl w-full mx-6 glass p-12 rounded-[48px] border border-white/20 shadow-[0_0_100px_rgba(59,130,246,0.3)] flex flex-col items-center text-center animate-in zoom-in slide-in-from-bottom-10 duration-700">
-              <div className="w-24 h-24 rounded-[32px] bg-blue-600 flex items-center justify-center mb-10 shadow-2xl shadow-blue-500/50">
-                <Monitor size={48} className="text-white" />
-              </div>
-              <h3 className="text-4xl font-black text-white uppercase tracking-tighter mb-6 leading-none">NATIVE DESKTOP<br/><span className="text-blue-500">ENGAGED</span></h3>
-              <p className="text-xl text-white/40 font-light leading-relaxed mb-10">
-                For the ultimate command center experience, we recommend entering <span className="text-white font-bold italic">Immersive Mode.</span>
-              </p>
-              
-              <div className="flex flex-col items-center gap-4 mb-12">
-                 <div className="bg-white text-black px-10 py-6 rounded-3xl font-black text-5xl shadow-xl border-b-8 border-gray-300">F11</div>
-                 <p className="text-[12px] font-black uppercase tracking-[0.5em] text-blue-400 mt-4">UNLEASH FULL PIXEL DENSITY</p>
-              </div>
-
-              <button 
-                onClick={() => setShowImmersiveModal(false)}
-                className="w-full bg-white text-black py-6 rounded-3xl font-black uppercase text-lg tracking-[0.2em] hover:bg-blue-600 hover:text-white transition-all shadow-2xl active:scale-95"
-              >
-                READY TO OPERATE
-              </button>
+              <Monitor size={48} className="text-blue-500 mb-8" />
+              <h3 className="text-4xl font-black text-white uppercase tracking-tighter mb-4">NATIVE IMMERSION</h3>
+              <p className="text-xl text-white/40 font-light leading-relaxed mb-10">Press <span className="text-white font-bold italic">F11</span> for a true full-screen command center experience.</p>
+              <button onClick={() => setShowImmersiveModal(false)} className="w-full bg-white text-black py-6 rounded-3xl font-black uppercase text-lg tracking-[0.2em] hover:bg-blue-600 hover:text-white transition-all shadow-2xl">OPERATE TERMINAL</button>
            </div>
         </div>
       )}
@@ -888,22 +811,12 @@ const App: React.FC = () => {
         <div className="text-[120px] font-black leading-none tracking-tighter text-white/90 uppercase">
           {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false })}
         </div>
-        <div className="text-lg font-bold tracking-[0.4em] text-white/20 uppercase mt-4 mb-10">
+        <div className="text-lg font-bold tracking-[0.4em] text-white/20 uppercase mt-4">
           {currentTime.toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric' })}
-        </div>
-        <div className="pointer-events-auto flex flex-col items-end gap-4 animate-in fade-in slide-in-from-right duration-1000 delay-500">
-           <a 
-            href={LEMON_SQUEEZY_LINK}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group relative flex flex-col items-center gap-1 bg-white text-black px-10 py-5 rounded-2xl font-black text-2xl tracking-tighter uppercase transition-all hover:bg-blue-600 hover:text-white hover:-translate-y-1 shadow-[0_0_50px_rgba(255,255,255,0.2)]"
-           >
-              <span className="flex items-center gap-3"><Gift className="group-hover:rotate-12 transition-transform" size={28} />UPGRADE YOUR SHOP</span>
-           </a>
         </div>
       </div>
 
-      {/* Movable Desktop Icons Container */}
+      {/* Desktop Icons Container */}
       <div className="absolute inset-0 z-10 overflow-hidden">
         {iconPositions.map(pos => {
           const app = APPS.find(a => a.id === pos.id);
@@ -918,8 +831,6 @@ const App: React.FC = () => {
             />
           );
         })}
-        
-        {/* Fixed Exit Icon Bottom-Left of Grid or manually placed */}
         <div 
           onClick={() => setViewMode('showcase')}
           className="absolute bottom-16 left-16 z-10 group flex flex-col items-center gap-2 w-20 p-2 transition-all hover:bg-white/10 rounded-2xl text-white/20 hover:text-white cursor-pointer"
@@ -944,11 +855,6 @@ const App: React.FC = () => {
         })}
       </div>
 
-      {/* Footer Branding */}
-      <div className="absolute bottom-4 left-6 z-[100] pointer-events-none opacity-40 flex flex-col gap-1">
-        <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-white/50">{PATENT_NOTICE}</p>
-      </div>
-
       {/* Taskbar Dock */}
       <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-[500]">
         <div className="glass px-6 py-4 rounded-[32px] flex items-center gap-3 lg:gap-6 border border-white/10 shadow-2xl overflow-x-auto max-w-[90vw]">
@@ -959,7 +865,13 @@ const App: React.FC = () => {
                 onClick={() => openApp(app.id)} 
                 className={`p-3 lg:p-4 rounded-2xl transition-all relative group shrink-0 ${windows.some(w => w.id === app.id) ? 'bg-white/10 text-white' : 'text-white/40 hover:bg-white/5 hover:text-white'}`}
                >
-                 {React.cloneElement(app.icon as React.ReactElement<any>, { size: 22 })}
+                 <div className={`w-8 h-8 rounded-lg flex items-center justify-center overflow-hidden ${app.imageIcon ? 'bg-black' : ''}`}>
+                    {app.imageIcon ? (
+                      <img src={app.imageIcon} className="w-full h-full object-cover" alt="" />
+                    ) : (
+                      React.cloneElement(app.icon as React.ReactElement<any>, { size: 22 })
+                    )}
+                 </div>
                  {windows.some(w => w.id === app.id) && <div className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-white rounded-full"></div>}
                </button>
              ))}
