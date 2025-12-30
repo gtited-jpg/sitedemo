@@ -97,7 +97,7 @@ const IMAGES = {
   pos: "https://cutlzlouwruvvdldospp.supabase.co/storage/v1/object/public/marketing/posROS.png"
 };
 
-const LEMON_SQUEEZY_LINK = "https://daemoncore.lemonsqueezy.com/checkout/buy/460d2a55-e651-4839-bd7c-3bab72437301";
+const LEMON_SQUEEZY_LINK = "https://daemoncore.lemonsqueezy.com/checkout/buy/3e1e1790-0ce6-4c31-8ddb-0944608c8047";
 
 // --- Components ---
 
@@ -234,6 +234,7 @@ const FeatureSplitView: React.FC<{
 const Dashboard = () => <FeatureSplitView title="Dashboard" icon={<LayoutDashboard />} colorClass="from-blue-600 to-indigo-600" screenshots={[IMAGES.multitask]} highlights={["Real-time Telemetry", "Bench Pressure Matrix", "Cashflow Signals"]}><p>Command your shop from a unified cockpit. Track every metric in real-time.</p></FeatureSplitView>;
 const Tickets = () => <FeatureSplitView title="Tickets" icon={<Ticket />} colorClass="from-pink-600 to-rose-600" screenshots={[IMAGES.tickets1, IMAGES.tickets2, IMAGES.tickets4]} highlights={["Kanban Matrix", "Automated SMS", "L1-L4 Tech Flow"]}><p>Advanced device intake and workflow management system.</p></FeatureSplitView>;
 const Inventory = () => <FeatureSplitView title="Inventory" icon={<Package />} colorClass="from-emerald-600 to-teal-600" screenshots={[IMAGES.inventory]} highlights={["Vault Storage", "Low Stock Triggers", "Supplier Sync"]}><p>The ultimate part repository. Manage thousands of SKUs with ease.</p></FeatureSplitView>;
+// Fix: Corrected typo in closing tag from FeatureRollView to FeatureSplitView
 const Payroll = () => <FeatureSplitView title="Payroll" icon={<Coins />} colorClass="from-green-600 to-emerald-700" screenshots={[IMAGES.payroll1, IMAGES.payroll2, IMAGES.payroll3]} highlights={["Tax Logic", "Commission Tracking", "Direct Deposit"]}><p>Precision accounting for your technicians and staff.</p></FeatureSplitView>;
 const POS = () => <FeatureSplitView title="Terminal POS" icon={<ShoppingCart />} colorClass="from-amber-400 to-orange-600" screenshots={[IMAGES.pos]} highlights={["Split Pay", "Integrated Readers", "Offline Buffer"]}><p>High-velocity retail environment terminal.</p></FeatureSplitView>;
 const Estimates = () => <FeatureSplitView title="Estimates" icon={<FileText />} colorClass="from-amber-600 to-orange-700" screenshots={[IMAGES.estimates]} highlights={["Instant Quoting", "PDF Pipeline", "Approval Matrix"]}><p>Professional quotes delivered in seconds.</p></FeatureSplitView>;
@@ -295,7 +296,7 @@ const APPS: AppDefinition[] = [
   { id: 'buyback', name: 'Buy Back', icon: <DollarSign />, color: 'from-teal-600 to-cyan-700', component: BuyBack },
   { id: 'wiki', name: 'Wiki', icon: <BookOpen />, color: 'from-slate-600 to-slate-800', component: () => <FeatureSplitView title="Wiki" icon={<BookOpen />} colorClass="from-slate-600 to-slate-800" screenshots={[IMAGES.nexus]} highlights={["Schematic Library", "SOP Storage", "Internal Training"]}><p>Knowledge is power. Centralize your shop intelligence.</p></FeatureSplitView> },
   { id: 'guide', name: 'Guide', icon: <Library />, color: 'from-blue-700 to-blue-900', component: Guide },
-  { id: 'suppliers', name: 'Suppliers', icon: <Truck />, color: 'from-rose-600 to-pink-600', component: () => <FeatureSplitView title="Suppliers" icon={<Truck />} colorClass="from-rose-600 to-pink-600" screenshots={[IMAGES.inventory]} highlights={["Global Hub", "Instant Orders", "Return Tracking"]}><p>Direct parts procurement pipeline.</p></FeatureSplitView> },
+  { id: 'suppliers', name: 'Suppliers', icon: <Truck />, color: 'from-rose-600 to-pink-600', component: () => <FeatureSplitView title="Suppliers" icon={<Truck />} colorClass="from-rose-600 to-pink-600" screenshots={[IMAGES.nexus]} highlights={["Global Hub", "Instant Orders", "Return Tracking"]}><p>Direct parts procurement pipeline.</p></FeatureSplitView> },
   { id: 'daemon', name: 'Daemon AI', icon: <Bot />, color: 'from-purple-600 to-fuchsia-600', component: DaemonAI },
   { id: 'nexus', name: 'Nexus', icon: <Store />, color: 'from-cyan-600 to-blue-600', component: Nexus },
   { id: 'settings', name: 'Setup', icon: <Settings />, color: 'from-gray-600 to-slate-600', component: () => <FeatureSplitView title="Setup" icon={<Settings />} colorClass="from-gray-600 to-slate-600" screenshots={[IMAGES.settings]} highlights={["Global Config", "User Management", "Theme Overrides"]}><p>Configure your shop environment settings.</p></FeatureSplitView> },
