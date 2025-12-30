@@ -97,7 +97,7 @@ const IMAGES = {
   pos: "https://cutlzlouwruvvdldospp.supabase.co/storage/v1/object/public/marketing/posROS.png"
 };
 
-const LEMON_SQUEEZY_LINK = "https://daemoncore.lemonsqueezy.com/checkout/buy/3e1e1790-0ce6-4c31-8ddb-0944608c8047";
+const LEMON_SQUEEZY_LINK = "https://repair-os-final-52bu.vercel.app/";
 
 // --- Components ---
 
