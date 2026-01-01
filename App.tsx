@@ -123,6 +123,7 @@ const IMAGES = {
   checkin: "https://hlelnadzajmnxryzteww.supabase.co/storage/v1/object/public/RepairOS/checkin.png",
   checkedIn: "https://hlelnadzajmnxryzteww.supabase.co/storage/v1/object/public/RepairOS/Screenshot%202025-12-30%20170021.png",
   desktopNew: "https://hlelnadzajmnxryzteww.supabase.co/storage/v1/object/public/RepairOS/desktopROS.png",
+  desktopSecondary: "https://hlelnadzajmnxryzteww.supabase.co/storage/v1/object/public/RepairOS/Screenshot%202026-01-01%20053335.png",
   emailBlaster: "https://hlelnadzajmnxryzteww.supabase.co/storage/v1/object/public/RepairOS/Screenshot%202025-12-30%20175802.png",
   unlockSoftware: "https://hlelnadzajmnxryzteww.supabase.co/storage/v1/object/public/RepairOS/Screenshot%202025-12-27%20155945.png",
   nexus: "https://hlelnadzajmnxryzteww.supabase.co/storage/v1/object/public/RepairOS/Screenshot%202026-01-01%20050121.png",
@@ -408,10 +409,10 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
         </div>
       </section>
 
-      {/* Flagship Command Center Section */}
+      {/* Flagship Command Center Section - REDESIGNED TO PREVENT OVERLAP */}
       <section id="everything" className="py-40 bg-white/[0.01] border-y border-white/5 relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-10 grid lg:grid-cols-5 gap-16 items-center">
-           <div className="lg:col-span-2">
+        <div className="max-w-7xl mx-auto px-10 grid lg:grid-cols-2 gap-24 items-center">
+           <div className="relative z-20">
               <h3 className="text-6xl md:text-8xl font-black uppercase mb-8 leading-[0.9] tracking-tighter">ONE <br/><span className="text-blue-500 text-shadow-blue">MEMBERSHIP.</span></h3>
               <p className="text-2xl text-white/40 font-light mb-12">No pro tiers. No locked features. Every tool we build is yours for one flat fee. Infinite scaling for your shop.</p>
               <div className="space-y-4">
@@ -427,12 +428,23 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
                  ))}
               </div>
            </div>
-           <div className="lg:col-span-3 relative group cursor-pointer" onClick={() => setLbImage(IMAGES.desktopNew)}>
-              <div className="absolute -inset-20 bg-blue-600/10 blur-[150px] rounded-full animate-pulse"></div>
-              <img src={IMAGES.desktopNew} className="relative rounded-[40px] border border-white/10 shadow-[0_0_80px_rgba(0,0,0,0.6)] group-hover:scale-[1.01] transition-transform duration-700" alt="New Desktop Environment" />
-              <div className="absolute top-6 left-6 bg-blue-600/90 text-white text-[10px] font-black uppercase px-6 py-2 rounded-full tracking-widest backdrop-blur-xl">THE NEW COMMAND CENTER</div>
-              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100 rounded-[40px]">
-                <Maximize2 size={48} className="text-white drop-shadow-2xl" />
+           
+           {/* IMAGE CONTAINER PUSHED TO THE RIGHT */}
+           <div className="flex flex-col gap-10 relative z-10 lg:justify-self-end w-full">
+              <div className="relative group cursor-pointer w-full" onClick={() => setLbImage(IMAGES.desktopNew)}>
+                 <div className="absolute -inset-10 bg-blue-600/10 blur-[120px] rounded-full animate-pulse"></div>
+                 <img src={IMAGES.desktopNew} className="relative rounded-[40px] border border-white/10 shadow-[0_0_80px_rgba(0,0,0,0.6)] group-hover:scale-[1.01] transition-transform duration-700 w-full h-auto" alt="New Desktop Environment" />
+                 <div className="absolute top-6 left-6 bg-blue-600/90 text-white text-[10px] font-black uppercase px-6 py-2 rounded-full tracking-widest backdrop-blur-xl">THE NEW COMMAND CENTER</div>
+                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100 rounded-[40px]">
+                   <Maximize2 size={48} className="text-white drop-shadow-2xl" />
+                 </div>
+              </div>
+              <div className="relative group cursor-pointer w-full" onClick={() => setLbImage(IMAGES.desktopSecondary)}>
+                 <div className="absolute -inset-10 bg-indigo-600/5 blur-[120px] rounded-full opacity-50"></div>
+                 <img src={IMAGES.desktopSecondary} className="relative rounded-[40px] border border-white/10 shadow-[0_0_80px_rgba(0,0,0,0.4)] group-hover:scale-[1.01] transition-transform duration-700 w-full h-auto" alt="Desktop Ecosystem View" />
+                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100 rounded-[40px]">
+                   <Maximize2 size={48} className="text-white drop-shadow-2xl" />
+                 </div>
               </div>
            </div>
         </div>
@@ -552,7 +564,7 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
         </div>
       </section>
 
-      {/* Operation: Floor - Visual High Fidelity */}
+      {/* Operation: Floor - Visual High Fidelity - FIXED SAME SIZE */}
       <section id="operations" className="py-40 bg-white/[0.01] border-y border-white/5 relative">
         <div className="max-w-7xl mx-auto px-10">
           <div className="flex flex-col items-center text-center mb-24">
@@ -571,8 +583,8 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
                   </div>
                   <h4 className="text-4xl font-black uppercase tracking-tighter mb-6 leading-none">KIOSK MODE</h4>
                   <p className="text-white/40 text-lg leading-relaxed font-medium mb-10">Deploy a dedicated self-service terminal. Customers intake their own devices, log issues, and get instant duration estimates.</p>
-                  <div className="rounded-[32px] overflow-hidden border border-white/5 relative">
-                     <img src={IMAGES.checkin} className="w-full h-auto group-hover:scale-105 transition-transform duration-700" alt="Check-in Screen" />
+                  <div className="rounded-[32px] overflow-hidden border border-white/5 relative aspect-video">
+                     <img src={IMAGES.checkin} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Check-in Screen" />
                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-8">
                         <span className="text-[10px] font-black text-white uppercase tracking-widest flex items-center gap-2">
                            <Maximize2 size={12} /> TAP TO ENLARGE WORKFLOW
@@ -592,8 +604,8 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
                   </div>
                   <h4 className="text-4xl font-black uppercase tracking-tighter mb-6 leading-none">INSTANT SYNC</h4>
                   <p className="text-white/40 text-lg leading-relaxed font-medium mb-10">The moment they hit 'Complete', the ticket jumps directly into the work matrix. No double data entry. No delay.</p>
-                  <div className="rounded-[32px] overflow-hidden border border-white/5 relative">
-                     <img src={IMAGES.checkedIn} className="w-full h-auto group-hover:scale-105 transition-transform duration-700" alt="Checked In Screen" />
+                  <div className="rounded-[32px] overflow-hidden border border-white/5 relative aspect-video">
+                     <img src={IMAGES.checkedIn} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Checked In Screen" />
                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-8">
                         <span className="text-[10px] font-black text-white uppercase tracking-widest flex items-center gap-2">
                            <Maximize2 size={12} /> VIEW SYSTEM RECEIPT
@@ -1073,7 +1085,7 @@ const App: React.FC = () => {
               <div className="shrink-0">
                 {app.imageIcon ? <img src={app.imageIcon} className="w-6 h-6 object-cover rounded" alt="" /> : React.cloneElement(app.icon as React.ReactElement<any>, { size: 18 })}
               </div>
-              {windows.some(w => w.id === app.id) && <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-blue-500 rounded-full shadow-[0_0_5px_rgba(59,130,246,1)]"></div>}
+              {windows.some(w => w.id === app.id) && <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-blue-500 rounded-full shadow-[0_0_50px_rgba(59,130,246,1)]"></div>}
               <div className="absolute -top-12 left-1/2 -translate-x-1/2 px-3 py-1.5 bg-black/80 backdrop-blur-xl rounded-lg text-[8px] font-black uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap border border-white/10 shadow-2xl">
                 {app.name}
               </div>
