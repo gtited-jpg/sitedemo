@@ -42,7 +42,25 @@ import {
   Medal,
   Power,
   Tablet,
-  Laptop
+  Laptop,
+  Lock,
+  ShieldAlert,
+  Calculator,
+  Navigation,
+  Microscope,
+  HardDrive,
+  Database,
+  History,
+  Layers,
+  Code,
+  MessageSquare,
+  CloudLightning,
+  LockKeyhole,
+  Rocket,
+  ArrowRightLeft,
+  CalendarDays,
+  StickyNote,
+  Send
 } from 'lucide-react';
 import { GoogleGenAI } from "@google/genai";
 
@@ -234,7 +252,6 @@ const FeatureSplitView: React.FC<{
 const Dashboard = () => <FeatureSplitView title="Dashboard" icon={<LayoutDashboard />} colorClass="from-blue-600 to-indigo-600" screenshots={[IMAGES.multitask]} highlights={["Real-time Telemetry", "Bench Pressure Matrix", "Cashflow Signals"]}><p>Command your shop from a unified cockpit. Track every metric in real-time.</p></FeatureSplitView>;
 const Tickets = () => <FeatureSplitView title="Tickets" icon={<Ticket />} colorClass="from-pink-600 to-rose-600" screenshots={[IMAGES.tickets1, IMAGES.tickets2, IMAGES.tickets4]} highlights={["Kanban Matrix", "Automated SMS", "L1-L4 Tech Flow"]}><p>Advanced device intake and workflow management system.</p></FeatureSplitView>;
 const Inventory = () => <FeatureSplitView title="Inventory" icon={<Package />} colorClass="from-emerald-600 to-teal-600" screenshots={[IMAGES.inventory]} highlights={["Vault Storage", "Low Stock Triggers", "Supplier Sync"]}><p>The ultimate part repository. Manage thousands of SKUs with ease.</p></FeatureSplitView>;
-// Fix: Corrected typo in closing tag from FeatureRollView to FeatureSplitView
 const Payroll = () => <FeatureSplitView title="Payroll" icon={<Coins />} colorClass="from-green-600 to-emerald-700" screenshots={[IMAGES.payroll1, IMAGES.payroll2, IMAGES.payroll3]} highlights={["Tax Logic", "Commission Tracking", "Direct Deposit"]}><p>Precision accounting for your technicians and staff.</p></FeatureSplitView>;
 const POS = () => <FeatureSplitView title="Terminal POS" icon={<ShoppingCart />} colorClass="from-amber-400 to-orange-600" screenshots={[IMAGES.pos]} highlights={["Split Pay", "Integrated Readers", "Offline Buffer"]}><p>High-velocity retail environment terminal.</p></FeatureSplitView>;
 const Estimates = () => <FeatureSplitView title="Estimates" icon={<FileText />} colorClass="from-amber-600 to-orange-700" screenshots={[IMAGES.estimates]} highlights={["Instant Quoting", "PDF Pipeline", "Approval Matrix"]}><p>Professional quotes delivered in seconds.</p></FeatureSplitView>;
@@ -325,7 +342,9 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
         </div>
         <div className="hidden md:flex items-center gap-10 text-[10px] font-black uppercase tracking-[0.3em] text-white/40">
           <a href="#everything" className="hover:text-white transition-colors">Membership</a>
-          <a href="#compatibility" className="hover:text-white transition-colors">Compatibility</a>
+          <a href="#modules" className="hover:text-white transition-colors">Modules</a>
+          <a href="#vault" className="hover:text-white transition-colors">Vault</a>
+          <a href="#matrix" className="hover:text-white transition-colors">Matrix</a>
           <a href="#pricing" className="hover:text-white transition-colors">Pricing</a>
         </div>
         <button onClick={onLaunch} className="bg-white text-black px-10 py-3 rounded-full text-[11px] font-black uppercase tracking-widest hover:bg-blue-600 hover:text-white transition-all shadow-xl">Launch Demo</button>
@@ -360,7 +379,6 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
               LAUNCH SYSTEM DEMO <ArrowRight className="group-hover:translate-x-3 transition-transform" />
             </button>
 
-            {/* Restored & Enhanced Awards */}
             <div className="flex flex-wrap justify-center gap-6 md:gap-8 max-w-5xl">
               {awards.map((award, idx) => (
                 <div key={idx} className="flex items-center gap-3 px-6 py-3 glass rounded-2xl border border-white/5 text-[10px] font-black uppercase tracking-[0.2em] text-white/40 hover:text-white hover:border-blue-500/30 transition-all hover:-translate-y-1 cursor-default group">
@@ -381,9 +399,9 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
               <p className="text-2xl text-white/40 font-light mb-12">No pro tiers. No locked features. Every tool we build is yours for one flat fee. Infinite scaling for your shop.</p>
               <div className="space-y-4">
                  {[
-                   { t: "Infinite App Expansion", i: <Infinity className="text-blue-500" /> },
-                   { t: "Zero Upsells, Forever", i: <Shield className="text-pink-500" /> },
-                   { t: "Cross-Platform Runtime", i: <Globe className="text-emerald-500" /> }
+                   { t: "30+ Proprietary Modules", i: <Layers className="text-blue-500" /> },
+                   { t: "100% Custom Architecture", i: <Code className="text-pink-500" /> },
+                   { t: "Infinite Growth Policy", i: <Infinity className="text-emerald-500" /> }
                  ].map((item, idx) => (
                    <div key={idx} className="flex items-center gap-6 p-6 glass rounded-3xl border border-white/10 group hover:border-blue-500/30 transition-all">
                       <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center group-hover:scale-110 transition-transform">{item.i}</div>
@@ -402,54 +420,294 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
         </div>
       </section>
 
-      {/* Compatibility Section */}
-      <section id="compatibility" className="py-40 border-b border-white/5">
-        <div className="max-w-7xl mx-auto px-10">
-          <h2 className="text-5xl md:text-7xl font-black uppercase mb-20 text-center tracking-tighter">RUN ON <span className="text-blue-500">EVERYTHING.</span></h2>
-          <div className="grid md:grid-cols-4 gap-10">
-             {[
-               { icon: <Tablet size={40} />, name: "iPad & Android", desc: "Full touch-optimized interface for floor diagnostics." },
-               { icon: <Monitor size={40} />, name: "PC & Mac", desc: "Native desktop feel in any modern web browser." },
-               { icon: <Laptop size={40} />, name: "Surface Hub", desc: "High-density view for large command center displays." },
-               { icon: <Smartphone size={40} />, name: "Mobile Ready", desc: "Check your shop signals from the palm of your hand." }
-             ].map((device, idx) => (
-               <div key={idx} className="glass p-10 rounded-[40px] border border-white/10 flex flex-col items-center text-center group hover:border-blue-500/50 transition-all">
-                  <div className="w-20 h-20 rounded-2xl bg-white/5 flex items-center justify-center mb-8 group-hover:bg-blue-600/20 group-hover:text-blue-400 transition-all">
-                    {device.icon}
-                  </div>
-                  <h4 className="text-xl font-black uppercase mb-4 tracking-widest">{device.name}</h4>
-                  <p className="text-white/40 text-sm leading-relaxed">{device.desc}</p>
-               </div>
-             ))}
+      {/* Module Core Section */}
+      <section id="modules" className="py-40 bg-black relative overflow-hidden">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-600/10 blur-[150px] rounded-full"></div>
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-600/10 blur-[150px] rounded-full"></div>
+        
+        <div className="max-w-7xl mx-auto px-10 relative z-10">
+          <div className="flex flex-col items-center text-center mb-24">
+            <h2 className="text-6xl md:text-8xl font-black uppercase tracking-tighter mb-6 leading-none">THE <span className="text-blue-500">STACK.</span></h2>
+            <p className="text-xl text-white/30 max-w-2xl font-medium tracking-tight">Over 30+ custom apps and tools growing every single day. 100% proprietary code designed for elite throughput.</p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="glass p-12 rounded-[48px] border border-white/10 hover:border-blue-500/50 transition-all group hover:-translate-y-2">
+              <div className="w-20 h-20 rounded-3xl bg-blue-600/10 flex items-center justify-center mb-10 group-hover:bg-blue-600 group-hover:text-white text-blue-500 transition-all shadow-xl shadow-blue-500/20">
+                <Lock size={40} />
+              </div>
+              <h4 className="text-3xl font-black uppercase tracking-tighter mb-4 leading-none">CELLPHONE UNLOCK</h4>
+              <p className="text-white/40 text-lg leading-relaxed font-medium mb-8">Direct carrier release integration and bootloader bypass automation suite.</p>
+              <div className="flex items-center gap-2 text-[10px] font-black text-blue-400 uppercase tracking-widest">
+                <Zap size={12} /> INSTANT EXECUTION
+              </div>
+            </div>
+
+            <div className="glass p-12 rounded-[48px] border border-white/10 hover:border-red-500/50 transition-all group hover:-translate-y-2">
+              <div className="w-20 h-20 rounded-3xl bg-red-600/10 flex items-center justify-center mb-10 group-hover:bg-red-600 group-hover:text-white text-red-500 transition-all shadow-xl shadow-red-500/20">
+                <ShieldAlert size={40} />
+              </div>
+              <h4 className="text-3xl font-black uppercase tracking-tighter mb-4 leading-none">PENTESTER SUITE</h4>
+              <p className="text-white/40 text-lg leading-relaxed font-medium mb-8">Advanced hardware security auditing and logic-board vulnerability scanner for pro techs.</p>
+              <div className="flex items-center gap-2 text-[10px] font-black text-red-400 uppercase tracking-widest">
+                <Shield size={12} /> SECOPS READY
+              </div>
+            </div>
+
+            <div className="glass p-12 rounded-[48px] border border-white/10 hover:border-emerald-500/50 transition-all group hover:-translate-y-2">
+              <div className="w-20 h-20 rounded-3xl bg-emerald-600/10 flex items-center justify-center mb-10 group-hover:bg-emerald-600 group-hover:text-white text-emerald-500 transition-all shadow-xl shadow-emerald-500/20">
+                <Calculator size={40} />
+              </div>
+              <h4 className="text-3xl font-black uppercase tracking-tighter mb-4 leading-none">SHOP RATE</h4>
+              <p className="text-white/40 text-lg leading-relaxed font-medium mb-8">Real-time market valuation engine. Gives accurate buyback prices with guaranteed profit margins.</p>
+              <div className="flex items-center gap-2 text-[10px] font-black text-emerald-400 uppercase tracking-widest">
+                <BarChart3 size={12} /> PROFIT OPTIMIZED
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Pricing & Footer Section - Fully Restored to Design Image */}
+      {/* Knowledge Vault Section */}
+      <section id="vault" className="py-40 bg-white/[0.01] border-y border-white/5 relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-10 grid md:grid-cols-2 gap-24 items-center">
+           <div className="order-2 md:order-1 relative group" onClick={() => setLbImage(IMAGES.guide)}>
+              <div className="absolute -inset-10 bg-blue-600/5 blur-[100px] rounded-full"></div>
+              <img src={IMAGES.guide} className="relative rounded-[40px] border border-white/10 shadow-2xl group-hover:scale-[1.02] transition-transform duration-700" alt="Repair Knowledge" />
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100 rounded-[40px]">
+                <Maximize2 size={48} className="text-white drop-shadow-2xl" />
+              </div>
+           </div>
+           <div className="order-1 md:order-2">
+              <h3 className="text-7xl font-black uppercase mb-8 leading-none tracking-tighter">THE <br/><span className="text-blue-500">KNOWLEDGE VAULT.</span></h3>
+              <p className="text-2xl text-white/40 font-light mb-12">Stop hunting for manuals. We've indexed the entire world of repair into one unified database.</p>
+              
+              <div className="grid grid-cols-1 gap-8">
+                 <div className="glass p-10 rounded-[40px] border border-white/10 hover:border-blue-500/30 transition-all">
+                    <div className="flex items-center gap-6 mb-6">
+                       <div className="w-14 h-14 rounded-2xl bg-blue-600/10 flex items-center justify-center text-blue-500"><Library size={32} /></div>
+                       <h4 className="text-2xl font-black uppercase tracking-tighter">REPAIR HOW-TO</h4>
+                    </div>
+                    <p className="text-white/40 leading-relaxed font-medium">Literally every repair listed step-by-step. From basic iPhone screens to complex L4 logic board microsoldering SOPs.</p>
+                 </div>
+
+                 <div className="glass p-10 rounded-[40px] border border-white/10 hover:border-blue-500/30 transition-all">
+                    <div className="flex items-center gap-6 mb-6">
+                       <div className="w-14 h-14 rounded-2xl bg-blue-600/10 flex items-center justify-center text-blue-500"><Database size={32} /></div>
+                       <h4 className="text-2xl font-black uppercase tracking-tighter">DRIVER DATABASE</h4>
+                    </div>
+                    <p className="text-white/40 leading-relaxed font-medium">The world's most comprehensive repository of proprietary drivers for hardware diagnostics and firmware recovery.</p>
+                 </div>
+              </div>
+           </div>
+        </div>
+      </section>
+
+      {/* Operations Floor Section */}
+      <section id="operations" className="py-40 bg-black relative">
+        <div className="max-w-7xl mx-auto px-10">
+          <div className="flex flex-col items-center text-center mb-24">
+            <h2 className="text-6xl md:text-8xl font-black uppercase tracking-tighter mb-6 leading-none">OPERATION: <span className="text-blue-500">FLOOR.</span></h2>
+            <p className="text-xl text-white/30 max-w-3xl font-medium tracking-tight">Streamlining your customer experience from the moment they walk in. High-velocity check-ins meet AI marketing automation.</p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-10">
+            <div className="glass p-14 rounded-[56px] border border-white/10 group hover:border-blue-500/50 transition-all relative overflow-hidden">
+               <div className="absolute top-0 right-0 p-12 opacity-5 group-hover:opacity-10 transition-opacity">
+                  <Tablet size={160} />
+               </div>
+               <div className="relative z-10">
+                  <div className="w-16 h-16 rounded-2xl bg-blue-600/10 flex items-center justify-center text-blue-500 mb-10"><Tablet size={32} /></div>
+                  <h4 className="text-4xl font-black uppercase tracking-tighter mb-6 leading-none">KIOSK MODE</h4>
+                  <p className="text-white/40 text-xl leading-relaxed font-medium mb-10">Set up a tablet on your counter. Let customers check themselves in. The system automatically estimates repair duration based on current tech load and device complexity.</p>
+                  <div className="flex items-center gap-4 text-sm font-black text-blue-500 uppercase tracking-widest">
+                     <History size={18} /> LIVE TIME-PREDICTOR ENGINE
+                  </div>
+               </div>
+            </div>
+
+            <div className="glass p-14 rounded-[56px] border border-white/10 group hover:border-purple-500/50 transition-all relative overflow-hidden">
+               <div className="absolute top-0 right-0 p-12 opacity-5 group-hover:opacity-10 transition-opacity">
+                  <MessageSquare size={160} />
+               </div>
+               <div className="relative z-10">
+                  <div className="w-16 h-16 rounded-2xl bg-purple-600/10 flex items-center justify-center text-purple-500 mb-10"><Megaphone size={32} /></div>
+                  <h4 className="text-4xl font-black uppercase tracking-tighter mb-6 leading-none">MARKETING AI</h4>
+                  <p className="text-white/40 text-xl leading-relaxed font-medium mb-10">Built-in AI Ad Creator. Generate stunning custom promos and blast your customer database with targeted sales in seconds. Professional-grade creative without the agency cost.</p>
+                  <div className="flex items-center gap-4 text-sm font-black text-purple-500 uppercase tracking-widest">
+                     <Bot size={18} /> NEURAL PROMO GENERATION
+                  </div>
+               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* NEW: The Matrix: Workflow Intelligence Section */}
+      <section id="matrix" className="py-40 bg-white/[0.01] border-y border-white/5 relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-10">
+           <div className="flex flex-col lg:flex-row items-center gap-24">
+              <div className="flex-1 order-2 lg:order-1">
+                 <div className="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[10px] font-black uppercase tracking-[0.4em] mb-10">
+                    <Layers size={14} /> FULL STACK WORKFLOW
+                 </div>
+                 <h3 className="text-7xl md:text-8xl font-black uppercase tracking-tighter mb-8 leading-none">THE <br/><span className="text-blue-500">MATRIX.</span></h3>
+                 <p className="text-2xl text-white/40 font-light leading-relaxed mb-12">Total synchronization between intake, repair, and billing. Our proprietary engine bridges the gap between technician labor and financial accuracy.</p>
+                 
+                 <div className="space-y-6">
+                    <div className="glass p-8 rounded-3xl border border-white/10 group hover:border-blue-500/30 transition-all">
+                       <div className="flex items-center gap-5 mb-4">
+                          <Layout size={24} className="text-blue-500" />
+                          <h4 className="text-xl font-black uppercase tracking-tighter">IMMERSIVE KANBAN</h4>
+                       </div>
+                       <p className="text-white/40 text-sm font-medium">Full-screen ticket board with drag-and-drop state transitions. Open tickets to log <span className="text-white">Private internal notes</span> for techs or <span className="text-blue-400">Public notes</span> for customer transparency and instant approvals.</p>
+                    </div>
+
+                    <div className="glass p-8 rounded-3xl border border-white/10 group hover:border-blue-500/30 transition-all">
+                       <div className="flex items-center gap-5 mb-4">
+                          <ArrowRightLeft size={24} className="text-blue-500" />
+                          <h4 className="text-xl font-black uppercase tracking-tighter">CIRCULAR FLOW</h4>
+                       </div>
+                       <p className="text-white/40 text-sm font-medium">Bidirectional data pipeline. Convert Estimates to Work Orders to Invoices with one tap. Every interaction is tracked in the <span className="text-white">Customer Portal</span>—let your clients see exactly where their device is in the chain.</p>
+                    </div>
+
+                    <div className="glass p-8 rounded-3xl border border-white/10 group hover:border-blue-500/30 transition-all">
+                       <div className="flex items-center gap-5 mb-4">
+                          <Send size={24} className="text-blue-500" />
+                          <h4 className="text-xl font-black uppercase tracking-tighter">AI AUTONOMY</h4>
+                       </div>
+                       <p className="text-white/40 text-sm font-medium">Our proprietary AI engine handles the grunt work. Automated payment reminders, follow-ups, and appointment scheduling via SMS/Email to keep your bench moving and your cash flowing.</p>
+                    </div>
+                 </div>
+              </div>
+              <div className="flex-1 order-1 lg:order-2 relative group" onClick={() => setLbImage(IMAGES.tickets2)}>
+                 <div className="absolute -inset-20 bg-blue-600/10 blur-[150px] rounded-full"></div>
+                 <img src={IMAGES.tickets2} className="relative rounded-[56px] border border-white/10 shadow-[0_0_80px_rgba(0,0,0,0.8)] group-hover:scale-[1.02] transition-all duration-700" alt="Kanban Interface" />
+                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100 rounded-[56px]">
+                    <Maximize2 size={64} className="text-white drop-shadow-2xl" />
+                 </div>
+              </div>
+           </div>
+        </div>
+      </section>
+
+      {/* Architecture / Zero Footprint Section */}
+      <section id="architecture" className="py-40 bg-black relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-10">
+           <div className="flex flex-col lg:flex-row items-center gap-20">
+              <div className="flex-1">
+                 <h3 className="text-6xl md:text-8xl font-black uppercase tracking-tighter mb-8 leading-none">ZERO INSTALL.<br/><span className="text-blue-500">TOTAL COMMAND.</span></h3>
+                 <p className="text-2xl text-white/40 font-light leading-relaxed mb-12">No software to download. No bloatware to manage. Repair OS streams directly through your browser engine for a complete desktop UX with zero installation latency.</p>
+                 
+                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="glass p-8 rounded-3xl border border-white/10 flex items-start gap-5">
+                       <CloudLightning size={32} className="text-blue-500 shrink-0" />
+                       <div>
+                          <h4 className="text-lg font-bold uppercase tracking-widest mb-2">OS STREAMING</h4>
+                          <p className="text-sm text-white/30">Native-speed execution streamed directly into any modern web engine.</p>
+                       </div>
+                    </div>
+                    <div className="glass p-8 rounded-3xl border border-white/10 flex items-start gap-5">
+                       <LockKeyhole size={32} className="text-emerald-500 shrink-0" />
+                       <div>
+                          <h4 className="text-lg font-bold uppercase tracking-widest mb-2">256-BIT CRYPTO</h4>
+                          <p className="text-sm text-white/30">Every data packet is secured with enterprise-grade military encryption.</p>
+                       </div>
+                    </div>
+                 </div>
+              </div>
+              <div className="w-full lg:w-1/3 glass p-10 rounded-[56px] border border-blue-500/20 bg-blue-500/5 text-center">
+                 <div className="w-20 h-20 rounded-full bg-blue-600 flex items-center justify-center mx-auto mb-8 shadow-[0_0_50px_rgba(37,99,235,0.4)]">
+                    <Check size={40} className="text-white" />
+                 </div>
+                 <h4 className="text-2xl font-black uppercase tracking-tighter mb-4">DEPLOY INSTANTLY</h4>
+                 <p className="text-white/40 text-sm font-medium mb-10 leading-relaxed">Launch your entire shop infrastructure from a single URL. Infinite scaling for main floor terminals.</p>
+                 <button onClick={onLaunch} className="w-full bg-white text-black py-5 rounded-2xl font-black uppercase text-xs tracking-widest hover:bg-blue-600 hover:text-white transition-all">TEST DEPLOYMENT</button>
+              </div>
+           </div>
+        </div>
+      </section>
+
+      {/* No Monkey Business Section */}
+      <section className="py-40 bg-white/[0.01] border-y border-white/5 relative">
+        <div className="max-w-7xl mx-auto px-10 text-center">
+           <div className="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-red-600/10 border border-red-600/20 text-red-500 text-[11px] font-black uppercase tracking-[0.4em] mb-12">
+              <ShieldAlert size={14} /> NO MONKEY BUSINESS
+           </div>
+           <h3 className="text-6xl md:text-[9rem] font-black uppercase tracking-tighter mb-10 leading-none">WE HOOK IT UP.</h3>
+           <p className="text-2xl md:text-3xl text-white/40 max-w-5xl mx-auto font-light leading-relaxed mb-16 italic">
+             "We don't monkey around with per-tech fees or fragmented tools. We build 100% proprietary software that promotes your growth, not penalizes it. Growth is good. We're here to fuel it."
+           </p>
+           
+           <div className="grid md:grid-cols-4 gap-8">
+              {[
+                {t: "30+ NATIVE APPS", d: "Zero external dependencies.", i: <Layers />},
+                {t: "ZERO PER-TECH FEES", d: "Hire as many as you want.", i: <Users />},
+                {t: "PROPRIETARY CORE", d: "100% original code.", i: <Cpu />},
+                {t: "ELITE SUPPORT", d: "Techs supporting techs.", i: <Bot />}
+              ].map((item, i) => (
+                <div key={i} className="glass p-10 rounded-[40px] border border-white/5 hover:border-blue-500/30 transition-all flex flex-col items-center">
+                   <div className="text-blue-500 mb-6">{React.cloneElement(item.i as React.ReactElement<any>, { size: 32 })}</div>
+                   <h4 className="text-sm font-black uppercase tracking-widest mb-3">{item.t}</h4>
+                   <p className="text-xs text-white/20 uppercase font-black tracking-widest">{item.d}</p>
+                </div>
+              ))}
+           </div>
+        </div>
+      </section>
+
+      {/* Compatibility Section */}
+      <section id="compatibility" className="py-40 border-y border-white/5 bg-white/[0.01]">
+        <div className="max-w-7xl mx-auto px-10">
+          <div className="text-center mb-20">
+             <h2 className="text-5xl md:text-7xl font-black uppercase tracking-tighter mb-6">DESKTOP <span className="text-blue-500">FIDELITY.</span></h2>
+             <p className="text-xl text-white/40 max-w-2xl mx-auto font-medium">Repair OS is a true Desktop OS. We focus on power-user performance for your main terminals, while providing mobile bridges for on-the-go efficiency.</p>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-10">
+             <div className="glass p-12 rounded-[48px] border border-white/10 flex flex-col items-center text-center group">
+                <div className="w-20 h-20 rounded-2xl bg-blue-600/10 flex items-center justify-center mb-8 group-hover:bg-blue-600 group-hover:text-white text-blue-500 transition-all"><Monitor size={40} /></div>
+                <h4 className="text-2xl font-black uppercase mb-4 tracking-tighter">THE CORE OS</h4>
+                <p className="text-white/40 text-sm leading-relaxed">The full desktop suite. Zero compromises on performance. Runs in any modern browser on PC or Mac.</p>
+             </div>
+
+             <div className="glass p-12 rounded-[48px] border border-white/10 flex flex-col items-center text-center group">
+                <div className="w-20 h-20 rounded-2xl bg-blue-600/10 flex items-center justify-center mb-8 group-hover:bg-blue-600 group-hover:text-white text-blue-500 transition-all"><Tablet size={40} /></div>
+                <h4 className="text-2xl font-black uppercase mb-4 tracking-tighter">KIOSK TABLET</h4>
+                <p className="text-white/40 text-sm leading-relaxed">Proprietary touch-first environment designed for customer self-service terminals on the shop floor.</p>
+             </div>
+
+             <div className="glass p-12 rounded-[48px] border border-white/10 flex flex-col items-center text-center group border-blue-500/20">
+                <div className="w-20 h-20 rounded-2xl bg-blue-600/10 flex items-center justify-center mb-8 group-hover:bg-blue-600 group-hover:text-white text-blue-500 transition-all"><Smartphone size={40} /></div>
+                <h4 className="text-2xl font-black uppercase mb-4 tracking-tighter">MOBILE BRIDGE</h4>
+                <p className="text-white/40 text-sm leading-relaxed">Coming soon. A Supabase-powered mobile app for instant ticket editing and field-tech updates.</p>
+             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing & Footer Section */}
       <section id="pricing" className="py-40 bg-black">
         <div className="max-w-7xl mx-auto px-10">
-          {/* Main Price Header */}
           <div className="mb-12">
             <div className="flex items-baseline gap-2 mb-4">
               <h2 className="text-8xl md:text-[10rem] font-black leading-none tracking-tighter">$199</h2>
               <span className="text-4xl text-white/40 font-bold">/mo</span>
             </div>
-            <p className="text-2xl font-medium text-white tracking-tight">Unlimited users. All current apps. All future apps.</p>
-            <p className="text-xl font-black uppercase tracking-widest text-white/90 mt-2">PRICE LOCKED FOR 5 YEARS.</p>
+            <p className="text-2xl font-medium text-white tracking-tight">Unlimited users. All 30+ current apps. All future apps.</p>
+            <p className="text-xl font-black uppercase tracking-widest text-white/90 mt-2">WE PROMOTE GROWTH. NO PER-TECH FEES.</p>
           </div>
 
-          {/* Feature Grid & Action Card */}
           <div className="grid md:grid-cols-2 gap-8 mb-40">
-            {/* Left Box: Features */}
             <div className="glass p-12 rounded-[32px] border border-white/5 bg-white/[0.02]">
-              <h3 className="text-xl font-black uppercase tracking-widest mb-10 inline-block border-b-2 border-blue-500 pb-1">Included in the box:</h3>
+              <h3 className="text-xl font-black uppercase tracking-widest mb-10 inline-block border-b-2 border-blue-500 pb-1">Built to Scale:</h3>
               <ul className="space-y-6">
                 {[
-                  "Full Desktop OS Environment",
-                  "Daemon AI Neural Core",
-                  "Omnichannel Ticketing",
-                  "Warehouse Stock Vault",
-                  "App Store Access (All future modules included)"
+                  "100% Proprietary Codebase",
+                  "Repair How-To & Driver Vault",
+                  "Kiosk Self-Check-in Mode",
+                  "AI Ad Creator & Marketing Suite",
+                  "No Nickel-and-Diming. Period."
                 ].map((item, idx) => (
                   <li key={idx} className="flex items-center gap-4 text-white/70 font-bold uppercase text-[11px] tracking-widest">
                     <Check size={18} className="text-emerald-500" /> {item}
@@ -458,12 +716,11 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
               </ul>
             </div>
 
-            {/* Right Box: Call to Action */}
             <div className="glass p-12 rounded-[32px] border border-white/5 bg-white/[0.02] flex flex-col justify-between">
               <div>
-                <h3 className="text-3xl font-black uppercase tracking-tighter mb-6 leading-none">READY TO UPGRADE?</h3>
+                <h3 className="text-3xl font-black uppercase tracking-tighter mb-6 leading-none">GROW YOUR EMPIRE.</h3>
                 <p className="text-white/40 text-lg leading-relaxed font-medium">
-                  Join the shops running on the world's first Repair Operating System. Try it in your shop for 14 days, completely free.
+                  We don't penalize you for hiring more techs. We promote shop growth. Join the future of repair shop operations.
                 </p>
               </div>
               <a href={LEMON_SQUEEZY_LINK} target="_blank" className="block w-full bg-white text-black py-7 rounded-2xl font-black uppercase text-sm tracking-[0.3em] hover:bg-blue-600 hover:text-white transition-all shadow-2xl text-center mt-10">
@@ -472,32 +729,20 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
             </div>
           </div>
 
-          {/* RESTORED LEGAL STUFF AREA (MATCHING THE PIC) */}
           <div className="border-t border-white/5 pt-16 flex flex-col gap-12">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8">
-              {/* Left Side: Legal Disclaimer label */}
-              <button 
-                onClick={() => setShowLegal(true)}
-                className="flex items-center gap-3 text-[10px] font-black text-white/20 uppercase tracking-[0.4em] hover:text-white transition-colors group"
-              >
+              <button onClick={() => setShowLegal(true)} className="flex items-center gap-3 text-[10px] font-black text-white/20 uppercase tracking-[0.4em] hover:text-white transition-colors group">
                 <Scale size={16} className="text-white/30 group-hover:text-blue-500" /> LEGAL DISCLAIMER
               </button>
-              
-              {/* Right Side: Links and Inquiries */}
               <div className="flex flex-col items-start md:items-end gap-2">
                 <a href="https://daemoncore.app" target="_blank" className="text-[11px] font-black text-blue-500 uppercase tracking-[0.3em] hover:text-blue-400 transition-colors">
                   DAEMONCORE.APP
                 </a>
-                <a 
-                  href="mailto:contact@daemoncore.app"
-                  className="text-[10px] font-black text-white/20 uppercase tracking-[0.2em] hover:text-white transition-colors"
-                >
+                <a href="mailto:contact@daemoncore.app" className="text-[10px] font-black text-white/20 uppercase tracking-[0.2em] hover:text-white transition-colors">
                   INQUIRIES: CONTACT@DAEMONCORE.APP
                 </a>
               </div>
             </div>
-
-            {/* Centered Trademark & Patent Footer */}
             <footer className="text-center text-[10px] font-black text-white/10 uppercase tracking-[0.5em] pb-10">
               © 2025 REPAIR OS BY DAEMONCORE • PATENT PENDING: US 10/2025/08429-DAEMON
             </footer>
@@ -505,18 +750,13 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
         </div>
       </section>
       
-      {/* Lightbox for membership image */}
       {lbImage && <Lightbox src={lbImage} onClose={() => setLbImage(null)} />}
 
-      {/* Legal Disclaimer Modal */}
       {showLegal && (
         <div className="fixed inset-0 z-[1000] flex items-center justify-center p-6 md:p-12 animate-in fade-in duration-300">
           <div className="absolute inset-0 bg-black/80 backdrop-blur-2xl" onClick={() => setShowLegal(false)}></div>
           <div className="relative glass w-full max-w-4xl max-h-[80vh] overflow-y-auto p-12 md:p-20 rounded-[48px] border border-white/10 animate-in zoom-in duration-300 shadow-[0_0_100px_rgba(59,130,246,0.1)]">
-            <button 
-              onClick={() => setShowLegal(false)}
-              className="absolute top-10 right-10 p-4 hover:bg-white/10 rounded-2xl transition-all"
-            >
+            <button onClick={() => setShowLegal(false)} className="absolute top-10 right-10 p-4 hover:bg-white/10 rounded-2xl transition-all">
               <X size={24} />
             </button>
             <div className="flex flex-col gap-10">
@@ -617,7 +857,6 @@ const App: React.FC = () => {
     <div className="h-screen w-screen relative overflow-hidden bg-[#050505] font-poppins">
       <div className="absolute inset-0 bg-gradient-to-br from-blue-950/30 via-black to-purple-950/30"></div>
       
-      {/* Immersive Modal Pop-up */}
       {showImmersiveModal && (
         <div className="fixed inset-0 z-[2000] flex items-center justify-center bg-black/40 backdrop-blur-3xl animate-in fade-in duration-500">
            <div className="max-w-xl w-full mx-6 glass p-12 rounded-[48px] border border-white/20 shadow-[0_0_100px_rgba(59,130,246,0.3)] flex flex-col items-center text-center animate-in zoom-in slide-in-from-bottom-10 duration-700">
@@ -637,7 +876,6 @@ const App: React.FC = () => {
         </div>
       )}
 
-      {/* Clock & Date */}
       <div className="absolute top-16 right-16 z-10 text-right select-none opacity-80 pointer-events-none">
         <div className="text-[120px] font-black leading-none tracking-tighter text-white uppercase">
           {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false })}
@@ -647,25 +885,15 @@ const App: React.FC = () => {
         </div>
       </div>
 
-      {/* JUMPING RED OFFER BUTTON */}
       <div className="absolute top-80 right-16 z-20">
-         <a 
-          href={LEMON_SQUEEZY_LINK}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="group relative flex flex-col items-center gap-2 bg-white text-black px-10 py-5 rounded-3xl font-black text-2xl tracking-tighter uppercase transition-all hover:bg-blue-600 hover:text-white hover:-translate-y-1 shadow-2xl"
-         >
-            <div className="absolute -top-5 -right-5 bg-red-600 text-white text-[12px] font-black px-5 py-2 rounded-full border-2 border-white animate-bounce shadow-[0_10px_30px_rgba(220,38,38,0.5)]">
-              HOT OFFER
-            </div>
+         <a href={LEMON_SQUEEZY_LINK} target="_blank" rel="noopener noreferrer" className="group relative flex flex-col items-center gap-2 bg-white text-black px-10 py-5 rounded-3xl font-black text-2xl tracking-tighter uppercase transition-all hover:bg-blue-600 hover:text-white hover:-translate-y-1 shadow-2xl">
+            <div className="absolute -top-5 -right-5 bg-red-600 text-white text-[12px] font-black px-5 py-2 rounded-full border-2 border-white animate-bounce shadow-[0_10px_30px_rgba(220,38,38,0.5)]">HOT OFFER</div>
             <span className="flex items-center gap-4">
-              <Gift className="group-hover:rotate-12 transition-transform" size={32} />
-              UPGRADE YOUR SHOP
+              <Gift className="group-hover:rotate-12 transition-transform" size={32} /> UPGRADE YOUR SHOP
             </span>
          </a>
       </div>
 
-      {/* System Sandbox Watermark - OS View */}
       <div className="absolute bottom-10 left-10 z-10 pointer-events-none">
          <div className="flex items-center gap-3 px-6 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-xl">
             <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></div>
@@ -673,15 +901,12 @@ const App: React.FC = () => {
          </div>
       </div>
 
-      {/* Desktop Icons */}
       <div className="absolute inset-0 z-10">
         {positions.map(p => {
           const app = APPS.find(a => a.id === p.id);
           return app && (
             <DesktopIcon 
-              key={p.id} 
-              app={app} 
-              pos={p} 
+              key={p.id} app={app} pos={p} 
               onDragEnd={(id, col, row) => setPositions(v => v.map(o => o.id === id ? { ...o, col, row } : o))} 
               onClick={() => openApp(p.id)} 
             />
@@ -689,12 +914,8 @@ const App: React.FC = () => {
         })}
       </div>
 
-      {/* Restored Exit Button - Bottom Right */}
       <div className="absolute bottom-10 right-10 z-[500]">
-        <button 
-          onClick={() => setViewMode('showcase')}
-          className="flex flex-col items-center gap-2 group transition-all"
-        >
+        <button onClick={() => setViewMode('showcase')} className="flex flex-col items-center gap-2 group transition-all">
           <div className="w-14 h-14 bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white rounded-2xl flex items-center justify-center border border-red-500/20 shadow-2xl transition-all group-hover:scale-110">
             <Power size={24} />
           </div>
@@ -702,20 +923,13 @@ const App: React.FC = () => {
         </button>
       </div>
 
-      {/* Windows Layer */}
       <div className="absolute inset-0 z-20 pointer-events-none">
         {windows.map(w => {
           const app = APPS.find(a => a.id === w.id);
           if (!app) return null;
           return (
             <div key={w.id} className="pointer-events-auto h-full w-full">
-              <Window 
-                window={w} 
-                app={app} 
-                onClose={() => closeWindow(w.id)} 
-                onMinimize={() => minWindow(w.id)} 
-                onFocus={() => focusWindow(w.id)}
-              >
+              <Window window={w} app={app} onClose={() => closeWindow(w.id)} onMinimize={() => minWindow(w.id)} onFocus={() => focusWindow(w.id)}>
                 <app.component onClose={() => closeWindow(w.id)} />
               </Window>
             </div>
@@ -723,25 +937,14 @@ const App: React.FC = () => {
         })}
       </div>
 
-      {/* Slimmed Sleek Taskbar */}
       <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-[500]">
         <div className="glass px-4 py-2.5 rounded-[24px] flex items-center gap-2.5 border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.8)]">
           {APPS.map(app => (
-            <button 
-              key={app.id} 
-              onClick={() => openApp(app.id)} 
-              className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all relative group ${windows.some(w => w.id === app.id) ? 'bg-white/15 text-white scale-110 shadow-lg' : 'text-white/30 hover:bg-white/5 hover:text-white hover:scale-105'}`}
-            >
+            <button key={app.id} onClick={() => openApp(app.id)} className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all relative group ${windows.some(w => w.id === app.id) ? 'bg-white/15 text-white scale-110 shadow-lg' : 'text-white/30 hover:bg-white/5 hover:text-white hover:scale-105'}`}>
               <div className="shrink-0">
-                {app.imageIcon ? (
-                  <img src={app.imageIcon} className="w-6 h-6 object-cover rounded" alt="" />
-                ) : (
-                  React.cloneElement(app.icon as React.ReactElement<any>, { size: 18 })
-                )}
+                {app.imageIcon ? <img src={app.imageIcon} className="w-6 h-6 object-cover rounded" alt="" /> : React.cloneElement(app.icon as React.ReactElement<any>, { size: 18 })}
               </div>
-              {windows.some(w => w.id === app.id) && (
-                <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-blue-500 rounded-full shadow-[0_0_5px_rgba(59,130,246,1)]"></div>
-              )}
+              {windows.some(w => w.id === app.id) && <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-blue-500 rounded-full shadow-[0_0_5px_rgba(59,130,246,1)]"></div>}
               <div className="absolute -top-12 left-1/2 -translate-x-1/2 px-3 py-1.5 bg-black/80 backdrop-blur-xl rounded-lg text-[8px] font-black uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap border border-white/10 shadow-2xl">
                 {app.name}
               </div>
