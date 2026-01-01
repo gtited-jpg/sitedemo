@@ -470,7 +470,7 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
         </div>
       </section>
 
-      {/* NEW: The BuyBack Engine - Trade-in and Shop Pricing */}
+      {/* The BuyBack Engine - Side by Side High Fidelity */}
       <section id="buyback" className="py-40 bg-white/[0.01] border-y border-white/5 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-10">
            <div className="grid lg:grid-cols-5 gap-16 items-center">
@@ -492,16 +492,20 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
                  </div>
               </div>
               <div className="lg:col-span-3">
-                 <div className="flex gap-4 md:gap-8">
+                 <div className="flex flex-col md:flex-row gap-6 md:gap-8">
                     <div className="flex-1 relative group cursor-pointer" onClick={() => setLbImage(IMAGES.buyback1)}>
                        <div className="absolute -inset-10 bg-emerald-600/5 blur-[80px] rounded-full group-hover:bg-emerald-600/10 transition-all"></div>
                        <img src={IMAGES.buyback1} className="relative rounded-[32px] border border-white/10 shadow-2xl group-hover:scale-[1.02] transition-all duration-700" alt="BuyBack Step 1" />
-                       <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors rounded-[32px]"></div>
+                       <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors rounded-[32px] flex items-center justify-center">
+                          <Maximize2 className="text-white opacity-0 group-hover:opacity-100 transition-opacity" size={48} />
+                       </div>
                     </div>
                     <div className="flex-1 relative group cursor-pointer" onClick={() => setLbImage(IMAGES.buyback2)}>
                        <div className="absolute -inset-10 bg-emerald-600/5 blur-[80px] rounded-full group-hover:bg-emerald-600/10 transition-all"></div>
                        <img src={IMAGES.buyback2} className="relative rounded-[32px] border border-white/10 shadow-2xl group-hover:scale-[1.02] transition-all duration-700" alt="BuyBack Step 2" />
-                       <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors rounded-[32px]"></div>
+                       <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors rounded-[32px] flex items-center justify-center">
+                          <Maximize2 className="text-white opacity-0 group-hover:opacity-100 transition-opacity" size={48} />
+                       </div>
                     </div>
                  </div>
                  <div className="text-center mt-10">
@@ -648,7 +652,7 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
                           <ArrowRightLeft size={24} className="text-blue-500" />
                           <h4 className="text-xl font-black uppercase tracking-tighter">BIDIRECTIONAL CHAIN</h4>
                        </div>
-                       <p className="text-white/40 text-sm font-medium">Everything is connected. Convert <span className="text-white">Estimates > Work Orders > Invoices</span> and back again. Never miss a payment or lose track of a part. Total financial visibility at every stage of the repair.</p>
+                       <p className="text-white/40 text-sm font-medium">Everything is connected. Convert <span className="text-white">Estimates &rarr; Work Orders &rarr; Invoices</span> and back again. Never miss a payment or lose track of a part. Total financial visibility at every stage of the repair.</p>
                     </div>
 
                     <div className="glass p-8 rounded-3xl border border-white/10 group hover:border-blue-500/30 transition-all">
