@@ -60,7 +60,14 @@ import {
   ArrowRightLeft,
   CalendarDays,
   StickyNote,
-  Send
+  Send,
+  Mail,
+  Sparkles,
+  Key,
+  AppWindow,
+  DownloadCloud,
+  Banknote,
+  TrendingUp
 } from 'lucide-react';
 import { GoogleGenAI } from "@google/genai";
 
@@ -97,7 +104,6 @@ const PADDING = 24;
 const IMAGES = {
   logo: "https://cutlzlouwruvvdldospp.supabase.co/storage/v1/object/public/marketing/repairoslogo.png",
   multitask: "https://cutlzlouwruvvdldospp.supabase.co/storage/v1/object/public/marketing/multitask.png",
-  nexus: "https://cutlzlouwruvvdldospp.supabase.co/storage/v1/object/public/marketing/Screenshot%202025-12-19%20172435.png",
   inventory: "https://cutlzlouwruvvdldospp.supabase.co/storage/v1/object/public/marketing/inventory.png",
   settings: "https://cutlzlouwruvvdldospp.supabase.co/storage/v1/object/public/marketing/employee.png",
   employeesLog: "https://cutlzlouwruvvdldospp.supabase.co/storage/v1/object/public/marketing/employeeslog.png",
@@ -112,7 +118,16 @@ const IMAGES = {
   payroll1: "https://cutlzlouwruvvdldospp.supabase.co/storage/v1/object/public/marketing/payrollROS.png",
   payroll2: "https://cutlzlouwruvvdldospp.supabase.co/storage/v1/object/public/marketing/payroll2ROS.png",
   payroll3: "https://cutlzlouwruvvdldospp.supabase.co/storage/v1/object/public/marketing/payroll3ROS.png",
-  pos: "https://cutlzlouwruvvdldospp.supabase.co/storage/v1/object/public/marketing/posROS.png"
+  pos: "https://cutlzlouwruvvdldospp.supabase.co/storage/v1/object/public/marketing/posROS.png",
+  // High-Fidelity Assets
+  checkin: "https://hlelnadzajmnxryzteww.supabase.co/storage/v1/object/public/RepairOS/checkin.png",
+  checkedIn: "https://hlelnadzajmnxryzteww.supabase.co/storage/v1/object/public/RepairOS/Screenshot%202025-12-30%20170021.png",
+  desktopNew: "https://hlelnadzajmnxryzteww.supabase.co/storage/v1/object/public/RepairOS/desktopROS.png",
+  emailBlaster: "https://hlelnadzajmnxryzteww.supabase.co/storage/v1/object/public/RepairOS/Screenshot%202025-12-30%20175802.png",
+  unlockSoftware: "https://hlelnadzajmnxryzteww.supabase.co/storage/v1/object/public/RepairOS/Screenshot%202025-12-27%20155945.png",
+  nexus: "https://hlelnadzajmnxryzteww.supabase.co/storage/v1/object/public/RepairOS/Screenshot%202026-01-01%20050121.png",
+  buyback1: "https://hlelnadzajmnxryzteww.supabase.co/storage/v1/object/public/RepairOS/Screenshot%202026-01-01%20050938.png",
+  buyback2: "https://hlelnadzajmnxryzteww.supabase.co/storage/v1/object/public/RepairOS/Screenshot%202026-01-01%20051032.png"
 };
 
 const LEMON_SQUEEZY_LINK = "https://repair-os-final-52bu.vercel.app/";
@@ -255,10 +270,10 @@ const Inventory = () => <FeatureSplitView title="Inventory" icon={<Package />} c
 const Payroll = () => <FeatureSplitView title="Payroll" icon={<Coins />} colorClass="from-green-600 to-emerald-700" screenshots={[IMAGES.payroll1, IMAGES.payroll2, IMAGES.payroll3]} highlights={["Tax Logic", "Commission Tracking", "Direct Deposit"]}><p>Precision accounting for your technicians and staff.</p></FeatureSplitView>;
 const POS = () => <FeatureSplitView title="Terminal POS" icon={<ShoppingCart />} colorClass="from-amber-400 to-orange-600" screenshots={[IMAGES.pos]} highlights={["Split Pay", "Integrated Readers", "Offline Buffer"]}><p>High-velocity retail environment terminal.</p></FeatureSplitView>;
 const Estimates = () => <FeatureSplitView title="Estimates" icon={<FileText />} colorClass="from-amber-600 to-orange-700" screenshots={[IMAGES.estimates]} highlights={["Instant Quoting", "PDF Pipeline", "Approval Matrix"]}><p>Professional quotes delivered in seconds.</p></FeatureSplitView>;
-const BuyBack = () => <FeatureSplitView title="Buy Back" icon={<DollarSign />} colorClass="from-teal-600 to-cyan-700" screenshots={[IMAGES.buyback]} highlights={["Grading Algorithm", "Instant Offers", "Contract Automation"]}><p>Scale your pre-owned inventory with surgical pricing.</p></FeatureSplitView>;
+const BuyBack = () => <FeatureSplitView title="Buy Back" icon={<DollarSign />} colorClass="from-teal-600 to-cyan-700" screenshots={[IMAGES.buyback1, IMAGES.buyback2]} highlights={["Grading Algorithm", "Instant Offers", "Contract Automation"]}><p>Scale your pre-owned inventory with surgical pricing. Pair market data with actual shop margins.</p></FeatureSplitView>;
 const Analytics = () => <FeatureSplitView title="Analytics" icon={<BarChart3 />} colorClass="from-emerald-500 to-cyan-600" screenshots={[IMAGES.analytics]} highlights={["Profitability Maps", "Labor Efficiency", "Weekly Signals"]}><p>Deep data insights for growth-focused shops.</p></FeatureSplitView>;
 const Personnel = () => <FeatureSplitView title="Personnel" icon={<Users />} colorClass="from-slate-600 to-indigo-800" screenshots={[IMAGES.employeesMain, IMAGES.employeesLog]} highlights={["Security Clearance", "Performance Logs", "Uptime Tracking"]}><p>Manage your recruits from intake to retirement.</p></FeatureSplitView>;
-const Nexus = () => <FeatureSplitView title="Nexus Store" icon={<Store />} colorClass="from-cyan-600 to-blue-600" screenshots={[IMAGES.nexus]} highlights={["Module Hub", "Verified Apps", "Weekly Updates"]}><p>Expand your OS capabilities with native shop modules.</p></FeatureSplitView>;
+const Nexus = () => <FeatureSplitView title="Nexus Store" icon={<Store />} colorClass="from-cyan-600 to-blue-600" screenshots={[IMAGES.nexus]} highlights={["Module Hub", "One-Tap Install", "Verified Toolkits"]}><p>The only App Store designed exclusively for repair shops. Expand your OS with powerful native modules.</p></FeatureSplitView>;
 const Guide = () => <FeatureSplitView title="RepairOS Guide" icon={<Library />} colorClass="from-blue-700 to-blue-900" screenshots={[IMAGES.guide]} highlights={["SOP Database", "Tech Training", "Hardware Config"]}><p>The master documentation for every Repair OS module.</p></FeatureSplitView>;
 
 const DaemonAI = () => {
@@ -306,7 +321,7 @@ const APPS: AppDefinition[] = [
   { id: 'inventory', name: 'Inventory', icon: <Package />, color: 'from-emerald-600 to-teal-600', component: Inventory },
   { id: 'pos', name: 'Terminal POS', icon: <ShoppingCart />, color: 'from-amber-400 to-orange-600', component: POS },
   { id: 'payroll', name: 'Payroll', icon: <Coins />, color: 'from-green-600 to-emerald-700', component: Payroll },
-  { id: 'marketing', name: 'Marketing', icon: <Megaphone />, color: 'from-indigo-600 to-purple-600', component: () => <FeatureSplitView title="Marketing" icon={<Megaphone />} colorClass="from-indigo-600 to-purple-600" screenshots={[IMAGES.nexus]} highlights={["Automated Reviews", "SMS Campaigns", "Loyalty Hub"]}><p>Automate your business growth engine.</p></FeatureSplitView> },
+  { id: 'marketing', name: 'Marketing', icon: <Megaphone />, color: 'from-indigo-600 to-purple-600', component: () => <FeatureSplitView title="Marketing" icon={<Megaphone />} colorClass="from-indigo-600 to-purple-600" screenshots={[IMAGES.emailBlaster]} highlights={["Automated Reviews", "SMS Campaigns", "Loyalty Hub"]}><p>Automate your business growth engine.</p></FeatureSplitView> },
   { id: 'analytics', name: 'Analytics', icon: <BarChart3 />, color: 'from-emerald-500 to-cyan-600', component: Analytics },
   { id: 'personnel', name: 'Personnel', icon: <Users />, color: 'from-slate-600 to-indigo-800', component: Personnel },
   { id: 'estimates', name: 'Estimates', icon: <FileText />, color: 'from-amber-600 to-orange-700', component: Estimates },
@@ -342,9 +357,11 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
         </div>
         <div className="hidden md:flex items-center gap-10 text-[10px] font-black uppercase tracking-[0.3em] text-white/40">
           <a href="#everything" className="hover:text-white transition-colors">Membership</a>
-          <a href="#modules" className="hover:text-white transition-colors">Modules</a>
-          <a href="#vault" className="hover:text-white transition-colors">Vault</a>
+          <a href="#unlock" className="hover:text-white transition-colors">Proprietary</a>
+          <a href="#buyback" className="hover:text-white transition-colors">BuyBack</a>
+          <a href="#nexus" className="hover:text-white transition-colors">Nexus Store</a>
           <a href="#matrix" className="hover:text-white transition-colors">Matrix</a>
+          <a href="#operations" className="hover:text-white transition-colors">Operations</a>
           <a href="#pricing" className="hover:text-white transition-colors">Pricing</a>
         </div>
         <button onClick={onLaunch} className="bg-white text-black px-10 py-3 rounded-full text-[11px] font-black uppercase tracking-widest hover:bg-blue-600 hover:text-white transition-all shadow-xl">Launch Demo</button>
@@ -391,11 +408,11 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
         </div>
       </section>
 
-      {/* Membership Section */}
-      <section id="everything" className="py-40 bg-white/[0.01] border-y border-white/5">
-        <div className="max-w-7xl mx-auto px-10 grid md:grid-cols-2 gap-24 items-center">
-           <div>
-              <h3 className="text-7xl font-black uppercase mb-8 leading-none tracking-tighter">ONE <br/><span className="text-blue-500">MEMBERSHIP.</span></h3>
+      {/* Flagship Command Center Section */}
+      <section id="everything" className="py-40 bg-white/[0.01] border-y border-white/5 relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-10 grid lg:grid-cols-5 gap-16 items-center">
+           <div className="lg:col-span-2">
+              <h3 className="text-6xl md:text-8xl font-black uppercase mb-8 leading-[0.9] tracking-tighter">ONE <br/><span className="text-blue-500 text-shadow-blue">MEMBERSHIP.</span></h3>
               <p className="text-2xl text-white/40 font-light mb-12">No pro tiers. No locked features. Every tool we build is yours for one flat fee. Infinite scaling for your shop.</p>
               <div className="space-y-4">
                  {[
@@ -405,14 +422,15 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
                  ].map((item, idx) => (
                    <div key={idx} className="flex items-center gap-6 p-6 glass rounded-3xl border border-white/10 group hover:border-blue-500/30 transition-all">
                       <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center group-hover:scale-110 transition-transform">{item.i}</div>
-                      <span className="text-lg font-bold uppercase">{item.t}</span>
+                      <span className="text-lg font-bold uppercase tracking-tighter">{item.t}</span>
                    </div>
                  ))}
               </div>
            </div>
-           <div className="relative group cursor-pointer" onClick={() => setLbImage(IMAGES.multitask)}>
-              <div className="absolute -inset-10 bg-blue-600/5 blur-[100px] rounded-full"></div>
-              <img src={IMAGES.multitask} className="relative rounded-[40px] border border-white/10 shadow-2xl group-hover:scale-[1.02] transition-transform duration-700" alt="Interface" />
+           <div className="lg:col-span-3 relative group cursor-pointer" onClick={() => setLbImage(IMAGES.desktopNew)}>
+              <div className="absolute -inset-20 bg-blue-600/10 blur-[150px] rounded-full animate-pulse"></div>
+              <img src={IMAGES.desktopNew} className="relative rounded-[40px] border border-white/10 shadow-[0_0_80px_rgba(0,0,0,0.6)] group-hover:scale-[1.01] transition-transform duration-700" alt="New Desktop Environment" />
+              <div className="absolute top-6 left-6 bg-blue-600/90 text-white text-[10px] font-black uppercase px-6 py-2 rounded-full tracking-widest backdrop-blur-xl">THE NEW COMMAND CENTER</div>
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100 rounded-[40px]">
                 <Maximize2 size={48} className="text-white drop-shadow-2xl" />
               </div>
@@ -420,11 +438,241 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
         </div>
       </section>
 
+      {/* The Unlock Edge - Proprietary Tech Showcase */}
+      <section id="unlock" className="py-40 bg-black relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-10 grid lg:grid-cols-2 gap-24 items-center">
+           <div className="relative group cursor-pointer" onClick={() => setLbImage(IMAGES.unlockSoftware)}>
+              <div className="absolute -inset-20 bg-indigo-600/10 blur-[150px] rounded-full"></div>
+              <img src={IMAGES.unlockSoftware} className="relative rounded-[56px] border border-white/10 shadow-[0_0_100px_rgba(0,0,0,0.9)] group-hover:scale-[1.02] transition-all duration-700" alt="Proprietary Unlock Software" />
+              <div className="absolute top-10 left-10 bg-indigo-600 text-white text-[10px] font-black uppercase px-6 py-2 rounded-full tracking-widest animate-pulse">100% PROPRIETARY</div>
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100 rounded-[56px]">
+                <Maximize2 size={64} className="text-white drop-shadow-2xl" />
+              </div>
+           </div>
+           <div>
+              <div className="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-[10px] font-black uppercase tracking-[0.4em] mb-10">
+                 <Key size={14} /> EXCLUSIVE MODULE
+              </div>
+              <h3 className="text-7xl md:text-8xl font-black uppercase tracking-tighter mb-8 leading-[0.9]">THE <br/><span className="text-indigo-500">UNLOCK EDGE.</span></h3>
+              <p className="text-2xl text-white/40 font-light leading-relaxed mb-12 italic">"Nobody has this. We don't license this tech—we built it from the ground up for elite shops."</p>
+              
+              <div className="grid grid-cols-1 gap-6">
+                 <div className="glass p-8 rounded-[40px] border border-white/10 group hover:border-indigo-500/30 transition-all">
+                    <h4 className="text-2xl font-black uppercase tracking-tighter mb-4">CARRIER BYPASS CORE</h4>
+                    <p className="text-white/40 leading-relaxed font-medium">Direct bootloader level interaction. Our proprietary suite handles global carrier unlocks and firmware patches that competitors can't touch.</p>
+                 </div>
+                 <div className="glass p-8 rounded-[40px] border border-white/10 group hover:border-indigo-500/30 transition-all">
+                    <h4 className="text-2xl font-black uppercase tracking-tighter mb-4">L1-L4 AUTONOMY</h4>
+                    <p className="text-white/40 leading-relaxed font-medium">Integrated directly into the Repair OS environment. From simple IMEI checks to deep kernel-level overrides, everything happens in one window.</p>
+                 </div>
+              </div>
+           </div>
+        </div>
+      </section>
+
+      {/* NEW: The BuyBack Engine - Trade-in and Shop Pricing */}
+      <section id="buyback" className="py-40 bg-white/[0.01] border-y border-white/5 relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-10">
+           <div className="grid lg:grid-cols-5 gap-16 items-center">
+              <div className="lg:col-span-2">
+                 <div className="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-black uppercase tracking-[0.4em] mb-10">
+                    <Banknote size={14} /> PROFIT MAXIMIZATION
+                 </div>
+                 <h3 className="text-6xl md:text-8xl font-black uppercase tracking-tighter mb-8 leading-[0.9]">THE <br/><span className="text-emerald-500">BUYBACK</span> ENGINE.</h3>
+                 <p className="text-2xl text-white/40 font-light leading-relaxed mb-10">Be prepared next time a customer comes in with tech to sell. Our proprietary Trade-in and Shop Price engine gives you instant, accurate valuations that protect your margins.</p>
+                 <div className="space-y-4">
+                    <div className="flex items-center gap-4 text-emerald-500">
+                       <TrendingUp size={24} />
+                       <span className="text-sm font-black uppercase tracking-widest text-white/80">REAL-TIME MARKET ANALYSIS</span>
+                    </div>
+                    <div className="flex items-center gap-4 text-emerald-500">
+                       <CheckCircle2 size={24} />
+                       <span className="text-sm font-black uppercase tracking-widest text-white/80">INSTANT SHOP CREDIT VOUCHERS</span>
+                    </div>
+                 </div>
+              </div>
+              <div className="lg:col-span-3">
+                 <div className="flex gap-4 md:gap-8">
+                    <div className="flex-1 relative group cursor-pointer" onClick={() => setLbImage(IMAGES.buyback1)}>
+                       <div className="absolute -inset-10 bg-emerald-600/5 blur-[80px] rounded-full group-hover:bg-emerald-600/10 transition-all"></div>
+                       <img src={IMAGES.buyback1} className="relative rounded-[32px] border border-white/10 shadow-2xl group-hover:scale-[1.02] transition-all duration-700" alt="BuyBack Step 1" />
+                       <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors rounded-[32px]"></div>
+                    </div>
+                    <div className="flex-1 relative group cursor-pointer" onClick={() => setLbImage(IMAGES.buyback2)}>
+                       <div className="absolute -inset-10 bg-emerald-600/5 blur-[80px] rounded-full group-hover:bg-emerald-600/10 transition-all"></div>
+                       <img src={IMAGES.buyback2} className="relative rounded-[32px] border border-white/10 shadow-2xl group-hover:scale-[1.02] transition-all duration-700" alt="BuyBack Step 2" />
+                       <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors rounded-[32px]"></div>
+                    </div>
+                 </div>
+                 <div className="text-center mt-10">
+                    <span className="text-[10px] font-black uppercase tracking-[0.6em] text-white/20 animate-pulse">PROPRIETARY PRICING ALGORITHM // SHOP-SIDE EXCLUSIVE</span>
+                 </div>
+              </div>
+           </div>
+        </div>
+      </section>
+
+      {/* Nexus App Store Ecosystem */}
+      <section id="nexus" className="py-40 bg-black relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-10">
+           <div className="grid lg:grid-cols-5 gap-20 items-center">
+              <div className="lg:col-span-2">
+                 <div className="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-[10px] font-black uppercase tracking-[0.4em] mb-10">
+                    <Store size={14} /> INFINITE EXTENSIBILITY
+                 </div>
+                 <h3 className="text-7xl md:text-8xl font-black uppercase tracking-tighter mb-8 leading-[0.9]">THE <br/><span className="text-cyan-500">NEXUS STORE.</span></h3>
+                 <p className="text-2xl text-white/40 font-light leading-relaxed mb-10">The world's only application marketplace built specifically for the repair industry. Install verified toolkits with one tap.</p>
+                 
+                 <div className="grid grid-cols-1 gap-4">
+                    {[
+                      { t: "Verified Security Modules", i: <ShieldCheck className="text-cyan-500" /> },
+                      { t: "Custom Shop Integrations", i: <AppWindow className="text-cyan-500" /> },
+                      { t: "Instant Module Deployment", i: <DownloadCloud className="text-cyan-500" /> }
+                    ].map((item, idx) => (
+                      <div key={idx} className="flex items-center gap-4 p-5 glass rounded-2xl border border-white/5">
+                        {item.i}
+                        <span className="text-sm font-black uppercase tracking-widest">{item.t}</span>
+                      </div>
+                    ))}
+                 </div>
+              </div>
+              <div className="lg:col-span-3 relative group cursor-pointer" onClick={() => setLbImage(IMAGES.nexus)}>
+                 <div className="absolute -inset-10 bg-cyan-600/10 blur-[100px] rounded-full group-hover:bg-cyan-600/20 transition-all duration-700"></div>
+                 <img src={IMAGES.nexus} className="relative rounded-[56px] border border-white/10 shadow-[0_0_120px_rgba(6,182,212,0.15)] group-hover:scale-[1.01] transition-all duration-700" alt="Nexus App Store" />
+                 <div className="absolute top-10 right-10 bg-cyan-600 text-white text-[10px] font-black uppercase px-6 py-2 rounded-full tracking-widest animate-pulse">NATIVE ECOSYSTEM</div>
+                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100 rounded-[56px]">
+                    <Maximize2 size={64} className="text-white drop-shadow-2xl" />
+                 </div>
+              </div>
+           </div>
+        </div>
+      </section>
+
+      {/* Operation: Floor - Visual High Fidelity */}
+      <section id="operations" className="py-40 bg-white/[0.01] border-y border-white/5 relative">
+        <div className="max-w-7xl mx-auto px-10">
+          <div className="flex flex-col items-center text-center mb-24">
+            <h2 className="text-6xl md:text-8xl font-black uppercase tracking-tighter mb-6 leading-none">OPERATION: <span className="text-blue-500">FLOOR.</span></h2>
+            <p className="text-xl text-white/30 max-w-3xl font-medium tracking-tight">Experience the floor check-in workflow. From the first touch to the work board.</p>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-10 mb-20">
+            {/* Step 1: Check In */}
+            <div className="group relative" onClick={() => setLbImage(IMAGES.checkin)}>
+               <div className="absolute -inset-4 bg-gradient-to-br from-blue-600/20 to-transparent blur-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+               <div className="glass p-8 rounded-[56px] border border-white/10 group-hover:border-blue-500/50 transition-all relative overflow-hidden h-full">
+                  <div className="flex items-center justify-between mb-8">
+                    <div className="w-16 h-16 rounded-2xl bg-blue-600/10 flex items-center justify-center text-blue-500"><Tablet size={32} /></div>
+                    <span className="text-[10px] font-black uppercase tracking-[0.5em] text-white/20">STEP 01 // CUSTOMER PORTAL</span>
+                  </div>
+                  <h4 className="text-4xl font-black uppercase tracking-tighter mb-6 leading-none">KIOSK MODE</h4>
+                  <p className="text-white/40 text-lg leading-relaxed font-medium mb-10">Deploy a dedicated self-service terminal. Customers intake their own devices, log issues, and get instant duration estimates.</p>
+                  <div className="rounded-[32px] overflow-hidden border border-white/5 relative">
+                     <img src={IMAGES.checkin} className="w-full h-auto group-hover:scale-105 transition-transform duration-700" alt="Check-in Screen" />
+                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-8">
+                        <span className="text-[10px] font-black text-white uppercase tracking-widest flex items-center gap-2">
+                           <Maximize2 size={12} /> TAP TO ENLARGE WORKFLOW
+                        </span>
+                     </div>
+                  </div>
+               </div>
+            </div>
+
+            {/* Step 2: Checked In */}
+            <div className="group relative" onClick={() => setLbImage(IMAGES.checkedIn)}>
+               <div className="absolute -inset-4 bg-gradient-to-br from-emerald-600/20 to-transparent blur-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+               <div className="glass p-8 rounded-[56px] border border-white/10 group-hover:border-emerald-500/50 transition-all relative overflow-hidden h-full">
+                  <div className="flex items-center justify-between mb-8">
+                    <div className="w-16 h-16 rounded-2xl bg-emerald-600/10 flex items-center justify-center text-emerald-500"><CheckCircle2 size={32} /></div>
+                    <span className="text-[10px] font-black uppercase tracking-[0.5em] text-white/20">STEP 02 // TICKET READY</span>
+                  </div>
+                  <h4 className="text-4xl font-black uppercase tracking-tighter mb-6 leading-none">INSTANT SYNC</h4>
+                  <p className="text-white/40 text-lg leading-relaxed font-medium mb-10">The moment they hit 'Complete', the ticket jumps directly into the work matrix. No double data entry. No delay.</p>
+                  <div className="rounded-[32px] overflow-hidden border border-white/5 relative">
+                     <img src={IMAGES.checkedIn} className="w-full h-auto group-hover:scale-105 transition-transform duration-700" alt="Checked In Screen" />
+                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-8">
+                        <span className="text-[10px] font-black text-white uppercase tracking-widest flex items-center gap-2">
+                           <Maximize2 size={12} /> VIEW SYSTEM RECEIPT
+                        </span>
+                     </div>
+                  </div>
+               </div>
+            </div>
+          </div>
+
+          {/* AI Email Blaster Visual */}
+          <div className="grid lg:grid-cols-5 gap-16 items-center py-20 border-t border-white/5">
+            <div className="lg:col-span-3 group relative cursor-pointer" onClick={() => setLbImage(IMAGES.emailBlaster)}>
+               <div className="absolute -inset-10 bg-purple-600/5 blur-[100px] rounded-full group-hover:bg-purple-600/10 transition-colors"></div>
+               <img src={IMAGES.emailBlaster} className="relative rounded-[48px] border border-white/10 shadow-2xl group-hover:scale-[1.01] transition-transform duration-700" alt="AI Email Blaster" />
+               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors rounded-[48px]"></div>
+               <div className="absolute bottom-6 right-6 bg-purple-600 text-white text-[10px] font-black uppercase px-6 py-2 rounded-full tracking-widest shadow-2xl">PROPRIETARY AI ENGINE</div>
+            </div>
+            <div className="lg:col-span-2">
+               <div className="w-16 h-16 rounded-2xl bg-purple-600/10 flex items-center justify-center text-purple-500 mb-10"><Mail size={32} /></div>
+               <h4 className="text-6xl font-black uppercase tracking-tighter mb-6 leading-none">EMAIL <br/><span className="text-purple-500">BLASTER.</span></h4>
+               <p className="text-2xl text-white/40 font-light mb-10 leading-relaxed">Stop manually writing follow-ups. Our AI engine builds custom high-conversion promos and blasts your entire customer base with one tap.</p>
+               <div className="flex items-center gap-4 text-sm font-black text-purple-500 uppercase tracking-widest">
+                  <Sparkles size={18} /> NEURAL PROMO GENERATION
+               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* The Matrix: Workflow Intelligence Section */}
+      <section id="matrix" className="py-40 bg-black relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-10">
+           <div className="flex flex-col lg:flex-row items-center gap-24">
+              <div className="flex-1 order-2 lg:order-1">
+                 <div className="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[10px] font-black uppercase tracking-[0.4em] mb-10">
+                    <Layers size={14} /> WORKFLOW AUTOMATION
+                 </div>
+                 <h3 className="text-7xl md:text-8xl font-black uppercase tracking-tighter mb-8 leading-none">THE <br/><span className="text-blue-500">MATRIX.</span></h3>
+                 <p className="text-2xl text-white/40 font-light leading-relaxed mb-12">Synchronize intake, repair, and billing. No more fragmented manual work. The OS handles the heavy lifting.</p>
+                 
+                 <div className="space-y-6">
+                    <div className="glass p-8 rounded-3xl border border-white/10 group hover:border-blue-500/30 transition-all">
+                       <div className="flex items-center justify-between mb-4">
+                          <div className="flex items-center gap-5">
+                            <Layout size={24} className="text-blue-500" />
+                            <h4 className="text-xl font-black uppercase tracking-tighter">IMMERSIVE KANBAN</h4>
+                          </div>
+                          <span className="text-[9px] font-black uppercase tracking-widest text-emerald-500 bg-emerald-500/10 px-3 py-1 rounded-full">LIVE CORE</span>
+                       </div>
+                       <p className="text-white/40 text-sm font-medium">Experience a full-screen ticket board with drag-and-drop state transitions. Open tickets to log <span className="text-white font-bold">Private Internal Notes</span> for your techs or <span className="text-blue-400 font-bold">Public Notes</span> directly to the <span className="text-white">Customer Portal</span> for instant remote approvals.</p>
+                    </div>
+
+                    <div className="glass p-8 rounded-3xl border border-white/10 group hover:border-blue-500/30 transition-all">
+                       <div className="flex items-center gap-5 mb-4">
+                          <ArrowRightLeft size={24} className="text-blue-500" />
+                          <h4 className="text-xl font-black uppercase tracking-tighter">BIDIRECTIONAL CHAIN</h4>
+                       </div>
+                       <p className="text-white/40 text-sm font-medium">Everything is connected. Convert <span className="text-white">Estimates > Work Orders > Invoices</span> and back again. Never miss a payment or lose track of a part. Total financial visibility at every stage of the repair.</p>
+                    </div>
+
+                    <div className="glass p-8 rounded-3xl border border-white/10 group hover:border-blue-500/30 transition-all">
+                       <div className="flex items-center gap-5 mb-4">
+                          <Send size={24} className="text-blue-500" />
+                          <h4 className="text-xl font-black uppercase tracking-tighter">AI AUTONOMY</h4>
+                       </div>
+                       <p className="text-white/40 text-sm font-medium">Our proprietary AI engine reaches out autonomously. It sends payment reminders, schedules follow-up appointments, and keeps your bench moving while you focus on the hardware.</p>
+                    </div>
+                 </div>
+              </div>
+              <div className="flex-1 order-1 lg:order-2 relative group" onClick={() => setLbImage(IMAGES.tickets2)}>
+                 <div className="absolute -inset-20 bg-blue-600/10 blur-[150px] rounded-full"></div>
+                 <img src={IMAGES.tickets2} className="relative rounded-[56px] border border-white/10 shadow-[0_0_80px_rgba(0,0,0,0.8)] group-hover:scale-[1.02] transition-all duration-700" alt="Kanban Interface" />
+                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100 rounded-[56px]">
+                    <Maximize2 size={64} className="text-white drop-shadow-2xl" />
+                 </div>
+              </div>
+           </div>
+        </div>
+      </section>
+
       {/* Module Core Section */}
-      <section id="modules" className="py-40 bg-black relative overflow-hidden">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-600/10 blur-[150px] rounded-full"></div>
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-600/10 blur-[150px] rounded-full"></div>
-        
+      <section id="modules" className="py-40 bg-white/[0.01] border-y border-white/5 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-10 relative z-10">
           <div className="flex flex-col items-center text-center mb-24">
             <h2 className="text-6xl md:text-8xl font-black uppercase tracking-tighter mb-6 leading-none">THE <span className="text-blue-500">STACK.</span></h2>
@@ -436,10 +684,10 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
               <div className="w-20 h-20 rounded-3xl bg-blue-600/10 flex items-center justify-center mb-10 group-hover:bg-blue-600 group-hover:text-white text-blue-500 transition-all shadow-xl shadow-blue-500/20">
                 <Lock size={40} />
               </div>
-              <h4 className="text-3xl font-black uppercase tracking-tighter mb-4 leading-none">CELLPHONE UNLOCK</h4>
-              <p className="text-white/40 text-lg leading-relaxed font-medium mb-8">Direct carrier release integration and bootloader bypass automation suite.</p>
+              <h4 className="text-3xl font-black uppercase tracking-tighter mb-4 leading-none">PROPRIETARY UNLOCK</h4>
+              <p className="text-white/40 text-lg leading-relaxed font-medium mb-8">Exclusive carrier release suite. Bootloader bypass and global network unlocking that nobody else has.</p>
               <div className="flex items-center gap-2 text-[10px] font-black text-blue-400 uppercase tracking-widest">
-                <Zap size={12} /> INSTANT EXECUTION
+                <Zap size={12} /> L1-L4 CAPABILITY
               </div>
             </div>
 
@@ -468,136 +716,13 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
         </div>
       </section>
 
-      {/* Knowledge Vault Section */}
-      <section id="vault" className="py-40 bg-white/[0.01] border-y border-white/5 relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-10 grid md:grid-cols-2 gap-24 items-center">
-           <div className="order-2 md:order-1 relative group" onClick={() => setLbImage(IMAGES.guide)}>
-              <div className="absolute -inset-10 bg-blue-600/5 blur-[100px] rounded-full"></div>
-              <img src={IMAGES.guide} className="relative rounded-[40px] border border-white/10 shadow-2xl group-hover:scale-[1.02] transition-transform duration-700" alt="Repair Knowledge" />
-              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100 rounded-[40px]">
-                <Maximize2 size={48} className="text-white drop-shadow-2xl" />
-              </div>
-           </div>
-           <div className="order-1 md:order-2">
-              <h3 className="text-7xl font-black uppercase mb-8 leading-none tracking-tighter">THE <br/><span className="text-blue-500">KNOWLEDGE VAULT.</span></h3>
-              <p className="text-2xl text-white/40 font-light mb-12">Stop hunting for manuals. We've indexed the entire world of repair into one unified database.</p>
-              
-              <div className="grid grid-cols-1 gap-8">
-                 <div className="glass p-10 rounded-[40px] border border-white/10 hover:border-blue-500/30 transition-all">
-                    <div className="flex items-center gap-6 mb-6">
-                       <div className="w-14 h-14 rounded-2xl bg-blue-600/10 flex items-center justify-center text-blue-500"><Library size={32} /></div>
-                       <h4 className="text-2xl font-black uppercase tracking-tighter">REPAIR HOW-TO</h4>
-                    </div>
-                    <p className="text-white/40 leading-relaxed font-medium">Literally every repair listed step-by-step. From basic iPhone screens to complex L4 logic board microsoldering SOPs.</p>
-                 </div>
-
-                 <div className="glass p-10 rounded-[40px] border border-white/10 hover:border-blue-500/30 transition-all">
-                    <div className="flex items-center gap-6 mb-6">
-                       <div className="w-14 h-14 rounded-2xl bg-blue-600/10 flex items-center justify-center text-blue-500"><Database size={32} /></div>
-                       <h4 className="text-2xl font-black uppercase tracking-tighter">DRIVER DATABASE</h4>
-                    </div>
-                    <p className="text-white/40 leading-relaxed font-medium">The world's most comprehensive repository of proprietary drivers for hardware diagnostics and firmware recovery.</p>
-                 </div>
-              </div>
-           </div>
-        </div>
-      </section>
-
-      {/* Operations Floor Section */}
-      <section id="operations" className="py-40 bg-black relative">
-        <div className="max-w-7xl mx-auto px-10">
-          <div className="flex flex-col items-center text-center mb-24">
-            <h2 className="text-6xl md:text-8xl font-black uppercase tracking-tighter mb-6 leading-none">OPERATION: <span className="text-blue-500">FLOOR.</span></h2>
-            <p className="text-xl text-white/30 max-w-3xl font-medium tracking-tight">Streamlining your customer experience from the moment they walk in. High-velocity check-ins meet AI marketing automation.</p>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-10">
-            <div className="glass p-14 rounded-[56px] border border-white/10 group hover:border-blue-500/50 transition-all relative overflow-hidden">
-               <div className="absolute top-0 right-0 p-12 opacity-5 group-hover:opacity-10 transition-opacity">
-                  <Tablet size={160} />
-               </div>
-               <div className="relative z-10">
-                  <div className="w-16 h-16 rounded-2xl bg-blue-600/10 flex items-center justify-center text-blue-500 mb-10"><Tablet size={32} /></div>
-                  <h4 className="text-4xl font-black uppercase tracking-tighter mb-6 leading-none">KIOSK MODE</h4>
-                  <p className="text-white/40 text-xl leading-relaxed font-medium mb-10">Set up a tablet on your counter. Let customers check themselves in. The system automatically estimates repair duration based on current tech load and device complexity.</p>
-                  <div className="flex items-center gap-4 text-sm font-black text-blue-500 uppercase tracking-widest">
-                     <History size={18} /> LIVE TIME-PREDICTOR ENGINE
-                  </div>
-               </div>
-            </div>
-
-            <div className="glass p-14 rounded-[56px] border border-white/10 group hover:border-purple-500/50 transition-all relative overflow-hidden">
-               <div className="absolute top-0 right-0 p-12 opacity-5 group-hover:opacity-10 transition-opacity">
-                  <MessageSquare size={160} />
-               </div>
-               <div className="relative z-10">
-                  <div className="w-16 h-16 rounded-2xl bg-purple-600/10 flex items-center justify-center text-purple-500 mb-10"><Megaphone size={32} /></div>
-                  <h4 className="text-4xl font-black uppercase tracking-tighter mb-6 leading-none">MARKETING AI</h4>
-                  <p className="text-white/40 text-xl leading-relaxed font-medium mb-10">Built-in AI Ad Creator. Generate stunning custom promos and blast your customer database with targeted sales in seconds. Professional-grade creative without the agency cost.</p>
-                  <div className="flex items-center gap-4 text-sm font-black text-purple-500 uppercase tracking-widest">
-                     <Bot size={18} /> NEURAL PROMO GENERATION
-                  </div>
-               </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* NEW: The Matrix: Workflow Intelligence Section */}
-      <section id="matrix" className="py-40 bg-white/[0.01] border-y border-white/5 relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-10">
-           <div className="flex flex-col lg:flex-row items-center gap-24">
-              <div className="flex-1 order-2 lg:order-1">
-                 <div className="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[10px] font-black uppercase tracking-[0.4em] mb-10">
-                    <Layers size={14} /> FULL STACK WORKFLOW
-                 </div>
-                 <h3 className="text-7xl md:text-8xl font-black uppercase tracking-tighter mb-8 leading-none">THE <br/><span className="text-blue-500">MATRIX.</span></h3>
-                 <p className="text-2xl text-white/40 font-light leading-relaxed mb-12">Total synchronization between intake, repair, and billing. Our proprietary engine bridges the gap between technician labor and financial accuracy.</p>
-                 
-                 <div className="space-y-6">
-                    <div className="glass p-8 rounded-3xl border border-white/10 group hover:border-blue-500/30 transition-all">
-                       <div className="flex items-center gap-5 mb-4">
-                          <Layout size={24} className="text-blue-500" />
-                          <h4 className="text-xl font-black uppercase tracking-tighter">IMMERSIVE KANBAN</h4>
-                       </div>
-                       <p className="text-white/40 text-sm font-medium">Full-screen ticket board with drag-and-drop state transitions. Open tickets to log <span className="text-white">Private internal notes</span> for techs or <span className="text-blue-400">Public notes</span> for customer transparency and instant approvals.</p>
-                    </div>
-
-                    <div className="glass p-8 rounded-3xl border border-white/10 group hover:border-blue-500/30 transition-all">
-                       <div className="flex items-center gap-5 mb-4">
-                          <ArrowRightLeft size={24} className="text-blue-500" />
-                          <h4 className="text-xl font-black uppercase tracking-tighter">CIRCULAR FLOW</h4>
-                       </div>
-                       <p className="text-white/40 text-sm font-medium">Bidirectional data pipeline. Convert Estimates to Work Orders to Invoices with one tap. Every interaction is tracked in the <span className="text-white">Customer Portal</span>—let your clients see exactly where their device is in the chain.</p>
-                    </div>
-
-                    <div className="glass p-8 rounded-3xl border border-white/10 group hover:border-blue-500/30 transition-all">
-                       <div className="flex items-center gap-5 mb-4">
-                          <Send size={24} className="text-blue-500" />
-                          <h4 className="text-xl font-black uppercase tracking-tighter">AI AUTONOMY</h4>
-                       </div>
-                       <p className="text-white/40 text-sm font-medium">Our proprietary AI engine handles the grunt work. Automated payment reminders, follow-ups, and appointment scheduling via SMS/Email to keep your bench moving and your cash flowing.</p>
-                    </div>
-                 </div>
-              </div>
-              <div className="flex-1 order-1 lg:order-2 relative group" onClick={() => setLbImage(IMAGES.tickets2)}>
-                 <div className="absolute -inset-20 bg-blue-600/10 blur-[150px] rounded-full"></div>
-                 <img src={IMAGES.tickets2} className="relative rounded-[56px] border border-white/10 shadow-[0_0_80px_rgba(0,0,0,0.8)] group-hover:scale-[1.02] transition-all duration-700" alt="Kanban Interface" />
-                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100 rounded-[56px]">
-                    <Maximize2 size={64} className="text-white drop-shadow-2xl" />
-                 </div>
-              </div>
-           </div>
-        </div>
-      </section>
-
       {/* Architecture / Zero Footprint Section */}
       <section id="architecture" className="py-40 bg-black relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-10">
            <div className="flex flex-col lg:flex-row items-center gap-20">
               <div className="flex-1">
                  <h3 className="text-6xl md:text-8xl font-black uppercase tracking-tighter mb-8 leading-none">ZERO INSTALL.<br/><span className="text-blue-500">TOTAL COMMAND.</span></h3>
-                 <p className="text-2xl text-white/40 font-light leading-relaxed mb-12">No software to download. No bloatware to manage. Repair OS streams directly through your browser engine for a complete desktop UX with zero installation latency.</p>
+                 <p className="text-2xl text-white/40 font-light leading-relaxed mb-12">No software to download. No bloatware to manage. Repair OS streams directly through your browser engine for a complete desktop UX with zero installation latency. 256-bit enterprise encryption ensures your shop data is a vault.</p>
                  
                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="glass p-8 rounded-3xl border border-white/10 flex items-start gap-5">
@@ -634,7 +759,7 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
            <div className="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-red-600/10 border border-red-600/20 text-red-500 text-[11px] font-black uppercase tracking-[0.4em] mb-12">
               <ShieldAlert size={14} /> NO MONKEY BUSINESS
            </div>
-           <h3 className="text-6xl md:text-[9rem] font-black uppercase tracking-tighter mb-10 leading-none">WE HOOK IT UP.</h3>
+           <h3 className="text-6xl md:text-[9rem] font-black uppercase tracking-tighter mb-10 leading-none text-shadow-blue">WE HOOK IT UP.</h3>
            <p className="text-2xl md:text-3xl text-white/40 max-w-5xl mx-auto font-light leading-relaxed mb-16 italic">
              "We don't monkey around with per-tech fees or fragmented tools. We build 100% proprietary software that promotes your growth, not penalizes it. Growth is good. We're here to fuel it."
            </p>
@@ -657,10 +782,10 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
       </section>
 
       {/* Compatibility Section */}
-      <section id="compatibility" className="py-40 border-y border-white/5 bg-white/[0.01]">
+      <section id="compatibility" className="py-40 border-y border-white/5 bg-black relative">
         <div className="max-w-7xl mx-auto px-10">
           <div className="text-center mb-20">
-             <h2 className="text-5xl md:text-7xl font-black uppercase tracking-tighter mb-6">DESKTOP <span className="text-blue-500">FIDELITY.</span></h2>
+             <h2 className="text-5xl md:text-7xl font-black uppercase tracking-tighter mb-6">DESKTOP <span className="text-blue-500 text-shadow-blue">FIDELITY.</span></h2>
              <p className="text-xl text-white/40 max-w-2xl mx-auto font-medium">Repair OS is a true Desktop OS. We focus on power-user performance for your main terminals, while providing mobile bridges for on-the-go efficiency.</p>
           </div>
           
@@ -680,7 +805,7 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
              <div className="glass p-12 rounded-[48px] border border-white/10 flex flex-col items-center text-center group border-blue-500/20">
                 <div className="w-20 h-20 rounded-2xl bg-blue-600/10 flex items-center justify-center mb-8 group-hover:bg-blue-600 group-hover:text-white text-blue-500 transition-all"><Smartphone size={40} /></div>
                 <h4 className="text-2xl font-black uppercase mb-4 tracking-tighter">MOBILE BRIDGE</h4>
-                <p className="text-white/40 text-sm leading-relaxed">Coming soon. A Supabase-powered mobile app for instant ticket editing and field-tech updates.</p>
+                <p className="text-white/40 text-sm leading-relaxed">Coming soon. A Supabase-powered mobile app for instant ticket editing and field-tech updates. We don't compromise desktop power for mobile apps—we build bridges.</p>
              </div>
           </div>
         </div>
@@ -877,7 +1002,7 @@ const App: React.FC = () => {
       )}
 
       <div className="absolute top-16 right-16 z-10 text-right select-none opacity-80 pointer-events-none">
-        <div className="text-[120px] font-black leading-none tracking-tighter text-white uppercase">
+        <div className="text-[120px] font-black leading-none tracking-tighter text-white uppercase text-shadow-blue">
           {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false })}
         </div>
         <div className="text-lg font-bold tracking-[0.5em] text-white/20 uppercase mt-4 mb-10">
