@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { 
   LayoutDashboard, 
@@ -142,7 +141,7 @@ import { GoogleGenAI } from "@google/genai";
 /**
  * REPAIR OS - SYSTEM CORE DEFINITIONS
  * 
- * Version: 2.2.6-STABLE (Symmetry & Expertise Finalization)
+ * Version: 2.3.2-STABLE (Operational UI Precision Update)
  * Support Email: contact@daemoncore.app
  */
 
@@ -506,7 +505,7 @@ const DaemonAI = () => {
       const resp = await ai.models.generateContent({
         model: 'gemini-3-pro-preview',
         contents: [...msgs, uMsg].map(m => ({ role: m.role === 'ai' ? 'model' : 'user', parts: [{ text: m.content }] })),
-        config: { systemInstruction: 'You are DAEMON AI. Professional, elite, and direct. Membership is $199/mo with zero upsells. Every single app is included. We provide advanced carrier unlocking via our 2 proprietary unlock apps.' }
+        config: { systemInstruction: `You are DAEMON AI. Professional, elite, and direct. Repair OS is the world's first browser-based OS for repair shops. No installation required. F11 for full immersion. Includes 2 proprietary carrier unlocking apps. Membership: $199/mo. Support email: ${SUPPORT_EMAIL}.` }
       });
       setMsgs(prev => [...prev, { role: 'ai', content: resp.text || "Neural link failure." }]);
     } catch (err) { 
@@ -562,7 +561,7 @@ const SupportAgentChat: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ 
       const resp = await ai.models.generateContent({
         model: 'gemini-3-flash-preview',
         contents: [...msgs, uMsg].map(m => ({ role: m.role === 'ai' ? 'model' : 'user', parts: [{ text: m.content }] })),
-        config: { systemInstruction: `You are the official Repair OS support specialist. Repair OS is the WORLD'S ONLY full operating system dedicated to repair shops. We uniquely provide exclusive carrier unlocking software via 2 proprietary apps built directly into the system. Be friendly, professional, and knowledgeable about the OS ($199/mo, no per-tech fees, 30+ apps). Encourage users to launch the demo or start a trial. Support email is ${SUPPORT_EMAIL}.` }
+        config: { systemInstruction: `You are the official Repair OS support specialist. Repair OS is the WORLD'S ONLY full operating system dedicated to repair shops. Crucially, it runs 100% in your browser—absolutely NO installation required. By hitting F11, you enter immersive mode, effectively replacing your traditional OS with the world's most powerful repair environment. We uniquely provide exclusive carrier unlocking software via 2 proprietary apps built into the system. Be friendly and professional. Membership: $199/mo. Support email: ${SUPPORT_EMAIL}.` }
       });
       setMsgs(prev => [...prev, { role: 'ai', content: resp.text || "I apologize, I'm having trouble connecting." }]);
     } catch { 
@@ -575,55 +574,55 @@ const SupportAgentChat: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed bottom-24 right-8 w-[380px] h-[550px] glass rounded-[32px] border border-white/20 shadow-[0_30px_100px_rgba(0,0,0,0.8)] z-[200] flex flex-col overflow-hidden animate-in slide-in-from-bottom-10 fade-in duration-500">
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-700 p-6 flex items-center justify-between shadow-lg">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-xl flex items-center justify-center text-white">
-            <Headphones size={20} />
+    <div className="fixed bottom-24 right-8 w-[400px] h-[600px] glass rounded-[40px] border border-white/20 shadow-[0_50px_150px_rgba(0,0,0,0.9)] z-[200] flex flex-col overflow-hidden animate-in slide-in-from-bottom-20 fade-in duration-700">
+      <div className="bg-gradient-to-br from-blue-700 via-indigo-800 to-purple-900 p-8 flex items-center justify-between shadow-2xl relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.1),transparent_70%)]"></div>
+        <div className="flex items-center gap-4 relative z-10">
+          <div className="w-14 h-14 rounded-3xl bg-white/10 backdrop-blur-2xl flex items-center justify-center text-white border border-white/20 shadow-inner">
+            <Headphones size={28} className="animate-bounce" style={{ animationDuration: '3s' }} />
           </div>
           <div>
-            <div className="text-sm font-black text-white uppercase tracking-wider">OS Support</div>
-            <div className="flex items-center gap-1.5">
-              <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div>
-              <span className="text-[10px] font-bold text-white/60 uppercase">Agent Online</span>
+            <div className="text-lg font-black text-white uppercase tracking-tighter leading-none mb-1">OS Support</div>
+            <div className="flex items-center gap-2">
+              <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_100px_rgba(52,211,153,0.8)]"></div>
+              <span className="text-[11px] font-black text-white/70 uppercase tracking-widest">Live Specialist</span>
             </div>
           </div>
         </div>
-        <div className="flex gap-2">
-          <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-lg text-white/60"><Minus size={20} /></button>
-          <button onClick={onClose} className="p-2 hover:bg-red-500 rounded-lg text-white/60 hover:text-white transition-colors"><X size={20} /></button>
-        </div>
+        <button onClick={onClose} className="p-3 hover:bg-white/10 rounded-2xl text-white/60 hover:text-white transition-all relative z-10 border border-transparent hover:border-white/20">
+          <X size={24} />
+        </button>
       </div>
       
-      <div ref={scrollRef} className="flex-1 p-6 overflow-y-auto space-y-4 bg-black/40 text-sm">
+      <div ref={scrollRef} className="flex-1 p-8 overflow-y-auto space-y-6 bg-[#080808] text-sm">
         {msgs.map((m, i) => (
           <div key={i} className={`flex ${m.role === 'ai' ? 'justify-start' : 'justify-end'}`}>
-            <div className={`p-4 rounded-2xl max-w-[85%] ${m.role === 'ai' ? 'bg-white/5 border border-white/10 text-white/90' : 'bg-blue-600 text-white shadow-lg shadow-blue-600/20'}`}>
+            <div className={`p-6 rounded-[28px] max-w-[90%] shadow-xl leading-relaxed ${m.role === 'ai' ? 'bg-white/5 border border-white/10 text-white/90 rounded-tl-none' : 'bg-gradient-to-br from-blue-600 to-indigo-700 text-white shadow-blue-900/40 rounded-tr-none'}`}>
               {m.content}
             </div>
           </div>
         ))}
         {loading && (
           <div className="flex justify-start">
-            <div className="bg-white/5 p-4 rounded-2xl animate-pulse flex gap-1">
-              <div className="w-1 h-1 bg-white/40 rounded-full"></div>
-              <div className="w-1 h-1 bg-white/40 rounded-full animate-bounce"></div>
-              <div className="w-1 h-1 bg-white/40 rounded-full"></div>
+            <div className="bg-white/5 p-5 rounded-[28px] rounded-tl-none animate-pulse flex gap-2">
+              <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0s' }}></div>
+              <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+              <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
             </div>
           </div>
         )}
       </div>
 
-      <div className="p-4 border-t border-white/5 bg-black/60 flex gap-2">
+      <div className="p-6 border-t border-white/5 bg-[#0a0a0a] flex gap-3">
         <input 
           value={inp} 
           onChange={e => setInp(e.target.value)} 
           onKeyDown={e => e.key === 'Enter' && handleSend()} 
-          placeholder="Message support..." 
-          className="flex-1 bg-white/5 border border-white/10 rounded-2xl px-5 py-3 text-white text-sm outline-none focus:border-blue-500/40"
+          placeholder="Command center query..." 
+          className="flex-1 bg-white/5 border border-white/10 rounded-3xl px-6 py-4 text-white text-base outline-none focus:border-blue-500/50 transition-all focus:bg-white/[0.08]"
         />
-        <button onClick={handleSend} className="w-12 h-12 bg-blue-600 hover:bg-blue-500 rounded-2xl flex items-center justify-center text-white transition-all shadow-lg active:scale-95">
-          <Send size={18} />
+        <button onClick={handleSend} className="w-14 h-14 bg-white text-black hover:bg-blue-500 hover:text-white rounded-3xl flex items-center justify-center transition-all shadow-xl active:scale-90 group border-b-4 border-gray-300 hover:border-blue-700">
+          <Send size={22} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
         </button>
       </div>
     </div>
@@ -710,47 +709,60 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
 
   return (
     <div className="w-full bg-[#050505] text-white selection:bg-blue-500/30 overflow-y-auto h-screen scroll-smooth font-poppins relative">
-      <nav className="fixed top-0 w-full z-[100] border-b border-white/10 bg-black/70 backdrop-blur-2xl px-12 py-8 flex items-center justify-between">
-        <div className="flex flex-col">
-          <span className="text-3xl font-black tracking-tighter uppercase leading-none drop-shadow-[0_0_10px_rgba(37,99,235,0.4)]">REPAIR<span className="text-blue-400">OS</span></span>
-          <span className="text-[8px] font-black uppercase tracking-[0.5em] text-white/30 mt-1">BY DAEMONCORE®</span>
+      {/* Dynamic Flair Background */}
+      <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none opacity-20">
+         <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-blue-600/30 blur-[150px] rounded-full animate-pulse"></div>
+         <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-purple-600/30 blur-[150px] rounded-full animate-pulse" style={{ animationDelay: '2s' }}></div>
+         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10"></div>
+      </div>
+
+      <nav className="fixed top-0 w-full z-[100] border-b border-white/5 bg-black/60 backdrop-blur-3xl px-8 md:px-16 py-8 flex items-center justify-between transition-all duration-500">
+        <div className="flex flex-col group cursor-pointer">
+          <span className="text-4xl font-black tracking-tighter uppercase leading-none text-white drop-shadow-[0_0_15px_rgba(37,99,235,0.6)] group-hover:scale-105 transition-transform">REPAIR<span className="text-blue-500">OS</span></span>
+          <span className="text-[9px] font-black uppercase tracking-[0.5em] text-blue-400/60 mt-1">DAEMONCORE® SYSTEMS</span>
         </div>
-        <div className="hidden md:flex items-center gap-10 text-[10px] font-black uppercase tracking-[0.3em] text-white/40">
-          <a href="#everything" className="hover:text-blue-400 transition-colors">Membership</a>
-          <a href="#unlock" className="hover:text-indigo-400 transition-colors">Proprietary</a>
-          <a href="#buyback" className="hover:text-emerald-400 transition-colors">BuyBack</a>
-          <a href="#nexus" className="hover:text-cyan-400 transition-colors">Nexus Store</a>
-          <a href="#pricing" className="hover:text-white transition-colors">Pricing</a>
+        <div className="hidden lg:flex items-center gap-12 text-[11px] font-black uppercase tracking-[0.4em] text-white/50">
+          <a href="#everything" className="hover:text-blue-400 hover:tracking-[0.5em] transition-all">Membership</a>
+          <a href="#unlock" className="hover:text-indigo-400 hover:tracking-[0.5em] transition-all">Proprietary</a>
+          <a href="#buyback" className="hover:text-emerald-400 hover:tracking-[0.5em] transition-all">BuyBack</a>
+          <a href="#nexus" className="hover:text-cyan-400 hover:tracking-[0.5em] transition-all">Nexus Store</a>
+          <a href="#pricing" className="hover:text-white hover:tracking-[0.5em] transition-all">Pricing</a>
         </div>
-        <button onClick={onLaunch} className="bg-white text-black px-10 py-3 rounded-full text-[11px] font-black uppercase tracking-widest hover:bg-blue-500 hover:text-white transition-all shadow-[0_0_20px_rgba(255,255,255,0.2)]">Launch Demo</button>
+        <button onClick={onLaunch} className="bg-white text-black px-12 py-4 rounded-[20px] text-[12px] font-black uppercase tracking-widest hover:bg-blue-600 hover:text-white transition-all shadow-[0_15px_35px_rgba(255,255,255,0.1)] active:scale-95 border-b-4 border-gray-300 hover:border-blue-700">LAUNCH SYSTEM DEMO</button>
       </nav>
 
-      {/* Hero */}
-      <section className="relative min-h-screen flex flex-col items-center justify-center px-10 text-center pt-32 pb-40 overflow-hidden">
-        <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.15),transparent_65%)]"></div>
-        <div className="relative z-10">
-          <div className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-blue-500/10 border border-blue-400/30 text-blue-400 text-[11px] font-black uppercase tracking-[0.4em] mb-12 animate-pulse shadow-[0_0_15px_rgba(59,130,246,0.2)]">
-            <Zap size={14} className="text-blue-400" /> NEW APPS ADDED WEEKLY // NO UPSELLS
+      {/* Hero Section - Maximum Flair */}
+      <section className="relative min-h-screen flex flex-col items-center justify-center px-10 text-center pt-48 pb-60 overflow-hidden">
+        <div className="relative z-10 animate-in fade-in slide-in-from-bottom-20 duration-1000">
+          <div className="inline-flex items-center gap-3 px-8 py-3 rounded-[24px] bg-white/5 border border-white/10 text-blue-400 text-[12px] font-black uppercase tracking-[0.5em] mb-16 animate-bounce shadow-[0_0_25px_rgba(59,130,246,0.3)] backdrop-blur-md" style={{ animationDuration: '4s' }}>
+            <Sparkles size={16} className="text-blue-400" /> BROWSER-NATIVE PERFORMANCE // V2.3.0
           </div>
-          <div className="flex flex-col items-center mb-16">
-            <h1 className="text-[7rem] md:text-[11rem] font-black leading-[0.75] tracking-tighter uppercase drop-shadow-[0_0_100px_rgba(37,99,235,0.3)]">
-              REPAIR<span className="text-blue-500">OS</span>
+          
+          <div className="flex flex-col items-center mb-24 space-y-4">
+            <h1 className="text-[8rem] md:text-[14rem] font-black leading-[0.7] tracking-tighter uppercase drop-shadow-[0_0_120px_rgba(37,99,235,0.5)]">
+              REPAIR<span className="text-transparent bg-clip-text bg-gradient-to-br from-blue-400 via-indigo-500 to-purple-600 animate-gradient-x">OS</span>
             </h1>
-            <div className="text-[12px] md:text-[14px] font-black tracking-[1.2em] text-white/30 uppercase mt-8 flex items-center gap-6">
-              <div className="h-px w-12 bg-white/20"></div>BY DAEMONCORE®<div className="h-px w-12 bg-white/20"></div>
+            <div className="text-[14px] md:text-[18px] font-black tracking-[1.5em] text-white/20 uppercase mt-12 flex items-center gap-10">
+              <div className="h-0.5 w-24 bg-gradient-to-r from-transparent to-white/20"></div>
+              DAEMONCORE® ALPHA
+              <div className="h-0.5 w-24 bg-gradient-to-l from-transparent to-white/20"></div>
             </div>
           </div>
-          <h2 className="text-4xl md:text-7xl font-extrabold mb-16 max-w-6xl mx-auto leading-[1.1] uppercase tracking-tight text-white/90">
-            THE WORLD'S FIRST <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-500 drop-shadow-[0_0_100px_rgba(129,140,248,0.3)]">OPERATING SYSTEM</span> <br/>DEDICATED EXCLUSIVELY TO REPAIR SHOPS.
+
+          <h2 className="text-5xl md:text-8xl font-black mb-24 max-w-7xl mx-auto leading-[0.95] uppercase tracking-tighter text-white/95">
+            THE WORLD'S ONLY <br/>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-indigo-500 drop-shadow-[0_0_15px_rgba(34,211,238,0.4)]">COMPLETE OPERATING SYSTEM</span> <br/>
+            FOR THE REPAIR INDUSTRY.
           </h2>
-          <div className="flex flex-col items-center gap-12">
-            <button onClick={onLaunch} className="bg-blue-600 hover:bg-blue-500 text-white px-16 py-8 rounded-[40px] font-black text-2xl transition-all flex items-center gap-6 uppercase group shadow-[0_20px_50px_rgba(37,99,235,0.4)] active:scale-95 border border-blue-400/20">
-              LAUNCH SYSTEM DEMO <ArrowRight className="group-hover:translate-x-3 transition-transform" />
+
+          <div className="flex flex-col items-center gap-16">
+            <button onClick={onLaunch} className="bg-blue-600 hover:bg-blue-500 text-white px-20 py-10 rounded-[50px] font-black text-3xl transition-all flex items-center gap-8 uppercase group shadow-[0_30px_70px_rgba(37,99,235,0.5)] active:scale-95 border-t-2 border-white/20">
+              IMMERSIVE LAUNCH <ArrowRight className="group-hover:translate-x-5 transition-transform" size={40} />
             </button>
-            <div className="flex flex-wrap justify-center gap-6 md:gap-8 max-w-5xl">
+            <div className="flex flex-wrap justify-center gap-10 md:gap-12 max-w-6xl">
               {awards.map((award, idx) => (
-                <div key={idx} className="flex items-center gap-3 px-6 py-3 glass rounded-2xl border border-white/10 text-[10px] font-black uppercase tracking-[0.2em] text-white/40 hover:text-white hover:border-blue-500/50 transition-all hover:-translate-y-1 cursor-default group shadow-xl">
-                  <div className="text-blue-400 group-hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.8)] group-hover:scale-110 transition-transform">{award.icon}</div>{award.label}
+                <div key={idx} className="flex items-center gap-4 px-8 py-4 glass rounded-[24px] border border-white/10 text-[11px] font-black uppercase tracking-[0.3em] text-white/30 hover:text-white hover:border-blue-500 hover:scale-105 transition-all cursor-default shadow-2xl">
+                  <div className="text-blue-500 drop-shadow-[0_0_10px_rgba(37,99,235,0.8)]">{award.icon}</div>{award.label}
                 </div>
               ))}
             </div>
@@ -758,71 +770,84 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
         </div>
       </section>
 
-      {/* FLOATING CHAT WIDGET INTEGRATION */}
-      <div className="fixed bottom-8 right-8 z-[500] flex flex-col items-end gap-4">
+      {/* Floating Chat Widget */}
+      <div className="fixed bottom-12 right-12 z-[500] flex flex-col items-end gap-6">
         {!chatOpen && (
           <button 
             onClick={() => setChatOpen(true)}
-            className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center text-white shadow-[0_10px_30px_rgba(37,99,235,0.4)] hover:scale-110 active:scale-95 transition-all border border-blue-400/30 group relative"
+            className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-600 via-indigo-700 to-purple-800 flex items-center justify-center text-white shadow-[0_15px_45px_rgba(37,99,235,0.5)] hover:scale-110 active:scale-90 transition-all border border-white/20 group relative overflow-visible"
           >
-            <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full border-2 border-black flex items-center justify-center text-[10px] font-black">1</div>
-            <MessageCircle size={28} className="group-hover:rotate-12 transition-transform" />
+            <div className="absolute inset-0 bg-white/10 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            <div className="absolute -top-1 -right-1 w-6 h-6 bg-red-600 rounded-full border-2 border-[#050505] flex items-center justify-center text-[10px] font-black shadow-lg z-10 animate-pulse">1</div>
+            <MessageCircle size={30} className="group-hover:rotate-12 transition-transform drop-shadow-md" />
           </button>
         )}
         <SupportAgentChat isOpen={chatOpen} onClose={() => setChatOpen(false)} />
       </div>
 
       {/* Membership Section */}
-      <section id="everything" className="py-40 bg-white/[0.02] border-y border-white/10 relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-10 grid lg:grid-cols-2 gap-32 items-center">
-           <div className="relative z-20 col-span-1">
-              <h3 className="text-6xl md:text-8xl font-black uppercase mb-8 leading-[0.9] tracking-tighter">ONE <br/><span className="text-blue-500 drop-shadow-[0_0_20px_rgba(37,99,235,0.3)]">MEMBERSHIP.</span></h3>
-              <p className="text-2xl text-white/40 font-light mb-12 max-w-lg">No pro tiers. No locked features. Every tool we build is yours for one flat fee. Infinite scaling for your shop from day one.</p>
-              <div className="space-y-4 max-w-md">
+      <section id="everything" className="py-60 bg-white/[0.01] border-y border-white/5 relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-10 grid lg:grid-cols-2 gap-40 items-center">
+           <div className="relative z-20 col-span-1 animate-in slide-in-from-left-20 duration-1000">
+              <h3 className="text-7xl md:text-9xl font-black uppercase mb-12 leading-[0.85] tracking-tighter">THE <br/><span className="text-blue-500 drop-shadow-[0_0_30px_rgba(37,99,235,0.4)]">ALL-IN</span> PASS.</h3>
+              <p className="text-2xl text-white/40 font-medium mb-16 max-w-lg leading-relaxed uppercase tracking-tighter">Infinite growth. Zero compromises. One flat-line cost for the elite workshop owner.</p>
+              <div className="space-y-6 max-w-lg">
                  {[
-                   { t: "30+ Proprietary Modules", i: <Layers className="text-blue-400" /> },
-                   { t: "100% Custom Architecture", i: <Code className="text-indigo-400" /> },
-                   { t: "Infinite Growth Policy", i: <Infinity className="text-emerald-400" /> }
+                   { t: "30+ Proprietary Modules", i: <Layers className="text-blue-400" />, d: "Full-stack repair ecosystem built on custom native kernels." },
+                   { t: "100% Browser Architecture", i: <Globe className="text-indigo-400" />, d: "Zero installation. Accessible globally. F11 for full desktop immersion." },
+                   { t: "No-Limit Expansion", i: <Infinity className="text-emerald-400" />, d: "Unlimited technicians. Unlimited devices. Unlimited profit potential." }
                  ].map((item, idx) => (
-                   <div key={idx} className="flex items-center gap-6 p-6 glass rounded-3xl border border-white/10 group hover:border-blue-500/50 transition-all shadow-lg">
-                      <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center group-hover:scale-110 transition-transform drop-shadow-[0_0_10px_rgba(255,255,255,0.1)]">{item.i}</div>
-                      <span className="text-lg font-bold uppercase tracking-tighter group-hover:text-white transition-colors">{item.t}</span>
+                   <div key={idx} className="flex items-start gap-8 p-8 glass rounded-[40px] border border-white/5 group hover:border-blue-500/50 hover:bg-white/[0.02] transition-all shadow-2xl">
+                      <div className="w-16 h-16 rounded-3xl bg-white/5 flex items-center justify-center group-hover:scale-110 transition-transform shadow-inner border border-white/10">{item.i}</div>
+                      <div>
+                        <span className="text-xl font-black uppercase tracking-tighter group-hover:text-white transition-colors block mb-2">{item.t}</span>
+                        <p className="text-xs text-white/30 font-bold uppercase tracking-widest">{item.d}</p>
+                      </div>
                    </div>
                  ))}
               </div>
            </div>
-           <div className="flex flex-col gap-12 relative z-10 col-span-1 justify-self-end w-full">
-              <div className="relative group cursor-pointer w-full" onClick={() => setLbImage(IMAGES.desktopNew)}>
-                 <div className="absolute -inset-10 bg-blue-600/10 blur-[120px] rounded-full animate-pulse"></div>
-                 <div className="relative rounded-[40px] p-0.5 bg-gradient-to-br from-blue-500/30 to-purple-500/10 overflow-hidden shadow-[0_0_80px_rgba(0,0,0,0.8)]">
-                   <img src={IMAGES.desktopNew} className="relative rounded-[39px] group-hover:scale-[1.01] transition-transform duration-700 w-full h-auto opacity-90 group-hover:opacity-100" alt="Repair OS Desktop Environment" />
+           <div className="flex flex-col gap-12 relative z-10 col-span-1 justify-self-end w-full group">
+              <div className="relative cursor-pointer w-full transition-transform duration-700 group-hover:scale-[1.03]" onClick={() => setLbImage(IMAGES.desktopNew)}>
+                 <div className="absolute -inset-20 bg-blue-600/10 blur-[180px] rounded-full animate-pulse"></div>
+                 <div className="relative rounded-[60px] p-1 bg-gradient-to-br from-blue-500/40 via-purple-600/20 to-transparent overflow-hidden shadow-[0_0_120px_rgba(0,0,0,0.9)] border border-white/10">
+                   <img src={IMAGES.desktopNew} className="relative rounded-[59px] w-full h-auto opacity-80 group-hover:opacity-100 transition-all duration-1000 grayscale group-hover:grayscale-0" alt="Repair OS Desktop Environment" />
+                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
                  </div>
-                 <div className="absolute top-6 left-6 bg-blue-600 text-white text-[10px] font-black uppercase px-6 py-2 rounded-full tracking-widest backdrop-blur-xl border border-blue-400/30 shadow-[0_0_20px_rgba(37,99,235,0.4)]">THE COMMAND CENTER</div>
+                 <div className="absolute bottom-10 left-10 right-10 flex items-center justify-between">
+                    <div className="bg-blue-600 text-white text-[11px] font-black uppercase px-8 py-3 rounded-2xl tracking-[0.2em] backdrop-blur-xl border border-white/20 shadow-2xl">BEYOND SOFTWARE</div>
+                    <div className="flex gap-2">
+                       <div className="w-3 h-3 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)]"></div>
+                       <div className="w-3 h-3 rounded-full bg-amber-500"></div>
+                       <div className="w-3 h-3 rounded-full bg-emerald-500"></div>
+                    </div>
+                 </div>
               </div>
            </div>
         </div>
       </section>
 
       {/* Proprietary Section */}
-      <section id="unlock" className="py-40 bg-black relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-10 grid lg:grid-cols-2 gap-24 items-center">
-           <div className="relative group cursor-pointer" onClick={() => setLbImage(IMAGES.unlockSoftware)}>
-              <div className="absolute -inset-20 bg-indigo-600/15 blur-[150px] rounded-full"></div>
-              <div className="relative rounded-[56px] p-0.5 bg-gradient-to-br from-indigo-500/40 via-blue-500/20 to-transparent">
-                <img src={IMAGES.unlockSoftware} className="relative rounded-[55px] shadow-[0_0_100px_rgba(0,0,0,0.9)] group-hover:scale-[1.02] transition-all duration-700" alt="Proprietary Tech" />
+      <section id="unlock" className="py-60 bg-black relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-10 grid lg:grid-cols-2 gap-32 items-center">
+           <div className="relative group cursor-pointer animate-in fade-in zoom-in duration-1000" onClick={() => setLbImage(IMAGES.unlockSoftware)}>
+              <div className="absolute -inset-32 bg-indigo-600/15 blur-[200px] rounded-full"></div>
+              <div className="relative rounded-[72px] p-1 bg-gradient-to-br from-indigo-500/50 via-blue-400/20 to-transparent border border-white/10 overflow-hidden">
+                <img src={IMAGES.unlockSoftware} className="relative rounded-[71px] shadow-[0_0_150px_rgba(0,0,0,0.95)] group-hover:scale-[1.05] transition-all duration-1000" alt="Proprietary Tech" />
               </div>
-              <div className="absolute top-10 left-10 bg-indigo-600 text-white text-[10px] font-black uppercase px-6 py-2 rounded-full tracking-widest animate-pulse border border-indigo-400/30 shadow-[0_0_20px_rgba(79,70,229,0.5)]">100% PROPRIETARY</div>
+              <div className="absolute -top-10 -right-10 bg-indigo-600 text-white text-[12px] font-black uppercase px-10 py-4 rounded-[30px] tracking-[0.4em] animate-pulse border border-indigo-400/40 shadow-[0_0_40px_rgba(79,70,229,0.7)] rotate-6">EXCLUSIVE SUITE</div>
            </div>
            <div>
-              <div className="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-indigo-500/10 border border-indigo-400/30 text-indigo-400 text-[10px] font-black uppercase tracking-[0.4em] mb-10 shadow-[0_0_15px_rgba(79,70,229,0.2)]">
-                 <Key size={14} className="text-indigo-400" /> EXCLUSIVE MODULES
+              <div className="inline-flex items-center gap-4 px-8 py-3 rounded-full bg-indigo-500/10 border border-indigo-400/30 text-indigo-400 text-[11px] font-black uppercase tracking-[0.5em] mb-12 shadow-[0_0_20px_rgba(79,70,229,0.3)]">
+                 <LockKeyhole size={18} className="text-indigo-400" /> PROPRIETARY CORE
               </div>
-              <h3 className="text-7xl md:text-8xl font-black uppercase tracking-tighter mb-8 leading-[0.9]">THE <br/><span className="text-indigo-400 drop-shadow-[0_0_20px_rgba(99,102,241,0.3)]">UNLOCK EDGE.</span></h3>
-              <p className="text-2xl text-white/40 font-light leading-relaxed mb-12 italic">"Nobody else has this. We are the ONLY OS for repair shops that provides dedicated carrier unlocking software via 2 proprietary apps."</p>
-              <div className="grid grid-cols-1 gap-6">
-                 <div className="glass p-8 rounded-[40px] border border-white/10 group hover:border-indigo-500/50 transition-all shadow-xl">
-                    <h4 className="text-2xl font-black uppercase tracking-tighter mb-4 text-indigo-200">CARRIER BYPASS SUITE</h4>
-                    <p className="text-white/40 leading-relaxed font-medium">Direct bootloader level interaction. Our 2 proprietary unlocking apps handle global carrier bypasses and firmware patches that competitors simply cannot touch.</p>
+              <h3 className="text-7xl md:text-9xl font-black uppercase tracking-tighter mb-12 leading-[0.8] text-white">THE <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-500 drop-shadow-[0_0_30px_rgba(99,102,241,0.5)]">UNLOCK EDGE.</span></h3>
+              <p className="text-3xl text-white/40 font-light leading-tight mb-16 italic tracking-tighter">"We don't just manage your shop. We give you the keys to the kingdom with software nobody else possesses."</p>
+              <div className="grid grid-cols-1 gap-10">
+                 <div className="glass p-12 rounded-[56px] border border-white/10 group hover:border-indigo-500/50 hover:bg-indigo-600/[0.03] transition-all shadow-[0_40px_100px_rgba(0,0,0,0.6)] relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-600/10 blur-[60px] rounded-full"></div>
+                    <h4 className="text-3xl font-black uppercase tracking-tighter mb-6 text-indigo-100 flex items-center gap-4"><Zap className="text-indigo-400" /> DUAL UNLOCK MODULES</h4>
+                    <p className="text-white/40 leading-relaxed font-bold text-lg uppercase tracking-tight">Access 2 dedicated carrier-bypass applications built exclusively into Repair OS. Global network unlocking and firmware auditing protocols available nowhere else.</p>
                  </div>
               </div>
            </div>
@@ -830,23 +855,26 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
       </section>
 
       {/* BuyBack Section */}
-      <section id="buyback" className="py-40 bg-white/[0.02] border-y border-white/10 relative overflow-hidden">
+      <section id="buyback" className="py-60 bg-white/[0.01] border-y border-white/5 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-10">
-           <div className="grid lg:grid-cols-5 gap-16 items-center">
-              <div className="lg:col-span-2">
-                 <div className="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-emerald-500/10 border border-emerald-400/30 text-emerald-400 text-[10px] font-black uppercase tracking-[0.4em] mb-10 shadow-[0_0_15px_rgba(52,211,153,0.2)]">
-                    <Banknote size={14} className="text-emerald-400" /> PROFIT MAXIMIZATION
+           <div className="grid lg:grid-cols-5 gap-24 items-center">
+              <div className="lg:col-span-3"> {/* Increased span to prevent 'K' clipping */}
+                 <div className="inline-flex items-center gap-4 px-8 py-3 rounded-full bg-emerald-500/10 border border-emerald-400/30 text-emerald-400 text-[11px] font-black uppercase tracking-[0.5em] mb-12 shadow-[0_0_20px_rgba(52,211,153,0.3)]">
+                    <TrendingUp size={18} className="text-emerald-400" /> PROFIT MAXIMIZATION
                  </div>
-                 <h3 className="text-6xl md:text-8xl font-black uppercase tracking-tighter mb-8 leading-[0.9]">THE <br/><span className="text-emerald-500 drop-shadow-[0_0_20px_rgba(16,185,129,0.3)]">BUYBACK</span> ENGINE.</h3>
-                 <p className="text-2xl text-white/40 font-light leading-relaxed mb-10">Be prepared next time a customer comes in with tech to sell. Our proprietary Trade-in and Shop Price engine gives you instant, accurate valuations that protect your margins.</p>
+                 <h3 className="text-7xl md:text-9xl font-black uppercase tracking-tight mb-12 leading-[0.85] overflow-visible">THE <br/><span className="text-emerald-500 drop-shadow-[0_0_30px_rgba(16,185,129,0.4)]">BUYBACK</span> ENGINE.</h3>
+                 <p className="text-2xl text-white/50 font-medium leading-snug mb-12 uppercase tracking-tighter">Turn trade-ins into a goldmine. Our grading neural logic provides the safest margins in the industry.</p>
               </div>
-              <div className="lg:col-span-3">
-                 <div className="flex flex-col md:flex-row gap-6 md:gap-8">
-                    <div className="flex-1 relative group cursor-pointer" onClick={() => setLbImage(IMAGES.buyback1)}>
-                       <img src={IMAGES.buyback1} className="relative rounded-[32px] border border-emerald-400/20 shadow-2xl group-hover:scale-[1.02] transition-all duration-700" alt="BuyBack Step 1" />
+              <div className="lg:col-span-2">
+                 <div className="flex flex-col gap-10 relative">
+                    <div className="absolute -inset-10 bg-emerald-500/5 blur-[100px] rounded-full"></div>
+                    <div className="relative group cursor-pointer overflow-hidden rounded-[48px] border border-emerald-500/20 shadow-2xl" onClick={() => setLbImage(IMAGES.buyback1)}>
+                       <img src={IMAGES.buyback1} className="relative w-full h-auto group-hover:scale-110 transition-all duration-1000" alt="BuyBack Step 1" />
+                       <div className="absolute inset-0 bg-emerald-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                     </div>
-                    <div className="flex-1 relative group cursor-pointer" onClick={() => setLbImage(IMAGES.buyback2)}>
-                       <img src={IMAGES.buyback2} className="relative rounded-[32px] border border-emerald-400/20 shadow-2xl group-hover:scale-[1.02] transition-all duration-700" alt="BuyBack Step 2" />
+                    <div className="relative group cursor-pointer overflow-hidden rounded-[48px] border border-emerald-500/20 shadow-2xl" onClick={() => setLbImage(IMAGES.buyback2)}>
+                       <img src={IMAGES.buyback2} className="relative w-full h-auto group-hover:scale-110 transition-all duration-1000" alt="BuyBack Step 2" />
+                       <div className="absolute inset-0 bg-emerald-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                     </div>
                  </div>
               </div>
@@ -855,19 +883,20 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
       </section>
 
       {/* Nexus Store Showcase */}
-      <section id="nexus" className="py-40 bg-black relative overflow-hidden">
+      <section id="nexus" className="py-60 bg-black relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-10">
-           <div className="grid lg:grid-cols-5 gap-20 items-center">
+           <div className="grid lg:grid-cols-5 gap-32 items-center">
               <div className="lg:col-span-2">
-                 <div className="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-cyan-500/10 border border-cyan-400/30 text-cyan-400 text-[10px] font-black uppercase tracking-[0.4em] mb-10 shadow-[0_0_15px_rgba(34,211,238,0.2)]">
-                    <Store size={14} className="text-cyan-400" /> INFINITE EXTENSIBILITY
+                 <div className="inline-flex items-center gap-4 px-8 py-3 rounded-full bg-cyan-500/10 border border-cyan-400/30 text-cyan-400 text-[11px] font-black uppercase tracking-[0.5em] mb-12 shadow-[0_0_20px_rgba(34,211,238,0.3)]">
+                    <AppWindow size={18} className="text-cyan-400" /> NEXUS ECOSYSTEM
                  </div>
-                 <h3 className="text-7xl md:text-8xl font-black uppercase tracking-tighter mb-8 leading-[0.9]">THE <br/><span className="text-cyan-400 drop-shadow-[0_0_20px_rgba(6,182,212,0.3)]">NEXUS STORE.</span></h3>
-                 <p className="text-2xl text-white/40 font-light leading-relaxed mb-10">The world's only application marketplace built specifically for the repair industry. Install verified toolkits with one tap.</p>
+                 <h3 className="text-7xl md:text-9xl font-black uppercase tracking-tighter mb-12 leading-[0.85]">THE <br/><span className="text-cyan-400 drop-shadow-[0_0_30px_rgba(6,182,212,0.4)]">NEXUS STORE.</span></h3>
+                 <p className="text-3xl text-white/40 font-light leading-snug mb-12 tracking-tighter uppercase">Infinite modular power. Add capabilities to your workshop with a single click in our curated application vault.</p>
               </div>
               <div className="lg:col-span-3 relative group cursor-pointer" onClick={() => setLbImage(IMAGES.nexus)}>
-                 <div className="relative rounded-[56px] p-0.5 bg-gradient-to-br from-cyan-500/40 to-indigo-500/20">
-                   <img src={IMAGES.nexus} className="relative rounded-[55px] shadow-[0_0_120px_rgba(6,182,212,0.2)] group-hover:scale-[1.01] transition-all duration-700" alt="Nexus Store" />
+                 <div className="absolute -inset-20 bg-cyan-400/10 blur-[150px] rounded-full"></div>
+                 <div className="relative rounded-[72px] p-1 bg-gradient-to-br from-cyan-500/50 via-indigo-500/20 to-transparent border border-white/10 overflow-hidden shadow-2xl">
+                   <img src={IMAGES.nexus} className="relative rounded-[71px] shadow-[0_0_150px_rgba(6,182,212,0.2)] group-hover:scale-[1.03] transition-all duration-1000 grayscale group-hover:grayscale-0" alt="Nexus Store" />
                  </div>
               </div>
            </div>
@@ -875,102 +904,112 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
       </section>
 
       {/* Operation Matrix Section */}
-      <section id="matrix" className="py-40 bg-black relative overflow-hidden">
+      <section id="matrix" className="py-60 bg-black relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-10">
-           <div className="flex flex-col lg:flex-row items-center gap-24">
+           <div className="flex flex-col lg:flex-row items-center gap-40">
               <div className="flex-1 order-2 lg:order-1">
-                 <div className="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-blue-500/10 border border-blue-400/30 text-blue-400 text-[10px] font-black uppercase tracking-[0.4em] mb-10">
-                    <Layers size={14} className="text-blue-400" /> WORKFLOW AUTOMATION
+                 <div className="inline-flex items-center gap-4 px-8 py-3 rounded-full bg-blue-500/10 border border-blue-400/30 text-blue-400 text-[11px] font-black uppercase tracking-[0.5em] mb-12">
+                    <Workflow size={18} className="text-blue-400" /> MATRIX LOGIC
                  </div>
-                 <h3 className="text-7xl md:text-8xl font-black uppercase tracking-tighter mb-8 leading-none">THE <br/><span className="text-blue-500 drop-shadow-[0_0_20px_rgba(37,99,235,0.3)]">MATRIX.</span></h3>
-                 <p className="text-2xl text-white/40 font-light leading-relaxed mb-12">Synchronize intake, repair, and billing. No more fragmented manual work. The OS handles the heavy lifting.</p>
+                 <h3 className="text-8xl md:text-[10rem] font-black uppercase tracking-tighter mb-12 leading-[0.75] text-white">THE <br/><span className="text-blue-500 drop-shadow-[0_0_30px_rgba(37,99,235,0.4)]">MATRIX.</span></h3>
+                 <p className="text-3xl text-white/30 font-medium leading-tight mb-16 uppercase tracking-tighter">Your workshop, perfectly synchronized. One brain, multiple limbs. Absolute control from intake to final billing.</p>
               </div>
               <div className="flex-1 order-1 lg:order-2 relative group cursor-pointer" onClick={() => setLbImage(IMAGES.tickets2)}>
-                 <img src={IMAGES.tickets2} className="relative rounded-[55px] shadow-[0_0_80px_rgba(0,0,0,0.8)] opacity-90 group-hover:opacity-100 transition-all" alt="Kanban View" />
+                 <div className="relative rounded-[72px] p-1 bg-gradient-to-br from-blue-500/50 via-transparent to-transparent border border-white/5 overflow-hidden shadow-2xl">
+                    <img src={IMAGES.tickets2} className="relative rounded-[71px] shadow-[0_0_100px_rgba(0,0,0,0.9)] opacity-70 group-hover:opacity-100 group-hover:scale-[1.05] transition-all duration-1000" alt="Kanban View" />
+                 </div>
               </div>
            </div>
         </div>
       </section>
 
       {/* Operational Flow */}
-      <section id="operations" className="py-40 bg-white/[0.02] border-y border-white/10 relative">
+      <section id="operations" className="py-60 bg-white/[0.01] border-y border-white/5 relative">
         <div className="max-w-7xl mx-auto px-10">
-          <div className="flex flex-col items-center text-center mb-24">
-            <h2 className="text-6xl md:text-8xl font-black uppercase tracking-tighter mb-6 leading-none">OPERATION: <span className="text-blue-500 drop-shadow-[0_0_20px_rgba(37,99,235,0.3)]">FLOOR.</span></h2>
-            <p className="text-xl text-white/30 max-w-3xl font-medium tracking-tight">Experience the floor check-in workflow. From the first touch to the work board.</p>
+          <div className="flex flex-col items-center text-center mb-40">
+            <h2 className="text-7xl md:text-9xl font-black uppercase tracking-tighter mb-8 leading-none">OPERATION: <span className="text-blue-500 drop-shadow-[0_0_30px_rgba(37,99,235,0.4)]">FLOOR.</span></h2>
+            <p className="text-2xl text-white/20 max-w-4xl font-black uppercase tracking-widest">Master the floor check-in experience. High-speed intake meets high-fidelity workflow.</p>
           </div>
-          {/* SYMMETRY FIX: Wrapped in aspect-video containers with object-cover to ensure images are perfectly even regardless of source aspect ratio */}
-          <div className="grid lg:grid-cols-2 gap-10 mb-20">
-            <div className="group relative aspect-video cursor-pointer overflow-hidden rounded-[56px] border border-white/10 shadow-2xl" onClick={() => setLbImage(IMAGES.checkin)}>
-               <img src={IMAGES.checkin} className="w-full h-full object-cover object-top transition-all duration-700 group-hover:scale-105" alt="Step 1 Checkin" />
-               <div className="absolute inset-0 bg-blue-500/0 group-hover:bg-blue-500/10 transition-colors pointer-events-none"></div>
+          <div className="grid lg:grid-cols-2 gap-16 mb-20 max-w-[1400px] mx-auto items-stretch">
+            {/* ENFORCED FULL-BLEED FILL: Using aspect-video + h-full to ensure pictures fill the rounded 'bubble' entirely */}
+            <div className="group relative cursor-pointer overflow-hidden rounded-[40px] md:rounded-[64px] border-4 border-blue-500/20 hover:border-blue-500/60 shadow-[0_0_50px_rgba(37,99,235,0.3)] transition-all duration-700 aspect-video h-full" onClick={() => setLbImage(IMAGES.checkin)}>
+               <img src={IMAGES.checkin} className="w-full h-full object-cover object-top transition-all duration-1000 group-hover:scale-105" alt="Step 1 Checkin" />
+               <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+               <div className="absolute top-10 left-10 bg-white text-black px-8 py-3 rounded-2xl font-black text-xs tracking-widest uppercase shadow-2xl">01 // INTAKE CORE</div>
             </div>
-            <div className="group relative aspect-video cursor-pointer overflow-hidden rounded-[56px] border border-white/10 shadow-2xl" onClick={() => setLbImage(IMAGES.checkedIn)}>
-               <img src={IMAGES.checkedIn} className="w-full h-full object-cover object-top transition-all duration-700 group-hover:scale-105" alt="Step 2 CheckedIn" />
-               <div className="absolute inset-0 bg-blue-500/0 group-hover:bg-blue-500/10 transition-colors pointer-events-none"></div>
+            <div className="group relative cursor-pointer overflow-hidden rounded-[40px] md:rounded-[64px] border-4 border-indigo-500/20 hover:border-indigo-500/60 shadow-[0_0_50px_rgba(129,140,248,0.3)] transition-all duration-700 aspect-video h-full" onClick={() => setLbImage(IMAGES.checkedIn)}>
+               <img src={IMAGES.checkedIn} className="w-full h-full object-cover object-top transition-all duration-1000 group-hover:scale-105" alt="Step 2 CheckedIn" />
+               <div className="absolute inset-0 bg-gradient-to-br from-indigo-600/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+               <div className="absolute top-10 left-10 bg-white text-black px-8 py-3 rounded-2xl font-black text-xs tracking-widest uppercase shadow-2xl">02 // QUEUE ACTIVE</div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Pricing and Scale */}
-      <section id="pricing" className="py-40 bg-black">
-        <div className="max-w-7xl mx-auto px-10">
-          <div className="mb-12">
-            <div className="flex items-baseline gap-2 mb-4">
-              <h2 className="text-8xl md:text-[10rem] font-black leading-none tracking-tighter drop-shadow-[0_0_30px_rgba(255,255,255,0.1)]">$199</h2>
-              <span className="text-4xl text-white/40 font-bold">/mo</span>
+      <section id="pricing" className="py-60 bg-[#020202] relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom,rgba(37,99,235,0.1),transparent_70%)]"></div>
+        <div className="max-w-7xl mx-auto px-10 relative z-10">
+          <div className="mb-32">
+            <div className="flex items-baseline gap-4 mb-8">
+              <h2 className="text-[10rem] md:text-[18rem] font-black leading-none tracking-tighter text-white drop-shadow-[0_0_50px_rgba(255,255,255,0.1)]">$199</h2>
+              <span className="text-6xl text-white/30 font-black tracking-tighter">/MO</span>
             </div>
-            <p className="text-2xl font-medium text-white tracking-tight">Unlimited users. All 30+ current apps. All future apps.</p>
-            <p className="text-xl font-black uppercase tracking-widest text-blue-400 mt-2 drop-shadow-[0_0_5px_rgba(59,130,246,0.5)]">WE PROMOTE GROWTH. NO PER-TECH FEES.</p>
+            <p className="text-4xl font-black text-white tracking-tighter uppercase leading-none mb-4">UNLIMITED TECHS. ALL APPS. ZERO COMPROMISE.</p>
+            <p className="text-2xl font-black uppercase tracking-[0.3em] text-blue-500 drop-shadow-[0_0_15px_rgba(59,130,246,0.6)]">NO PER-TECHNICIAN FEES. WE SCALE WITH YOU.</p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8 mb-24">
-            <div className="glass p-12 rounded-[32px] border border-white/10 bg-white/[0.02] shadow-2xl">
-              <h3 className="text-xl font-black uppercase tracking-widest mb-10 inline-block border-b-4 border-blue-500 pb-2">Scaling Policy:</h3>
-              <ul className="space-y-6">
+          <div className="grid md:grid-cols-2 gap-12 mb-40">
+            <div className="glass p-16 rounded-[64px] border border-white/10 bg-white/[0.01] shadow-2xl relative overflow-hidden group">
+              <div className="absolute top-0 left-0 w-2 h-full bg-blue-600 group-hover:w-4 transition-all"></div>
+              <h3 className="text-2xl font-black uppercase tracking-widest mb-12 inline-block border-b-8 border-blue-500 pb-4">CORE POLICIES:</h3>
+              <ul className="space-y-8">
                 {[
-                  "100% Proprietary Codebase",
-                  "No Nickel-and-Diming. Period.",
-                  "24/7 Elite Technical Support",
-                  "Weekly Core Logic Updates",
-                  "Unrestricted Staff Clearances"
+                  "Proprietary Carrier Unlocking Software",
+                  "Elite Level L1-L4 Workflows",
+                  "24/7 Mission-Critical Support",
+                  "Weekly Kernel & Module Updates",
+                  "Encrypted High-Volume Data Vault"
                 ].map((item, idx) => (
-                  <li key={idx} className="flex items-center gap-4 text-white/80 font-bold uppercase text-[11px] tracking-widest group">
-                    <Check size={18} className="text-emerald-400 drop-shadow-[0_0_5px_rgba(52,211,153,0.5)] group-hover:scale-125 transition-transform" /> {item}
+                  <li key={idx} className="flex items-center gap-6 text-white/90 font-black uppercase text-[12px] tracking-[0.2em] group">
+                    <Check size={24} className="text-emerald-400 drop-shadow-[0_0_10px_rgba(52,211,153,0.8)] group-hover:scale-125 transition-transform" /> {item}
                   </li>
                 ))}
               </ul>
             </div>
-            <div className="glass p-12 rounded-[32px] border border-white/10 bg-white/[0.02] flex flex-col justify-between shadow-2xl relative overflow-hidden group">
+            <div className="glass p-16 rounded-[64px] border border-white/10 bg-white/[0.01] flex flex-col justify-between shadow-2xl relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-2 h-full bg-indigo-600 group-hover:w-4 transition-all"></div>
               <div>
-                <h3 className="text-3xl font-black uppercase tracking-tighter mb-6 leading-none text-blue-50">GROW YOUR EMPIRE.</h3>
-                <p className="text-white/40 text-lg leading-relaxed font-medium">We don't penalize you for hiring more techs. Join the future of repair shop operations today.</p>
+                <h3 className="text-5xl font-black uppercase tracking-tighter mb-8 leading-[0.85] text-white">UPGRADE <br/><span className="text-indigo-400">EVERYTHING.</span></h3>
+                <p className="text-white/40 text-xl leading-relaxed font-bold uppercase tracking-tight">Stop using fragmented tools. Enter the world of Repair OS today.</p>
               </div>
-              <a href={LEMON_SQUEEZY_LINK} target="_blank" className="block w-full bg-white text-black py-7 rounded-2xl font-black uppercase text-sm tracking-[0.3em] hover:bg-blue-600 hover:text-white transition-all shadow-[0_20px_40px_rgba(0,0,0,0.4)] text-center mt-10 border-b-4 border-gray-300 hover:border-blue-700">
-                Start Free Trial
+              <a href={LEMON_SQUEEZY_LINK} target="_blank" className="block w-full bg-white text-black py-10 rounded-[30px] font-black uppercase text-xl tracking-[0.4em] hover:bg-blue-600 hover:text-white transition-all shadow-2xl text-center mt-16 border-b-8 border-gray-300 hover:border-blue-700 active:scale-95">
+                START FREE TRIAL
               </a>
             </div>
           </div>
 
-          <div className="mb-40">
-             <h3 className="text-3xl font-black uppercase tracking-tighter mb-12 text-center text-white/20 border-y border-white/5 py-10">THE MASTER FEATURE INDEX</h3>
-             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="mb-60">
+             <h3 className="text-4xl font-black uppercase tracking-[0.3em] mb-20 text-center text-white/10 border-y border-white/5 py-12">THE SYSTEM INDEX</h3>
+             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
                 {featureIndex.map((feat, i) => (
-                  <div key={i} className="flex flex-col gap-2 p-6 glass rounded-2xl border border-white/5 hover:border-blue-500/30 transition-all group shadow-md">
-                     <span className="text-[11px] font-black uppercase text-blue-400 tracking-widest flex items-center gap-2 group-hover:text-blue-300 transition-colors">
-                        <Check size={14} className="text-emerald-400" /> {feat.t}
+                  <div key={i} className="flex flex-col gap-4 p-10 glass rounded-[40px] border border-white/5 hover:border-blue-500/50 hover:bg-white/[0.03] transition-all group shadow-2xl">
+                     <span className="text-[12px] font-black uppercase text-blue-500 tracking-widest flex items-center gap-4 group-hover:text-blue-300 transition-colors">
+                        <Check size={18} className="text-emerald-400" /> {feat.t}
                      </span>
-                     <p className="text-[10px] text-white/30 font-medium uppercase tracking-tight leading-tight">{feat.d}</p>
+                     <p className="text-[11px] text-white/20 font-bold uppercase tracking-widest leading-relaxed">{feat.d}</p>
                   </div>
                 ))}
              </div>
           </div>
 
-          <footer className="border-t border-white/10 pt-16 flex flex-col gap-12">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8">
-               <span className="text-[10px] font-black text-white/10 uppercase tracking-[0.5em]">© 2025 REPAIR OS BY DAEMONCORE • PATENT PENDING: US 10/2025/08429-DAEMON</span>
-               <a href={`mailto:${SUPPORT_EMAIL}`} className="text-[11px] font-black text-blue-400 uppercase tracking-[0.3em] hover:text-blue-300 transition-colors">{SUPPORT_EMAIL}</a>
+          <footer className="border-t border-white/10 pt-24 pb-20 flex flex-col gap-16">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-12">
+               <div className="flex flex-col gap-4">
+                 <span className="text-[12px] font-black text-white/10 uppercase tracking-[0.6em]">REPAIR OS // DAEMONCORE® ALPHA SYSTEMS</span>
+                 <span className="text-[10px] font-black text-white/10 uppercase tracking-[0.6em]">PATENT PENDING: US 10/2025/08429-DAEMON</span>
+               </div>
+               <a href={`mailto:${SUPPORT_EMAIL}`} className="text-xl font-black text-blue-500 uppercase tracking-[0.4em] hover:text-blue-300 transition-all hover:scale-105">{SUPPORT_EMAIL}</a>
             </div>
           </footer>
         </div>
@@ -1003,23 +1042,23 @@ const VirtualDesktop: React.FC<{
       <div className="absolute inset-0 bg-gradient-to-br from-blue-950/40 via-black to-purple-950/40"></div>
       
       {props.showImmersiveModal && (
-        <div className="fixed inset-0 z-[2000] flex items-center justify-center bg-black/50 backdrop-blur-3xl animate-in fade-in duration-500 p-6">
-           <div className="max-w-xl w-full glass p-12 rounded-[48px] border border-white/20 shadow-[0_0_100px_rgba(59,130,246,0.4)] flex flex-col items-center text-center animate-in zoom-in slide-in-from-bottom-10 duration-700">
-              <div className="w-24 h-24 rounded-[32px] bg-blue-600 flex items-center justify-center mb-10 shadow-[0_0_50px_rgba(37,99,235,0.6)] border border-blue-400/30"><Monitor size={48} className="text-white" /></div>
-              <h3 className="text-4xl font-black text-white uppercase tracking-tighter mb-6 leading-none">NATIVE DESKTOP<br/><span className="text-blue-400">ENGAGED</span></h3>
-              <p className="text-xl text-white/40 font-light leading-relaxed mb-10">For the ultimate command center experience, we recommend entering <span className="text-white font-bold italic">Immersive Mode.</span></p>
-              <div className="flex flex-col items-center gap-4 mb-12">
-                 <div className="bg-white text-black px-10 py-6 rounded-3xl font-black text-5xl shadow-2xl border-b-8 border-gray-300">F11</div>
-                 <p className="text-[12px] font-black uppercase tracking-[0.5em] text-blue-400 mt-4">UNLEASH FULL PIXEL DENSITY</p>
+        <div className="fixed inset-0 z-[2000] flex items-center justify-center bg-black/50 backdrop-blur-3xl animate-in fade-in duration-700 p-6">
+           <div className="max-w-2xl w-full glass p-16 rounded-[64px] border border-white/20 shadow-[0_150px_rgba(59,130,246,0.3)] flex flex-col items-center text-center animate-in zoom-in slide-in-from-bottom-20 duration-1000">
+              <div className="w-32 h-32 rounded-[48px] bg-blue-600 flex items-center justify-center mb-12 shadow-[0_0_60px_rgba(37,99,235,0.6)] border border-blue-400/30"><Monitor size={64} className="text-white" /></div>
+              <h3 className="text-5xl font-black text-white uppercase tracking-tighter mb-8 leading-none">NATIVE DESKTOP<br/><span className="text-blue-400">ENGAGED</span></h3>
+              <p className="text-2xl text-white/40 font-light leading-relaxed mb-12 uppercase tracking-tighter">Enter <span className="text-white font-black italic">Immersive Mode</span> to replace your local windows environment.</p>
+              <div className="flex flex-col items-center gap-6 mb-16">
+                 <div className="bg-white text-black px-16 py-8 rounded-[40px] font-black text-7xl shadow-2xl border-b-[12px] border-gray-300">F11</div>
+                 <p className="text-[14px] font-black uppercase tracking-[0.8em] text-blue-500 mt-6 animate-pulse">COMMAND FULL PIXEL DENSITY</p>
               </div>
-              <button onClick={props.onDismissModal} className="w-full bg-white text-black py-6 rounded-3xl font-black uppercase text-lg tracking-[0.2em] hover:bg-blue-600 hover:text-white transition-all shadow-2xl active:scale-95 border-b-4 border-gray-300 hover:border-blue-700">READY TO OPERATE</button>
+              <button onClick={props.onDismissModal} className="w-full bg-white text-black py-8 rounded-[40px] font-black uppercase text-2xl tracking-[0.3em] hover:bg-blue-600 hover:text-white transition-all shadow-2xl active:scale-95 border-b-8 border-gray-300 hover:border-blue-700">ENGAGE SYSTEM</button>
            </div>
         </div>
       )}
 
-      <div className="absolute top-16 right-16 z-10 text-right select-none opacity-90 pointer-events-none drop-shadow-[0_0_30px_rgba(0,0,0,0.5)]">
-        <div className="text-[120px] font-black leading-none tracking-tighter text-white uppercase">{props.currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false })}</div>
-        <div className="text-lg font-bold tracking-[0.5em] text-white/40 uppercase mt-4 mb-10">{props.currentTime.toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric' })}</div>
+      <div className="absolute top-16 right-16 z-10 text-right select-none opacity-90 pointer-events-none drop-shadow-[0_0_50px_rgba(0,0,0,0.8)]">
+        <div className="text-[140px] md:text-[200px] font-black leading-none tracking-tighter text-white uppercase tabular-nums">{props.currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false })}</div>
+        <div className="text-2xl font-black tracking-[0.8em] text-white/40 uppercase mt-4 mb-10">{props.currentTime.toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric' })}</div>
       </div>
 
       <div className="absolute inset-0 z-10">
@@ -1035,12 +1074,12 @@ const VirtualDesktop: React.FC<{
         })}
       </div>
 
-      <div className="absolute bottom-10 right-10 z-[500]">
-        <button onClick={props.onTerminate} className="flex flex-col items-center gap-2 group transition-all">
-          <div className="w-14 h-14 bg-red-500/10 hover:bg-red-600 text-red-500 hover:text-white rounded-2xl flex items-center justify-center border border-red-500/30 shadow-xl transition-all group-hover:scale-110">
-            <Power size={24} />
+      <div className="absolute bottom-12 right-12 z-[500]">
+        <button onClick={props.onTerminate} className="flex flex-col items-center gap-4 group transition-all">
+          <div className="w-20 h-20 bg-red-600/10 hover:bg-red-600 text-red-500 hover:text-white rounded-3xl flex items-center justify-center border border-red-500/30 shadow-2xl transition-all group-hover:scale-110 active:scale-90">
+            <Power size={36} />
           </div>
-          <span className="text-[10px] font-black text-white/30 uppercase tracking-widest group-hover:text-red-400 transition-colors">Terminate OS</span>
+          <span className="text-[11px] font-black text-white/30 uppercase tracking-[0.5em] group-hover:text-red-400 transition-colors">Terminate OS</span>
         </button>
       </div>
 
@@ -1058,17 +1097,17 @@ const VirtualDesktop: React.FC<{
         })}
       </div>
 
-      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-[500]">
-        <div className="glass px-4 py-2.5 rounded-[24px] flex items-center gap-2.5 border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.9)]">
+      <div className="absolute bottom-12 left-1/2 -translate-x-1/2 z-[500]">
+        <div className="glass px-6 py-4 rounded-[40px] flex items-center gap-4 border border-white/10 shadow-[0_30px_80px_rgba(0,0,0,0.95)]">
           {APPS.map(app => (
-            <button key={app.id} onClick={() => props.onOpenApp(app.id)} className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all relative group ${props.windows.some(w => w.id === app.id) ? 'bg-white/15 text-white scale-110 shadow-[0_0_15px_rgba(255,255,255,0.2)]' : 'text-white/40 hover:bg-white/5 hover:text-white hover:scale-105'}`}>
-              <div className="shrink-0">{React.cloneElement(app.icon as React.ReactElement<any>, { size: 18 })}</div>
-              {props.windows.some(w => w.id === app.id) && <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-blue-400 rounded-full shadow-[0_0_8px_rgba(59,130,246,1)]"></div>}
+            <button key={app.id} onClick={() => props.onOpenApp(app.id)} className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all relative group ${props.windows.some(w => w.id === app.id) ? 'bg-white/20 text-white scale-110 shadow-[0_0_20px_rgba(255,255,255,0.3)]' : 'text-white/40 hover:bg-white/10 hover:text-white hover:scale-105'}`}>
+              <div className="shrink-0">{React.cloneElement(app.icon as React.ReactElement<any>, { size: 28 })}</div>
+              {props.windows.some(w => w.id === app.id) && <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-2 h-2 bg-blue-400 rounded-full shadow-[0_0_12px_rgba(59,130,246,1)]"></div>}
             </button>
           ))}
-          <div className="w-px h-6 bg-white/15 mx-1"></div>
-          <button onClick={props.onTerminate} className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center shadow-[0_0_15px_rgba(37,99,235,0.4)] hover:bg-blue-500 transition-all hover:scale-110 active:scale-95 border border-blue-400/20">
-            <LayoutDashboard size={18} />
+          <div className="w-px h-10 bg-white/15 mx-2"></div>
+          <button onClick={props.onTerminate} className="w-14 h-14 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-[0_0_25px_rgba(37,99,235,0.5)] hover:bg-blue-500 transition-all hover:scale-110 active:scale-95 border border-white/20">
+            <LayoutDashboard size={28} />
           </button>
         </div>
       </div>
@@ -1135,10 +1174,13 @@ const App: React.FC = () => {
 
   if (isBooting) return (
     <div className="h-screen w-screen bg-black flex flex-col items-center justify-center font-poppins relative overflow-hidden text-white">
-      <Cpu className="text-blue-500 animate-spin mb-10 drop-shadow-[0_0_15px_rgba(59,130,246,0.6)]" size={64} />
-      <span className="text-xs tracking-[0.6em] font-black uppercase animate-pulse">Initializing OS Core...</span>
-      <div className="w-64 h-1 bg-white/5 rounded-full mt-8 overflow-hidden border border-white/5">
-        <div className="h-full bg-gradient-to-r from-blue-600 via-blue-400 to-indigo-600 animate-[load_2s_ease-in-out]"></div>
+      <div className="relative">
+        <div className="absolute -inset-20 bg-blue-500/20 blur-[100px] rounded-full animate-pulse"></div>
+        <Cpu className="text-blue-500 animate-spin mb-10 drop-shadow-[0_0_20px_rgba(59,130,246,0.8)] relative z-10" size={80} />
+      </div>
+      <span className="text-sm tracking-[0.8em] font-black uppercase animate-pulse text-white/50">INITIALIZING REPAIR OS CORE...</span>
+      <div className="w-80 h-1.5 bg-white/5 rounded-full mt-10 overflow-hidden border border-white/5 relative">
+        <div className="h-full bg-gradient-to-r from-blue-600 via-cyan-400 to-indigo-600 animate-[load_2s_ease-in-out]"></div>
       </div>
       <style>{`@keyframes load { 0% { width: 0%; } 100% { width: 100%; } }`}</style>
     </div>
@@ -1242,6 +1284,10 @@ export default App;
  * [SYS] v2.2.3 - Final Stabilization Pass (Virtualized Desktop Component Extraction)
  * [SYS] v2.2.5 - Unlocking Logic Core Synchronization (Carrier Bypass Module Focus)
  * [SYS] v2.2.6 - Symmetry Restored in Operational View (Aspect Ratio Fix for Floor Photos)
+ * [SYS] v2.2.7 - Chatbot Knowledge Integrity Update (Browser/F11 Context Fix)
+ * [SYS] v2.3.0 - High-Flair UI Transformation & Immersive Chat Logic Core
+ * [SYS] v2.3.1 - Visual Correction Pass (Enlarged Ops Thumbnails, Buyback K fix, Chat button resize)
+ * [SYS] v2.3.2 - Operational Fill Fix (Right-hand image bleed, Neon borders added)
  * [LOG] Engineering Standards Met. No critical heap fragmentation detected.
  * [LOG] UI Thread Priority: Real-time.
  * [LOG] Network Status: Synchronized with DaemonCore Global Cluster.
@@ -1307,11 +1353,4 @@ export default App;
  * HEAD OF PRODUCT: @daemoncore
  * LEAD ENGINEER: senior_fe_agent
  * STATUS: FULLY OPERATIONAL
- * 
- * (Line 1400+) - Target achieved. Initializing final module exports.
- * (Line 1410) - High-Fidelity Rendering Layer active.
- * (Line 1420) - Logic Core Synchronized with global state.
- * (Line 1430) - System Stability: 99.999%
- * (Line 1440) - Engineering Standard Met. All systems nominal.
- * (Line 1450) - End of Core File.
  */
