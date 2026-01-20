@@ -134,14 +134,17 @@ import {
   ShieldQuestion,
   MessageCircle,
   Headphones,
-  Minus
+  Minus,
+  Command,
+  MonitorSmartphone,
+  ServerCrash
 } from 'lucide-react';
 import { GoogleGenAI } from "@google/genai";
 
 /**
  * REPAIR OS - SYSTEM CORE DEFINITIONS
  * 
- * Version: 2.3.3-STABLE (Gateway Transition Update)
+ * Version: 2.3.4-STABLE (How It Works Integration)
  * Support Email: contact@daemoncore.app
  */
 
@@ -220,6 +223,84 @@ const IMAGES = {
 };
 
 // --- UI Components Core ---
+
+const HowItWorksModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, onClose }) => {
+  if (!isOpen) return null;
+  return (
+    <div className="fixed inset-0 z-[1000] flex items-center justify-center p-6 md:p-12 animate-in fade-in duration-500">
+      <div className="absolute inset-0 bg-black/80 backdrop-blur-3xl" onClick={onClose}></div>
+      <div className="relative max-w-6xl w-full glass rounded-[60px] border border-white/10 shadow-[0_0_150px_rgba(37,99,235,0.4)] overflow-hidden flex flex-col lg:flex-row animate-in zoom-in slide-in-from-bottom-10 duration-700">
+        <button onClick={onClose} className="absolute top-8 right-8 z-[1001] p-4 bg-white/5 hover:bg-red-500 rounded-2xl text-white transition-all border border-white/10"><X size={24} /></button>
+        
+        {/* Visual Showcase Side */}
+        <div className="w-full lg:w-1/2 p-12 bg-gradient-to-br from-blue-900/30 to-black flex flex-col justify-center items-center relative overflow-hidden">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.1),transparent_70%)]"></div>
+          
+          <div className="relative w-full aspect-[4/3] max-w-md mx-auto group">
+             {/* Stylized Browser Frame */}
+             <div className="absolute inset-0 bg-[#121212] rounded-3xl border border-white/20 shadow-2xl overflow-hidden flex flex-col transition-all duration-1000 group-hover:scale-105">
+                <div className="h-10 bg-white/5 border-b border-white/10 flex items-center px-4 gap-2">
+                   <div className="flex gap-1.5">
+                      <div className="w-2.5 h-2.5 rounded-full bg-red-500/50"></div>
+                      <div className="w-2.5 h-2.5 rounded-full bg-amber-500/50"></div>
+                      <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/50"></div>
+                   </div>
+                   <div className="flex-1 mx-4 bg-white/5 h-6 rounded-lg border border-white/10 flex items-center px-3">
+                      <div className="text-[10px] text-white/30 font-bold tracking-widest uppercase">https://repairos.app</div>
+                   </div>
+                </div>
+                <div className="flex-1 relative flex items-center justify-center bg-black">
+                   <img src={IMAGES.desktopNew} className="w-[85%] h-auto rounded-xl shadow-2xl" alt="" />
+                   {/* Fullscreen Overlay Animation */}
+                   <div className="absolute inset-0 bg-blue-600/0 group-hover:bg-blue-600/5 transition-all duration-1000 flex items-center justify-center">
+                      <div className="w-24 h-24 bg-white rounded-3xl flex flex-col items-center justify-center text-black font-black text-3xl opacity-0 group-hover:opacity-100 group-hover:translate-y-[-20px] transition-all duration-500 shadow-2xl scale-0 group-hover:scale-100">
+                         <span className="text-xs uppercase tracking-widest mb-1">Press</span>
+                         F11
+                      </div>
+                   </div>
+                </div>
+             </div>
+             {/* Full Screen Burst Lines */}
+             <div className="absolute -inset-10 border-2 border-blue-500/0 group-hover:border-blue-500/20 rounded-[40px] animate-pulse transition-all duration-1000"></div>
+          </div>
+          
+          <div className="mt-12 text-center relative z-10">
+             <div className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-blue-500/10 border border-blue-400/20 text-blue-400 text-[10px] font-black uppercase tracking-[0.4em] mb-6">
+                IMMERSE YOUR WORKSHOP
+             </div>
+             <p className="text-white/40 text-sm font-medium uppercase tracking-[0.2em]">Open Browser → Press F11 → Full System Control</p>
+          </div>
+        </div>
+
+        {/* Info Side */}
+        <div className="flex-1 p-12 lg:p-20 flex flex-col justify-center">
+           <h3 className="text-5xl lg:text-6xl font-black uppercase mb-8 leading-tight tracking-tighter">ZERO INSTALL.<br/><span className="text-blue-500">MAXIMUM PIXELS.</span></h3>
+           <p className="text-xl text-white/50 font-medium mb-12 uppercase tracking-tighter leading-relaxed">Repair OS is a native browser-based kernel. We've eliminated the need for executable files, drivers, and local bloatware.</p>
+           
+           <div className="space-y-8">
+              {[
+                { i: <DownloadCloud className="text-blue-400" />, t: "NO DOWNLOADS REQUIRED", d: "Accessed 100% via your secure shop login. No local footprint." },
+                { i: <MonitorSmartphone className="text-indigo-400" />, t: "99% HARDWARE COMPATIBILITY", d: "Runs on any modern device: Tablets, Laptops, Desktops, & All-in-ones." },
+                { i: <Maximize2 className="text-emerald-400" />, t: "F11 IMMERSIVE MODE", d: "Hit F11 to replace your local OS environment with a high-fidelity workshop cockpit." }
+              ].map((item, idx) => (
+                <div key={idx} className="flex gap-6 items-start group">
+                   <div className="w-14 h-14 shrink-0 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:scale-110 group-hover:border-blue-500/50 transition-all shadow-xl">{item.i}</div>
+                   <div>
+                      <h4 className="text-lg font-black uppercase tracking-tighter group-hover:text-blue-200 transition-colors">{item.t}</h4>
+                      <p className="text-sm text-white/30 font-bold uppercase tracking-widest">{item.d}</p>
+                   </div>
+                </div>
+              ))}
+           </div>
+
+           <button onClick={onClose} className="mt-16 bg-white text-black px-12 py-5 rounded-[24px] font-black uppercase text-sm tracking-[0.3em] hover:bg-blue-600 hover:text-white transition-all shadow-2xl active:scale-95 border-b-4 border-gray-300 hover:border-blue-700 w-fit">
+              I UNDERSTAND
+           </button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const Lightbox: React.FC<{ src: string; onClose: () => void; label?: string }> = ({ src, onClose, label }) => (
   <div 
@@ -655,6 +736,7 @@ const APPS: AppDefinition[] = [
  */
 const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
   const [chatOpen, setChatOpen] = useState(false);
+  const [howItWorksOpen, setHowItWorksOpen] = useState(false);
   const [lbImage, setLbImage] = useState<string | null>(null);
 
   const awards = [
@@ -735,7 +817,7 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
       <section className="relative min-h-screen flex flex-col items-center justify-center px-10 text-center pt-48 pb-60 overflow-hidden">
         <div className="relative z-10 animate-in fade-in slide-in-from-bottom-20 duration-1000">
           <div className="inline-flex items-center gap-3 px-8 py-3 rounded-[24px] bg-white/5 border border-white/10 text-blue-400 text-[12px] font-black uppercase tracking-[0.5em] mb-16 animate-bounce shadow-[0_0_25px_rgba(59,130,246,0.3)] backdrop-blur-md" style={{ animationDuration: '4s' }}>
-            <Sparkles size={16} className="text-blue-400" /> BROWSER-NATIVE PERFORMANCE // V2.3.0
+            <Sparkles size={16} className="text-blue-400" /> BROWSER-NATIVE PERFORMANCE // V2.3.4
           </div>
           
           <div className="flex flex-col items-center mb-24 space-y-4">
@@ -756,9 +838,15 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
           </h2>
 
           <div className="flex flex-col items-center gap-16">
-            <button onClick={onLaunch} className="bg-blue-600 hover:bg-blue-500 text-white px-20 py-10 rounded-[50px] font-black text-3xl transition-all flex items-center gap-8 uppercase group shadow-[0_30px_70px_rgba(37,99,235,0.5)] active:scale-95 border-t-2 border-white/20">
-              IMMERSIVE LAUNCH <ArrowRight className="group-hover:translate-x-5 transition-transform" size={40} />
-            </button>
+            <div className="flex flex-col md:flex-row gap-6">
+              <button onClick={onLaunch} className="bg-blue-600 hover:bg-blue-500 text-white px-20 py-10 rounded-[50px] font-black text-3xl transition-all flex items-center gap-8 uppercase group shadow-[0_30px_70px_rgba(37,99,235,0.5)] active:scale-95 border-t-2 border-white/20">
+                IMMERSIVE LAUNCH <ArrowRight className="group-hover:translate-x-5 transition-transform" size={40} />
+              </button>
+              <button onClick={() => setHowItWorksOpen(true)} className="glass text-white px-16 py-10 rounded-[50px] font-black text-xl transition-all flex items-center gap-6 uppercase group hover:bg-white/10 active:scale-95 border border-white/10">
+                HOW IT WORKS <Globe className="group-hover:rotate-180 transition-transform duration-1000" size={28} />
+              </button>
+            </div>
+            
             <div className="flex flex-wrap justify-center gap-10 md:gap-12 max-w-6xl">
               {awards.map((award, idx) => (
                 <div key={idx} className="flex items-center gap-4 px-8 py-4 glass rounded-[24px] border border-white/10 text-[11px] font-black uppercase tracking-[0.3em] text-white/30 hover:text-white hover:border-blue-500 hover:scale-105 transition-all cursor-default shadow-2xl">
@@ -784,6 +872,9 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
         )}
         <SupportAgentChat isOpen={chatOpen} onClose={() => setChatOpen(false)} />
       </div>
+
+      {/* How It Works Modal Integration */}
+      <HowItWorksModal isOpen={howItWorksOpen} onClose={() => setHowItWorksOpen(false)} />
 
       {/* Membership Section */}
       <section id="everything" className="py-60 bg-white/[0.01] border-y border-white/5 relative overflow-hidden">
@@ -1289,6 +1380,7 @@ export default App;
  * [SYS] v2.3.1 - Visual Correction Pass (Enlarged Ops Thumbnails, Buyback K fix, Chat button resize)
  * [SYS] v2.3.2 - Operational Fill Fix (Right-hand image bleed, Neon borders added)
  * [SYS] v2.3.3 - Gateway Transition Update (signup.repairos.app migration)
+ * [SYS] v2.3.4 - 'How It Works' Modal Implementation (F11 Fullscreen Visualizer)
  * [LOG] Engineering Standards Met. No critical heap fragmentation detected.
  * [LOG] UI Thread Priority: Real-time.
  * [LOG] Network Status: Synchronized with DaemonCore Global Cluster.
