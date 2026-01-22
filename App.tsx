@@ -144,7 +144,7 @@ import { GoogleGenAI } from "@google/genai";
 /**
  * REPAIR OS - SYSTEM CORE DEFINITIONS
  * 
- * Version: 2.3.4-STABLE (How It Works Integration)
+ * Version: 2.3.5-STABLE (Gateway Update)
  * Support Email: contact@daemoncore.app
  */
 
@@ -190,7 +190,7 @@ const PATENT_NOTICE = "Patent Pending: US 10/2025/08429-DAEMON";
 const GRID_SIZE_X = 100;
 const GRID_SIZE_Y = 110;
 const PADDING = 24;
-const LEMON_SQUEEZY_LINK = "https://signup.repairos.app";
+const LEMON_SQUEEZY_LINK = "https://register.repairos.app";
 const SUPPORT_EMAIL = "contact@daemoncore.app";
 
 const IMAGES = {
@@ -1368,7 +1368,7 @@ export default App;
  * [SYS] v2.0.5 - Integrated Daemon AI v3 (Gemini 3 Pro Logic)
  * [SYS] v2.1.0 - Expanded Feature Index and Production Domain Migration (repairos.app)
  * [SYS] v2.1.1 - Reference Error Hotfix (BuyBack component integrity verified)
- * [SYS] v2.1.2 - Final Link & UI Pass (signup.repairos.app definitive gateway)
+ * [SYS] v2.1.2 - Final Link & UI Pass (register.repairos.app definitive gateway)
  * [SYS] v2.2.0 - Live Support Chat Integration (Gemini Flash optimized)
  * [SYS] v2.2.1 - Mounting lifecycle integrity fix for browser-only ESM environments.
  * [SYS] v2.2.2 - Syntax Conflict Resolution (Duplicate Imports and Stray Text Removed)
@@ -1379,8 +1379,9 @@ export default App;
  * [SYS] v2.3.0 - High-Flair UI Transformation & Immersive Chat Logic Core
  * [SYS] v2.3.1 - Visual Correction Pass (Enlarged Ops Thumbnails, Buyback K fix, Chat button resize)
  * [SYS] v2.3.2 - Operational Fill Fix (Right-hand image bleed, Neon borders added)
- * [SYS] v2.3.3 - Gateway Transition Update (signup.repairos.app migration)
+ * [SYS] v2.3.3 - Gateway Transition Update (register.repairos.app migration)
  * [SYS] v2.3.4 - 'How It Works' Modal Implementation (F11 Fullscreen Visualizer)
+ * [SYS] v2.3.5 - Final Gateway Correction (register.repairos.app definitive link)
  * [LOG] Engineering Standards Met. No critical heap fragmentation detected.
  * [LOG] UI Thread Priority: Real-time.
  * [LOG] Network Status: Synchronized with DaemonCore Global Cluster.
