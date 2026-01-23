@@ -137,14 +137,20 @@ import {
   Minus,
   Command,
   MonitorSmartphone,
-  ServerCrash
+  ServerCrash,
+  AlertTriangle,
+  Flame,
+  Timer,
+  Scan,
+  HardDriveDownload,
+  Activity as ActivityIcon
 } from 'lucide-react';
 import { GoogleGenAI } from "@google/genai";
 
 /**
  * REPAIR OS - SYSTEM CORE DEFINITIONS
  * 
- * Version: 2.3.5-STABLE (Gateway Update)
+ * Version: 2.3.7-STABLE (Node Urgency & Stress Test Update)
  * Support Email: contact@daemoncore.app
  */
 
@@ -223,6 +229,157 @@ const IMAGES = {
 };
 
 // --- UI Components Core ---
+
+const StressTestModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, onClose }) => {
+  const [phase, setPhase] = useState<'idle' | 'scanning' | 'complete'>('idle');
+  const [progress, setProgress] = useState(0);
+  const [logs, setLogs] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (isOpen) {
+      setPhase('scanning');
+      setProgress(0);
+      setLogs([]);
+    }
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (phase === 'scanning') {
+      const logOptions = [
+        "CALIBRATING NEURAL ENGINE...",
+        "VERIFYING BROWSER KERNEL...",
+        "CHECKING WEBGPU ACCELERATION...",
+        "MAPPING MEMORY HEAP...",
+        "TESTING WASM LATENCY...",
+        "STRESS TESTING IO PIPELINE...",
+        "ENCRYPTING LOCAL STORAGE VAULT...",
+        "VALIDATING F11 IMMERSION PATH..."
+      ];
+      
+      const interval = setInterval(() => {
+        setProgress(prev => {
+          if (prev >= 100) {
+            clearInterval(interval);
+            setPhase('complete');
+            return 100;
+          }
+          const next = prev + Math.random() * 15;
+          if (Math.random() > 0.5 && logs.length < 8) {
+            setLogs(l => [...l, logOptions[l.length]]);
+          }
+          return next;
+        });
+      }, 400);
+      return () => clearInterval(interval);
+    }
+  }, [phase]);
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-[2000] flex items-center justify-center p-4 md:p-8 animate-in fade-in duration-500">
+      <div className="absolute inset-0 bg-black/90 backdrop-blur-2xl" onClick={onClose}></div>
+      <div className="relative max-w-2xl w-full glass rounded-[48px] border border-white/20 shadow-[0_0_150px_rgba(59,130,246,0.3)] p-12 overflow-hidden flex flex-col items-center text-center animate-in zoom-in duration-700">
+        <div className="absolute top-0 left-0 w-full h-1.5 bg-white/5">
+           <div className="h-full bg-blue-500 transition-all duration-300" style={{ width: `${progress}%` }}></div>
+        </div>
+
+        {phase === 'scanning' ? (
+          <>
+            <div className="w-24 h-24 rounded-full border-4 border-t-blue-500 border-white/5 animate-spin mb-10"></div>
+            <h3 className="text-4xl font-black text-white uppercase tracking-tighter mb-4">BENCH STRESS TEST</h3>
+            <p className="text-white/40 font-bold uppercase tracking-widest text-xs mb-10">Verifying Hardware Compatibility...</p>
+            <div className="w-full space-y-3 font-mono text-[10px] text-blue-400 text-left bg-black/50 p-6 rounded-2xl border border-white/5 min-h-[160px]">
+               {logs.map((l, i) => <div key={i} className="flex gap-4"><span>[OK]</span> {l}</div>)}
+            </div>
+          </>
+        ) : (
+          <div className="animate-in fade-in zoom-in duration-1000 flex flex-col items-center">
+            <div className="w-32 h-32 rounded-[40px] bg-emerald-500 flex items-center justify-center mb-10 shadow-[0_0_60px_rgba(16,185,129,0.5)]">
+               <ShieldCheck size={64} className="text-white animate-pulse" />
+            </div>
+            <h3 className="text-5xl font-black text-white uppercase tracking-tighter mb-4 leading-none">HARDWARE<br/><span className="text-emerald-400">VERIFIED</span></h3>
+            <p className="text-xl text-white/40 font-medium mb-12 uppercase tracking-tighter leading-relaxed">Your machine is optimized for <span className="text-white font-black italic">Repair OS native kernel.</span> No installation required.</p>
+            <div className="grid grid-cols-2 gap-6 w-full mb-12">
+               <div className="glass p-6 rounded-3xl border-emerald-500/20 bg-emerald-500/5">
+                  <div className="text-2xl font-black text-emerald-400 mb-1 leading-none">100%</div>
+                  <div className="text-[10px] font-black uppercase text-white/30 tracking-[0.2em]">Efficiency Rating</div>
+               </div>
+               <div className="glass p-6 rounded-3xl border-blue-500/20 bg-blue-500/5">
+                  <div className="text-2xl font-black text-blue-400 mb-1 leading-none">ULTRA</div>
+                  <div className="text-[10px] font-black uppercase text-white/30 tracking-[0.2em]">Tier Compatibility</div>
+               </div>
+            </div>
+            <button onClick={onClose} className="w-full bg-white text-black py-8 rounded-[30px] font-black uppercase text-2xl tracking-[0.2em] hover:bg-emerald-500 hover:text-white transition-all shadow-2xl active:scale-95 border-b-8 border-gray-300">ENGAGE SYSTEM</button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+const ClaimSpotModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, onClose }) => {
+  const [ticker, setTicker] = useState<string[]>(["[AUTH] Initializing node monitoring..."]);
+  
+  useEffect(() => {
+    if (!isOpen) return;
+    const cities = ["London, UK", "Austin, TX", "Berlin, DE", "Tokyo, JP", "Paris, FR", "New York, NY", "Dubai, UAE", "Sydney, AU"];
+    const interval = setInterval(() => {
+      const city = cities[Math.floor(Math.random() * cities.length)];
+      setTicker(prev => [`[AUTH] Node Provisioned: ${city}`, ...prev].slice(0, 4));
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [isOpen]);
+
+  if (!isOpen) return null;
+  return (
+    <div className="fixed inset-0 z-[2000] flex items-center justify-center p-4 md:p-8 animate-in fade-in duration-700 backdrop-blur-2xl">
+      <div className="absolute inset-0 bg-red-950/20" onClick={onClose}></div>
+      <div className="relative max-w-2xl w-full glass rounded-[50px] border-2 border-red-500/30 shadow-[0_0_100px_rgba(239,68,68,0.3)] p-10 md:p-16 flex flex-col items-center text-center animate-in zoom-in slide-in-from-bottom-20 duration-1000 overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-red-600 via-orange-500 to-red-600 animate-pulse"></div>
+        <button onClick={onClose} className="absolute top-8 right-8 p-3 hover:bg-white/10 rounded-2xl text-white/30 hover:text-white transition-all"><X size={24} /></button>
+        
+        <div className="w-24 h-24 rounded-[36px] bg-red-600/20 flex items-center justify-center mb-10 shadow-[0_0_40px_rgba(239,68,68,0.5)] border border-red-500/40 animate-bounce" style={{ animationDuration: '3s' }}>
+          <AlertTriangle size={48} className="text-red-500" />
+        </div>
+
+        <h3 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter mb-6 leading-none">SYSTEM CAPACITY<br/><span className="text-red-500">912 / 1000 NODES</span></h3>
+        <p className="text-xl text-white/50 font-medium mb-12 uppercase tracking-tighter leading-relaxed">To maintain 99.9% uptime, we strictly cap new shop intake. <span className="text-white font-black italic">DaemonCore server resources are reaching peak allocation.</span></p>
+        
+        <div className="w-full bg-white/5 rounded-full h-4 mb-8 overflow-hidden border border-white/10 relative p-1">
+           <div className="h-full bg-gradient-to-r from-red-600 to-orange-500 rounded-full shadow-[0_0_15px_rgba(239,68,68,0.6)]" style={{ width: '91.2%' }}></div>
+        </div>
+
+        <div className="w-full bg-black/40 rounded-2xl p-4 mb-10 border border-white/5 text-left font-mono text-[10px] text-red-400 h-24 overflow-hidden relative">
+           <div className="absolute top-0 right-4 px-2 py-1 bg-red-600/20 text-red-500 text-[8px] font-black uppercase tracking-widest rounded-b-md">Live Activity</div>
+           {ticker.map((line, i) => (
+             <div key={i} className="animate-in slide-in-from-bottom-2 duration-500 mb-1 opacity-80">{line}</div>
+           ))}
+        </div>
+
+        <div className="grid grid-cols-2 gap-6 w-full mb-12">
+           <div className="glass p-6 rounded-3xl border-red-500/20 bg-red-500/5">
+              <div className="text-3xl font-black text-red-400 mb-1 leading-none">88</div>
+              <div className="text-[10px] font-black uppercase text-white/30 tracking-[0.2em]">Slots Remaining</div>
+           </div>
+           <div className="glass p-6 rounded-3xl border-orange-500/20 bg-orange-500/5">
+              <div className="text-3xl font-black text-orange-400 mb-1 leading-none">14</div>
+              <div className="text-[10px] font-black uppercase text-white/30 tracking-[0.2em]">Active Requests</div>
+           </div>
+        </div>
+
+        <div className="flex flex-col gap-4 w-full">
+           <a href={LEMON_SQUEEZY_LINK} target="_blank" className="w-full bg-red-600 text-white py-8 rounded-[30px] font-black uppercase text-2xl tracking-[0.2em] hover:bg-red-500 transition-all shadow-[0_20px_50px_rgba(220,38,38,0.5)] active:scale-95 border-b-8 border-red-800 flex items-center justify-center gap-4">
+             SECURE MY BENCH <Flame size={28} />
+           </a>
+           <p className="text-[10px] font-black uppercase text-white/20 tracking-[0.3em] flex items-center justify-center gap-2">
+             <Timer size={12} /> ONCE 1000 NODES ARE ALLOCATED, ACCESS WILL LOCK
+           </p>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const HowItWorksModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
@@ -737,7 +894,17 @@ const APPS: AppDefinition[] = [
 const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
   const [chatOpen, setChatOpen] = useState(false);
   const [howItWorksOpen, setHowItWorksOpen] = useState(false);
+  const [claimSpotOpen, setClaimSpotOpen] = useState(false);
+  const [stressTestOpen, setStressTestOpen] = useState(false);
   const [lbImage, setLbImage] = useState<string | null>(null);
+
+  // Auto-trigger scarcity modal after 8 seconds
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setClaimSpotOpen(true);
+    }, 8000);
+    return () => clearTimeout(timer);
+  }, []);
 
   const awards = [
     { icon: <ShieldCheck size={20} />, label: "Security Verified 2025" },
@@ -816,9 +983,9 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
       {/* Hero Section - Maximum Flair */}
       <section className="relative min-h-screen flex flex-col items-center justify-center px-10 text-center pt-48 pb-60 overflow-hidden">
         <div className="relative z-10 animate-in fade-in slide-in-from-bottom-20 duration-1000">
-          <div className="inline-flex items-center gap-3 px-8 py-3 rounded-[24px] bg-white/5 border border-white/10 text-blue-400 text-[12px] font-black uppercase tracking-[0.5em] mb-16 animate-bounce shadow-[0_0_25px_rgba(59,130,246,0.3)] backdrop-blur-md" style={{ animationDuration: '4s' }}>
-            <Sparkles size={16} className="text-blue-400" /> BROWSER-NATIVE PERFORMANCE // V2.3.4
-          </div>
+          <button onClick={() => setClaimSpotOpen(true)} className="inline-flex items-center gap-3 px-8 py-3 rounded-[24px] bg-red-600/10 border border-red-500/20 text-red-500 text-[12px] font-black uppercase tracking-[0.5em] mb-16 animate-pulse shadow-[0_0_25px_rgba(239,68,68,0.3)] backdrop-blur-md hover:bg-red-600/20 transition-all cursor-pointer">
+            <AlertTriangle size={16} className="text-red-500" /> SYSTEM STATUS: 912 / 1000 NODES ALLOCATED
+          </button>
           
           <div className="flex flex-col items-center mb-24 space-y-4">
             <h1 className="text-[8rem] md:text-[14rem] font-black leading-[0.7] tracking-tighter uppercase drop-shadow-[0_0_120px_rgba(37,99,235,0.5)]">
@@ -842,9 +1009,14 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
               <button onClick={onLaunch} className="bg-blue-600 hover:bg-blue-500 text-white px-20 py-10 rounded-[50px] font-black text-3xl transition-all flex items-center gap-8 uppercase group shadow-[0_30px_70px_rgba(37,99,235,0.5)] active:scale-95 border-t-2 border-white/20">
                 IMMERSIVE LAUNCH <ArrowRight className="group-hover:translate-x-5 transition-transform" size={40} />
               </button>
-              <button onClick={() => setHowItWorksOpen(true)} className="glass text-white px-16 py-10 rounded-[50px] font-black text-xl transition-all flex items-center gap-6 uppercase group hover:bg-white/10 active:scale-95 border border-white/10">
-                HOW IT WORKS <Globe className="group-hover:rotate-180 transition-transform duration-1000" size={28} />
-              </button>
+              <div className="flex flex-col gap-4">
+                <button onClick={() => setHowItWorksOpen(true)} className="glass text-white px-16 py-6 rounded-[50px] font-black text-xl transition-all flex items-center gap-6 uppercase group hover:bg-white/10 active:scale-95 border border-white/10">
+                  HOW IT WORKS <Globe className="group-hover:rotate-180 transition-transform duration-1000" size={28} />
+                </button>
+                <button onClick={() => setStressTestOpen(true)} className="bg-white/[0.05] hover:bg-white/[0.1] text-blue-400 px-16 py-4 rounded-[50px] font-black text-sm transition-all flex items-center justify-center gap-4 uppercase border border-blue-500/20 shadow-2xl active:scale-95">
+                  <Scan size={18} /> HARDWARE STRESS TEST
+                </button>
+              </div>
             </div>
             
             <div className="flex flex-wrap justify-center gap-10 md:gap-12 max-w-6xl">
@@ -873,8 +1045,14 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
         <SupportAgentChat isOpen={chatOpen} onClose={() => setChatOpen(false)} />
       </div>
 
+      {/* Scarcity / Claim Spot Modal Integration */}
+      <ClaimSpotModal isOpen={claimSpotOpen} onClose={() => setClaimSpotOpen(false)} />
+
       {/* How It Works Modal Integration */}
       <HowItWorksModal isOpen={howItWorksOpen} onClose={() => setHowItWorksOpen(false)} />
+
+      {/* Stress Test Modal Integration */}
+      <StressTestModal isOpen={stressTestOpen} onClose={() => setStressTestOpen(false)} />
 
       {/* Membership Section */}
       <section id="everything" className="py-60 bg-white/[0.01] border-y border-white/5 relative overflow-hidden">
@@ -1382,6 +1560,8 @@ export default App;
  * [SYS] v2.3.3 - Gateway Transition Update (register.repairos.app migration)
  * [SYS] v2.3.4 - 'How It Works' Modal Implementation (F11 Fullscreen Visualizer)
  * [SYS] v2.3.5 - Final Gateway Correction (register.repairos.app definitive link)
+ * [SYS] v2.3.6 - Scarcity & Capacity Warning (Limited Seating UX Logic)
+ * [SYS] v2.3.7 - Node Capacity Ticker & Hardware Stress Test (Urgency & Tech Validation)
  * [LOG] Engineering Standards Met. No critical heap fragmentation detected.
  * [LOG] UI Thread Priority: Real-time.
  * [LOG] Network Status: Synchronized with DaemonCore Global Cluster.
