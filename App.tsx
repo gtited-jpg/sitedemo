@@ -143,14 +143,19 @@ import {
   Timer,
   Scan,
   HardDriveDownload,
-  Activity as ActivityIcon
+  Activity as ActivityIcon,
+  Skull,
+  Fingerprint as FingerprintIcon,
+  ChevronRight,
+  DatabaseZap,
+  ShieldX
 } from 'lucide-react';
 import { GoogleGenAI } from "@google/genai";
 
 /**
  * REPAIR OS - SYSTEM CORE DEFINITIONS
  * 
- * Version: 2.3.7-STABLE (Node Urgency & Stress Test Update)
+ * Version: 2.3.8-STABLE (Financial Urgency & Audit Update)
  * Support Email: contact@daemoncore.app
  */
 
@@ -229,6 +234,152 @@ const IMAGES = {
 };
 
 // --- UI Components Core ---
+
+const ProfitLeakDiagnostic: React.FC = () => {
+  const [leaks, setLeaks] = useState({
+    manualSms: false,
+    paperWork: false,
+    shrinkage: false,
+    quoteDelay: false,
+    techChaos: false
+  });
+
+  const values = {
+    manualSms: 250,
+    paperWork: 400,
+    shrinkage: 650,
+    quoteDelay: 350,
+    techChaos: 500
+  };
+
+  const totalLoss = Object.entries(leaks).reduce((acc, [key, active]) => 
+    active ? acc + values[key as keyof typeof values] : acc, 0
+  );
+
+  const toggle = (key: keyof typeof leaks) => setLeaks(l => ({ ...l, [key]: !l[key] }));
+
+  return (
+    <div className="w-full max-w-5xl mx-auto glass rounded-[60px] border border-white/10 p-12 lg:p-20 shadow-2xl relative overflow-hidden">
+      <div className="absolute top-0 right-0 p-8">
+        <ActivityIcon className="text-red-500 animate-pulse" size={32} />
+      </div>
+      
+      <div className="grid lg:grid-cols-2 gap-20 items-center">
+        <div>
+           <div className="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-red-500/10 border border-red-500/30 text-red-500 text-[10px] font-black uppercase tracking-[0.4em] mb-8">
+              <ShieldAlert size={14} /> FINANCIAL HEMORRHAGE AUDIT
+           </div>
+           <h3 className="text-5xl lg:text-7xl font-black uppercase tracking-tighter mb-8 leading-none">DIAGNOSE YOUR <br/><span className="text-red-500">PROFIT LEAKS.</span></h3>
+           <p className="text-xl text-white/40 font-medium mb-12 uppercase tracking-tighter">Legacy workflows are costing you thousands. Select your current inefficiencies to see the damage.</p>
+           
+           <div className="space-y-4">
+              {[
+                { id: 'manualSms', t: 'MANUAL SMS UPDATES', d: 'Technicians manually texting customers.' },
+                { id: 'paperWork', t: 'PAPER INVOICING', d: 'Hard copy work orders and filing latency.' },
+                { id: 'shrinkage', t: 'STOCK DISCREPANCIES', d: 'Unaccounted inventory and part shrinkage.' },
+                { id: 'quoteDelay', t: 'QUOTING DELAYS', d: 'Missing sales due to slow estimate delivery.' },
+                { id: 'techChaos', t: 'TECH BENCH CONGESTION', d: 'Lack of L1-L4 surgical tech routing.' },
+              ].map((item) => (
+                <button 
+                  key={item.id}
+                  onClick={() => toggle(item.id as keyof typeof leaks)}
+                  className={`w-full flex items-center justify-between p-6 rounded-3xl border transition-all group ${leaks[item.id as keyof typeof leaks] ? 'bg-red-500/10 border-red-500/50' : 'bg-white/5 border-white/10 hover:border-white/20'}`}
+                >
+                  <div className="text-left">
+                    <div className={`text-sm font-black uppercase tracking-widest mb-1 ${leaks[item.id as keyof typeof leaks] ? 'text-red-400' : 'text-white/60'}`}>{item.t}</div>
+                    <div className="text-[10px] text-white/20 font-bold uppercase tracking-widest">{item.d}</div>
+                  </div>
+                  <div className={`w-12 h-6 rounded-full relative transition-colors ${leaks[item.id as keyof typeof leaks] ? 'bg-red-600' : 'bg-white/10'}`}>
+                    <div className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-all ${leaks[item.id as keyof typeof leaks] ? 'left-7' : 'left-1'}`}></div>
+                  </div>
+                </button>
+              ))}
+           </div>
+        </div>
+
+        <div className="flex flex-col items-center justify-center text-center p-12 bg-black/40 rounded-[48px] border border-white/5 relative overflow-hidden group">
+           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(239,68,68,0.1),transparent_70%)]"></div>
+           <Skull className={`mb-10 transition-all duration-700 ${totalLoss > 0 ? 'text-red-500 scale-125 drop-shadow-[0_0_30px_rgba(239,68,68,0.6)]' : 'text-white/10'}`} size={80} />
+           <div className="text-[12px] font-black text-white/20 uppercase tracking-[0.5em] mb-4">ESTIMATED MONTHLY LOSS</div>
+           <div className="text-7xl lg:text-9xl font-black tabular-nums text-white tracking-tighter drop-shadow-[0_0_40px_rgba(0,0,0,0.8)]">
+              $<span className={totalLoss > 0 ? 'text-red-500' : 'text-white'}>{totalLoss}</span>
+           </div>
+           <div className="mt-12 p-8 glass rounded-3xl border-red-500/20 w-full animate-pulse">
+              <div className="text-[11px] font-black text-red-400 uppercase tracking-[0.3em] mb-2">CRITICAL DIAGNOSTIC:</div>
+              <p className="text-white/40 text-xs font-bold uppercase tracking-widest leading-relaxed">
+                {totalLoss === 0 ? "Select an inefficiency to begin audit." : "You are bleeding capital every 24 hours. Repair OS stops the hemorrhage instantly."}
+              </p>
+           </div>
+           <button onClick={() => window.open(LEMON_SQUEEZY_LINK)} className="mt-12 w-full bg-white text-black py-6 rounded-3xl font-black uppercase text-sm tracking-[0.3em] hover:bg-blue-600 hover:text-white transition-all border-b-4 border-gray-300">STOP THE LEAK NOW</button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const LegacyComparison: React.FC = () => {
+  const points = [
+    { label: "KERNEL ARCHITECTURE", legacy: "Fragmented Web / Local", ros: "Unified WASM Native Node" },
+    { label: "INTAKE SPEED", legacy: "4-6 Minutes per Device", ros: "45 Seconds (Surgical Intake)" },
+    { label: "TECH WORKFLOW", legacy: "Free-for-all Chaos", ros: "L1-L4 Proprietary Matrix" },
+    { label: "MODULE DELIVERY", legacy: "Third-party Plugins", ros: "Nexus Direct Kernel Injects" },
+    { label: "SYSTEM UPDATES", legacy: "Manual / Bi-Annual", ros: "Autonomous Weekly Kernels" },
+    { label: "FEE STRUCTURE", legacy: "Per-Technician Fees", ros: "Zero-Limit Flat-Rate Pass" },
+  ];
+
+  return (
+    <div className="w-full max-w-7xl mx-auto py-40 px-10">
+      <div className="flex flex-col items-center text-center mb-32">
+        <div className="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-500 text-[10px] font-black uppercase tracking-[0.4em] mb-8">
+          <Zap size={14} /> COMPETITIVE DISRUPTION
+        </div>
+        <h3 className="text-6xl lg:text-9xl font-black uppercase tracking-tighter mb-8 leading-none">THE <span className="text-blue-500">KILL-CHART.</span></h3>
+        <p className="text-2xl text-white/20 max-w-4xl font-black uppercase tracking-widest">End the era of fragmented tools. Audit the difference.</p>
+      </div>
+
+      <div className="grid lg:grid-cols-2 gap-1 overflow-hidden rounded-[60px] border border-white/10 bg-white/5 shadow-2xl">
+        {/* Legacy Side */}
+        <div className="p-12 lg:p-20 bg-red-950/10 border-r border-white/5 relative">
+           <div className="flex items-center gap-4 mb-16 opacity-40">
+              <Skull className="text-red-500" size={32} />
+              <span className="text-2xl font-black uppercase tracking-tighter text-red-500">LEGACY STACK</span>
+           </div>
+           <div className="space-y-12">
+              {points.map((p, i) => (
+                <div key={i} className="group">
+                  <div className="text-[10px] font-black text-white/10 uppercase tracking-[0.4em] mb-4 group-hover:text-red-500/30 transition-colors">{p.label}</div>
+                  <div className="text-xl font-black uppercase tracking-tighter text-white/30 italic flex items-center gap-4">
+                    <ShieldX size={18} className="text-red-900" /> {p.legacy}
+                  </div>
+                </div>
+              ))}
+           </div>
+        </div>
+
+        {/* Repair OS Side */}
+        <div className="p-12 lg:p-20 bg-blue-600/5 relative overflow-hidden">
+           <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600/10 blur-[100px] rounded-full"></div>
+           <div className="flex items-center gap-4 mb-16 relative z-10">
+              <div className="w-12 h-12 rounded-2xl bg-blue-600 flex items-center justify-center shadow-[0_0_30px_rgba(37,99,235,0.6)]">
+                <Cpu size={24} className="text-white" />
+              </div>
+              <span className="text-2xl font-black uppercase tracking-tighter text-blue-400">REPAIR OS</span>
+           </div>
+           <div className="space-y-12 relative z-10">
+              {points.map((p, i) => (
+                <div key={i} className="group">
+                  <div className="text-[10px] font-black text-blue-500/40 uppercase tracking-[0.4em] mb-4 group-hover:text-blue-400 transition-colors">{p.label}</div>
+                  <div className="text-xl font-black uppercase tracking-tighter text-white flex items-center gap-4">
+                    <CheckCircle2 size={18} className="text-emerald-400 drop-shadow-[0_0_10px_rgba(52,211,153,0.5)]" /> {p.ros}
+                  </div>
+                </div>
+              ))}
+           </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const StressTestModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, onClose }) => {
   const [phase, setPhase] = useState<'idle' | 'scanning' | 'complete'>('idle');
@@ -384,7 +535,7 @@ const ClaimSpotModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ is
 const HowItWorksModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
   return (
-    <div className="fixed inset-0 z-[1000] flex items-center justify-center p-6 md:p-12 animate-in fade-in duration-500">
+    <div className="fixed inset-0 z-[1000] flex items-center justify-center p-6 md:p-12 animate-in fade-in duration-700">
       <div className="absolute inset-0 bg-black/80 backdrop-blur-3xl" onClick={onClose}></div>
       <div className="relative max-w-6xl w-full glass rounded-[60px] border border-white/10 shadow-[0_0_150px_rgba(37,99,235,0.4)] overflow-hidden flex flex-col lg:flex-row animate-in zoom-in slide-in-from-bottom-10 duration-700">
         <button onClick={onClose} className="absolute top-8 right-8 z-[1001] p-4 bg-white/5 hover:bg-red-500 rounded-2xl text-white transition-all border border-white/10"><X size={24} /></button>
@@ -570,7 +721,7 @@ const FeatureSplitView: React.FC<{
           <div className="pt-8 border-t border-white/5 space-y-3">
             {highlights.map((h, i) => (
               <div key={i} className="flex items-center gap-3 text-sm font-bold text-white/40">
-                <CheckCircle2 size={16} className="text-emerald-400 drop-shadow-[0_0_5px_rgba(52,211,153,0.5)]" /> {h}
+                <CheckCircle2 size={16} className="text-emerald-400 drop-shadow-[0_0_10px_rgba(52,211,153,0.5)]" /> {h}
               </div>
             ))}
           </div>
@@ -1030,6 +1181,14 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
         </div>
       </section>
 
+      {/* New: Profit Leak Diagnostic Section */}
+      <section id="diagnostic" className="py-60 bg-black relative">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(239,68,68,0.05),transparent_70%)]"></div>
+        <div className="max-w-7xl mx-auto px-10">
+          <ProfitLeakDiagnostic />
+        </div>
+      </section>
+
       {/* Floating Chat Widget */}
       <div className="fixed bottom-12 right-12 z-[500] flex flex-col items-end gap-6">
         {!chatOpen && (
@@ -1172,6 +1331,11 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
         </div>
       </section>
 
+      {/* New: Legacy Comparison Side-by-Side Audit */}
+      <section id="comparison" className="bg-white/[0.01] border-y border-white/5 relative">
+        <LegacyComparison />
+      </section>
+
       {/* Operation Matrix Section */}
       <section id="matrix" className="py-60 bg-black relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-10">
@@ -1200,7 +1364,6 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
             <p className="text-2xl text-white/20 max-w-4xl font-black uppercase tracking-widest">Master the floor check-in experience. High-speed intake meets high-fidelity workflow.</p>
           </div>
           <div className="grid lg:grid-cols-2 gap-16 mb-20 max-w-[1400px] mx-auto items-stretch">
-            {/* ENFORCED FULL-BLEED FILL: Using aspect-video + h-full to ensure pictures fill the rounded 'bubble' entirely */}
             <div className="group relative cursor-pointer overflow-hidden rounded-[40px] md:rounded-[64px] border-4 border-blue-500/20 hover:border-blue-500/60 shadow-[0_0_50px_rgba(37,99,235,0.3)] transition-all duration-700 aspect-video h-full" onClick={() => setLbImage(IMAGES.checkin)}>
                <img src={IMAGES.checkin} className="w-full h-full object-cover object-top transition-all duration-1000 group-hover:scale-105" alt="Step 1 Checkin" />
                <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -1562,6 +1725,7 @@ export default App;
  * [SYS] v2.3.5 - Final Gateway Correction (register.repairos.app definitive link)
  * [SYS] v2.3.6 - Scarcity & Capacity Warning (Limited Seating UX Logic)
  * [SYS] v2.3.7 - Node Capacity Ticker & Hardware Stress Test (Urgency & Tech Validation)
+ * [SYS] v2.3.8 - Profit Leak Diagnostic & Legacy Audit (High-Impact Urgency)
  * [LOG] Engineering Standards Met. No critical heap fragmentation detected.
  * [LOG] UI Thread Priority: Real-time.
  * [LOG] Network Status: Synchronized with DaemonCore Global Cluster.
