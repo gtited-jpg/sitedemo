@@ -330,10 +330,10 @@ const ProfitLeakDiagnostic: React.FC = () => {
   // Perfectly balanced to reach exactly 199
   const values = {
     manualSms: 90,
-    paperWork: 140,
-    shrinkage: 225,
-    quoteDelay: 150,
-    techChaos: 300
+    paperWork: 150,
+    shrinkage: 250,
+    quoteDelay: 120,
+    techChaos: 160
   };
 
   const totalLoss = Object.entries(leaks).reduce((acc, [key, active]) => 
