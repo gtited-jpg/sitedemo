@@ -894,7 +894,7 @@ const DaemonAI = () => {
       const resp = await ai.models.generateContent({
         model: 'gemini-3-pro-preview',
         contents: [...msgs, uMsg].map(m => ({ role: m.role === 'ai' ? 'model' : 'user', parts: [{ text: m.content }] })),
-        config: { systemInstruction: `You are DAEMON AI. Professional, elite, and direct. Repair OS is the world's first browser-based OS for repair shops. No installation required. F11 for full immersion. Includes 2 proprietary carrier unlocking apps. Membership: $199/mo. Support email: ${SUPPORT_EMAIL}.` }
+        config: { systemInstruction: `You are DAEMON AI. An elite, punchy, and concise system core. Never use fluff. Max 2 short sentences per response. Repair OS: Browser-based, no install, F11 for immersion. Includes 2 carrier unlock apps. Membership $199/mo. Support: ${SUPPORT_EMAIL}.` }
       });
       setMsgs(prev => [...prev, { role: 'ai', content: resp.text || "Neural link failure." }]);
     } catch (err) { 
@@ -930,7 +930,7 @@ const DaemonAI = () => {
  * Floating UI for landing page engagement.
  */
 const SupportAgentChat: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, onClose }) => {
-  const [msgs, setMsgs] = useState<ChatMessage[]>([{ role: 'ai', content: "Hello! I'm the Repair OS support agent. How can I help you grow your shop today?" }]);
+  const [msgs, setMsgs] = useState<ChatMessage[]>([{ role: 'ai', content: "Hi! I'm here to help. What's on your mind today?" }]);
   const [inp, setInp] = useState('');
   const [loading, setLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -950,7 +950,7 @@ const SupportAgentChat: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ 
       const resp = await ai.models.generateContent({
         model: 'gemini-3-flash-preview',
         contents: [...msgs, uMsg].map(m => ({ role: m.role === 'ai' ? 'model' : 'user', parts: [{ text: m.content }] })),
-        config: { systemInstruction: `You are the official Repair OS support specialist. Repair OS is the WORLD'S ONLY full operating system dedicated to repair shops. Crucially, it runs 100% in your browser—absolutely NO installation required. By hitting F11, you enter immersive mode, effectively replacing your traditional OS with the world's most powerful repair environment. We uniquely provide exclusive carrier unlocking software via 2 proprietary apps built into the system. Be friendly and professional. Membership: $199/mo. Support email: ${SUPPORT_EMAIL}.` }
+        config: { systemInstruction: `You are a friendly human support agent for Repair OS. Be extremely concise and personable. 1 short sentence per response is ideal. Sound like a real person, not a manual. Repair OS: Browser-only (no install), hit F11 for full mode. $199/mo flat. Includes carrier unlock apps. Direct people to ${SUPPORT_EMAIL} for tech help.` }
       });
       setMsgs(prev => [...prev, { role: 'ai', content: resp.text || "I apologize, I'm having trouble connecting." }]);
     } catch { 
