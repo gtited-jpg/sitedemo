@@ -148,14 +148,24 @@ import {
   Fingerprint as FingerprintIcon,
   ChevronRight,
   DatabaseZap,
-  ShieldX
+  ShieldX,
+  History,
+  Zap as ZapIcon,
+  XCircle,
+  Ghost,
+  RadioTower,
+  BrainCircuit,
+  Gavel,
+  Microscope as Forensics,
+  ShieldHalf,
+  ChevronDown
 } from 'lucide-react';
 import { GoogleGenAI } from "@google/genai";
 
 /**
  * REPAIR OS - SYSTEM CORE DEFINITIONS
  * 
- * Version: 2.3.8-STABLE (Financial Urgency & Audit Update)
+ * Version: 2.4.3-STABLE (Visual Symmetry Fix)
  * Support Email: contact@daemoncore.app
  */
 
@@ -310,7 +320,12 @@ const ProfitLeakDiagnostic: React.FC = () => {
                 {totalLoss === 0 ? "Select an inefficiency to begin audit." : "You are bleeding capital every 24 hours. Repair OS stops the hemorrhage instantly."}
               </p>
            </div>
-           <button onClick={() => window.open(LEMON_SQUEEZY_LINK)} className="mt-12 w-full bg-white text-black py-6 rounded-3xl font-black uppercase text-sm tracking-[0.3em] hover:bg-blue-600 hover:text-white transition-all border-b-4 border-gray-300">STOP THE LEAK NOW</button>
+           <button 
+             onClick={() => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' })} 
+             className="mt-12 w-full bg-white text-black py-6 rounded-3xl font-black uppercase text-sm tracking-[0.3em] hover:bg-blue-600 hover:text-white transition-all border-b-4 border-gray-300"
+           >
+             STOP THE LEAK NOW
+           </button>
         </div>
       </div>
     </div>
@@ -319,61 +334,110 @@ const ProfitLeakDiagnostic: React.FC = () => {
 
 const LegacyComparison: React.FC = () => {
   const points = [
-    { label: "KERNEL ARCHITECTURE", legacy: "Fragmented Web / Local", ros: "Unified WASM Native Node" },
-    { label: "INTAKE SPEED", legacy: "4-6 Minutes per Device", ros: "45 Seconds (Surgical Intake)" },
-    { label: "TECH WORKFLOW", legacy: "Free-for-all Chaos", ros: "L1-L4 Proprietary Matrix" },
-    { label: "MODULE DELIVERY", legacy: "Third-party Plugins", ros: "Nexus Direct Kernel Injects" },
-    { label: "SYSTEM UPDATES", legacy: "Manual / Bi-Annual", ros: "Autonomous Weekly Kernels" },
-    { label: "FEE STRUCTURE", legacy: "Per-Technician Fees", ros: "Zero-Limit Flat-Rate Pass" },
+    { label: "CELL UNLOCKING", legacy: "Manual/3rd Party Apps", ros: "Proprietary Kernel Apps", icon: <RadioTower /> },
+    { label: "ASSET VALUATION", legacy: "Fixed Price Lists", ros: "Gemini AI Trade Engine", icon: <BrainCircuit /> },
+    { label: "PAYROLL SYNC", legacy: "External QuickBooks", ros: "Q2 2026 Core Integrated", icon: <DollarSign /> },
+    { label: "DISPATCHING", legacy: "Manual Messaging", ros: "Surgical Matrix Matrix", icon: <Workflow /> },
+    { label: "CELL FORENSICS", legacy: "Non-Existent", ros: "Native L4 Forensic Suite", icon: <Forensics /> },
+    { label: "TICKETING / POS", legacy: "Legacy Web Bloat", ros: "Unified High-Fidelity", icon: <Ticket /> },
+    { label: "INVOICING / QUOTES", legacy: "Paper & Generic PDF", ros: "Proprietary Neural Gen", icon: <FileText /> },
+    { label: "INVENTORY VAULT", legacy: "Spreadsheet Chaos", ros: "Encrypted SKU Repository", icon: <Package /> },
   ];
 
   return (
-    <div className="w-full max-w-7xl mx-auto py-40 px-10">
+    <div className="w-full max-w-7xl mx-auto py-48 px-10 relative">
       <div className="flex flex-col items-center text-center mb-32">
-        <div className="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-500 text-[10px] font-black uppercase tracking-[0.4em] mb-8">
-          <Zap size={14} /> COMPETITIVE DISRUPTION
-        </div>
-        <h3 className="text-6xl lg:text-9xl font-black uppercase tracking-tighter mb-8 leading-none">THE <span className="text-blue-500">KILL-CHART.</span></h3>
-        <p className="text-2xl text-white/20 max-w-4xl font-black uppercase tracking-widest">End the era of fragmented tools. Audit the difference.</p>
+        <a 
+          href={LEMON_SQUEEZY_LINK} 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-4 px-8 py-3 rounded-full bg-red-600 text-white text-[12px] font-black uppercase tracking-[0.6em] mb-12 shadow-[0_0_40px_rgba(220,38,38,0.5)] border-t border-white/20 hover:scale-105 hover:bg-red-500 transition-all cursor-pointer"
+        >
+          <ZapIcon size={16} fill="currentColor" /> THE KILL CHART
+        </a>
+        <h3 className="text-7xl lg:text-9xl font-black uppercase tracking-tighter mb-8 leading-none">TERMINATE THE <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-orange-500">OBSOLETE.</span></h3>
+        <p className="text-2xl text-white/40 max-w-4xl font-black uppercase tracking-widest italic">The era of "Repair Shopr" and "Shop Monkey" is over.</p>
       </div>
 
-      <div className="grid lg:grid-cols-2 gap-1 overflow-hidden rounded-[60px] border border-white/10 bg-white/5 shadow-2xl">
-        {/* Legacy Side */}
-        <div className="p-12 lg:p-20 bg-red-950/10 border-r border-white/5 relative">
-           <div className="flex items-center gap-4 mb-16 opacity-40">
-              <Skull className="text-red-500" size={32} />
-              <span className="text-2xl font-black uppercase tracking-tighter text-red-500">LEGACY STACK</span>
+      <div className="grid lg:grid-cols-2 gap-px overflow-hidden rounded-[80px] border-[6px] border-white/5 bg-white/5 shadow-[0_60px_150px_rgba(0,0,0,1)] relative">
+        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/graphy-dark.png')] opacity-10 pointer-events-none"></div>
+        
+        {/* Legacy Side - Dark, Grungy, Decaying Red */}
+        <div className="p-16 lg:p-24 bg-[#1a0a0a] relative group overflow-hidden flex flex-col">
+           <div className="absolute inset-0 bg-gradient-to-b from-red-600/5 to-transparent opacity-50"></div>
+           <div className="flex items-center gap-6 mb-20 relative z-10">
+              <div className="w-16 h-16 rounded-[28px] bg-red-600/20 border-2 border-red-600/40 flex items-center justify-center shadow-[0_0_30px_rgba(220,38,38,0.3)]">
+                <Skull className="text-red-500" size={36} />
+              </div>
+              <div>
+                <span className="text-4xl font-black uppercase tracking-tighter text-red-500 block leading-none mb-1">LEGACY ERA</span>
+                <span className="text-[10px] font-black uppercase tracking-[0.4em] text-red-900/60">SHOP MONKEY / REPAIR SHOPR</span>
            </div>
-           <div className="space-y-12">
+           </div>
+           
+           <div className="space-y-12 relative z-10 flex-1">
               {points.map((p, i) => (
-                <div key={i} className="group">
-                  <div className="text-[10px] font-black text-white/10 uppercase tracking-[0.4em] mb-4 group-hover:text-red-500/30 transition-colors">{p.label}</div>
-                  <div className="text-xl font-black uppercase tracking-tighter text-white/30 italic flex items-center gap-4">
-                    <ShieldX size={18} className="text-red-900" /> {p.legacy}
+                <div key={i} className="group/item">
+                  <div className="text-[10px] font-black text-red-900 uppercase tracking-[0.5em] mb-4 flex items-center gap-3">
+                    <div className="w-2 h-2 rounded-full bg-red-900/50"></div>
+                    {p.label}
+                  </div>
+                  <div className="text-2xl font-black uppercase tracking-tighter text-red-200/20 italic flex items-center gap-6 line-through decoration-red-900/60 decoration-[1px]">
+                    <XCircle size={22} className="text-red-900 shrink-0" /> {p.legacy}
                   </div>
                 </div>
               ))}
+           </div>
+
+           <div className="mt-24 p-10 min-h-[140px] flex items-center justify-center bg-black/40 rounded-[40px] border border-red-900/20 relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_top,rgba(220,38,38,0.05),transparent_70%)]"></div>
+              <p className="text-red-900 text-xs font-black uppercase tracking-widest text-center leading-relaxed relative z-10">
+                FRAGMENTED SYSTEM ARCHITECTURE <br/> DETECTED // PERFORMANCE DECAY: CRITICAL
+              </p>
            </div>
         </div>
 
-        {/* Repair OS Side */}
-        <div className="p-12 lg:p-20 bg-blue-600/5 relative overflow-hidden">
-           <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600/10 blur-[100px] rounded-full"></div>
-           <div className="flex items-center gap-4 mb-16 relative z-10">
-              <div className="w-12 h-12 rounded-2xl bg-blue-600 flex items-center justify-center shadow-[0_0_30px_rgba(37,99,235,0.6)]">
-                <Cpu size={24} className="text-white" />
+        {/* Repair OS Side - High-Voltage, Vivid Blue */}
+        <div className="p-16 lg:p-24 bg-[#0a0f1a] relative group overflow-hidden flex flex-col">
+           <div className="absolute inset-0 bg-gradient-to-b from-blue-600/10 to-transparent"></div>
+           <div className="absolute top-[-50px] right-[-50px] w-64 h-64 bg-blue-600/10 blur-[100px] rounded-full animate-pulse"></div>
+           
+           <div className="flex items-center gap-6 mb-20 relative z-10">
+              <div className="w-16 h-16 rounded-[28px] bg-blue-600 border-2 border-blue-400 flex items-center justify-center shadow-[0_0_60px_rgba(37,99,235,0.7)] animate-pulse">
+                <Cpu size={36} className="text-white" />
               </div>
-              <span className="text-2xl font-black uppercase tracking-tighter text-blue-400">REPAIR OS</span>
+              <div>
+                <span className="text-4xl font-black uppercase tracking-tighter text-white block leading-none mb-1">REPAIR OS</span>
+                <span className="text-[10px] font-black uppercase tracking-[0.4em] text-blue-400">100% PROPRIETARY KERNEL</span>
+              </div>
            </div>
-           <div className="space-y-12 relative z-10">
+           
+           <div className="space-y-12 relative z-10 flex-1">
               {points.map((p, i) => (
-                <div key={i} className="group">
-                  <div className="text-[10px] font-black text-blue-500/40 uppercase tracking-[0.4em] mb-4 group-hover:text-blue-400 transition-colors">{p.label}</div>
-                  <div className="text-xl font-black uppercase tracking-tighter text-white flex items-center gap-4">
-                    <CheckCircle2 size={18} className="text-emerald-400 drop-shadow-[0_0_10px_rgba(52,211,153,0.5)]" /> {p.ros}
+                <div key={i} className="group/item">
+                  <div className="text-[10px] font-black text-blue-500 uppercase tracking-[0.5em] mb-4 flex items-center gap-3">
+                    <div className="w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.8)]"></div>
+                    {p.label}
+                  </div>
+                  <div className="text-2xl font-black uppercase tracking-tighter text-white flex items-center gap-6 drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">
+                    <div className="p-1.5 rounded-lg bg-blue-500/10 border border-blue-500/20">
+                      {React.cloneElement(p.icon as any, { size: 24, className: "text-blue-400" })}
+                    </div>
+                    {p.ros}
                   </div>
                 </div>
               ))}
+           </div>
+
+           <div className="mt-24 p-10 min-h-[140px] flex items-center bg-blue-600 text-white rounded-[40px] shadow-[0_20px_50px_rgba(37,99,235,0.5)] border-t border-white/30 group-hover:scale-[1.02] transition-transform duration-500 relative cursor-pointer overflow-hidden" onClick={() => window.open(LEMON_SQUEEZY_LINK)}>
+              <div className="absolute inset-0 bg-white/10 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
+              <div className="flex items-center justify-between gap-4 w-full">
+                 <div className="text-left">
+                    <span className="block text-[10px] font-black uppercase tracking-widest mb-1 opacity-70">NATIVE DEPLOYMENT ACTIVE</span>
+                    <span className="block text-xl font-black uppercase tracking-tighter">CLAIM YOUR PROPRIETARY BENCH</span>
+                 </div>
+                 <ArrowRight size={32} />
+              </div>
            </div>
         </div>
       </div>
@@ -537,7 +601,7 @@ const HowItWorksModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ i
   return (
     <div className="fixed inset-0 z-[1000] flex items-center justify-center p-6 md:p-12 animate-in fade-in duration-700">
       <div className="absolute inset-0 bg-black/80 backdrop-blur-3xl" onClick={onClose}></div>
-      <div className="relative max-w-6xl w-full glass rounded-[60px] border border-white/10 shadow-[0_0_150px_rgba(37,99,235,0.4)] overflow-hidden flex flex-col lg:flex-row animate-in zoom-in slide-in-from-bottom-10 duration-700">
+      <div className="relative max-w-6xl w-full glass rounded-[60px] border border-white/10 shadow-[0_0_150px_rgba(37,99,235,0.4)] overflow-hidden flex flex-col lg:flex-row animate-in zoom-in slide-in-from-bottom-10 duration-1000">
         <button onClick={onClose} className="absolute top-8 right-8 z-[1001] p-4 bg-white/5 hover:bg-red-500 rounded-2xl text-white transition-all border border-white/10"><X size={24} /></button>
         
         {/* Visual Showcase Side */}
@@ -661,7 +725,8 @@ const DesktopIcon: React.FC<{
       style={{ left: PADDING + pos.col * GRID_SIZE_X, top: PADDING + pos.row * GRID_SIZE_Y }}
     >
       <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-white shadow-lg overflow-hidden ${app.imageIcon ? 'bg-black' : `bg-gradient-to-br ${app.color}`}`}>
-        {app.imageIcon ? <img src={app.imageIcon} className="w-full h-full object-cover" alt="" /> : React.cloneElement(app.icon as React.ReactElement<any>, { size: 24 })}
+        {/* Using any cast to prevent TypeScript from complaining about unknown props in React.cloneElement */}
+        {app.imageIcon ? <img src={app.imageIcon} className="w-full h-full object-cover" alt="" /> : React.cloneElement(app.icon as any, { size: 24 })}
       </div>
       <span className="text-[10px] font-bold text-white/90 text-center drop-shadow-md line-clamp-2 leading-tight drop-shadow-[0_0_5px_rgba(0,0,0,0.8)]">{app.name}</span>
     </div>
@@ -686,7 +751,8 @@ const Window: React.FC<{
       <div className="h-12 bg-black/60 border-b border-white/5 flex items-center justify-between px-6">
         <div className="flex items-center gap-3">
           <div className={`w-6 h-6 rounded-lg flex items-center justify-center text-white ${app.imageIcon ? 'bg-black' : `bg-gradient-to-br ${app.color}`}`}>
-            {app.imageIcon ? <img src={app.imageIcon} className="w-full h-full object-cover" alt="" /> : React.cloneElement(app.icon as React.ReactElement<any>, { size: 12 })}
+            {/* Using any cast to prevent TypeScript from complaining about unknown props in React.cloneElement */}
+            {app.imageIcon ? <img src={app.imageIcon} className="w-full h-full object-cover" alt="" /> : React.cloneElement(app.icon as any, { size: 12 })}
           </div>
           <span className="text-[11px] font-bold uppercase tracking-widest text-white/80">{app.name}</span>
         </div>
@@ -714,7 +780,8 @@ const FeatureSplitView: React.FC<{
       <div className="flex flex-col lg:flex-row h-full font-poppins">
         <div className="w-full lg:w-[40%] p-10 lg:p-14 overflow-y-auto border-r border-white/5 bg-black/30 flex flex-col h-full">
           <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${colorClass} flex items-center justify-center mb-8 shadow-2xl`}>
-            {React.cloneElement(icon as React.ReactElement<any>, { size: 32, className: "text-white" })}
+            {/* Using any cast to prevent TypeScript from complaining about unknown props in React.cloneElement */}
+            {React.cloneElement(icon as any, { size: 32, className: "text-white" })}
           </div>
           <h2 className="text-4xl font-black text-white mb-6 uppercase tracking-tighter">{title}</h2>
           <div className="text-white/50 leading-relaxed mb-10">{children}</div>
@@ -1049,14 +1116,6 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
   const [stressTestOpen, setStressTestOpen] = useState(false);
   const [lbImage, setLbImage] = useState<string | null>(null);
 
-  // Auto-trigger scarcity modal after 8 seconds
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setClaimSpotOpen(true);
-    }, 8000);
-    return () => clearTimeout(timer);
-  }, []);
-
   const awards = [
     { icon: <ShieldCheck size={20} />, label: "Security Verified 2025" },
     { icon: <Trophy size={20} />, label: "Shop Choice Award" },
@@ -1087,7 +1146,7 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
     { t: "Zero-Latency Stream", d: "WASM-based browser performance for desktop speeds." },
     { t: "Approval Portal", d: "Remote customer approval gateway for service costs." },
     { t: "Digital Contracts", d: "Paperless signature workflows for legal protections." },
-    { t: "Repair AI Estimator", d: "Duration & pricing neural logic based on market data." },
+    { t: "Repair AI Estimator", d: "Duration & pricing neural logic based market data." },
     { t: "Low Stock Alerts", d: "Predictive triggers for proactive parts procurement." },
     { t: "Parts Audit Engine", d: "Cycle counting and inventory discrepancy logging." },
     { t: "Supplier Sync", d: "Direct API ordering from verified global vendors." },
@@ -1123,20 +1182,20 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
         </div>
         <div className="hidden lg:flex items-center gap-12 text-[11px] font-black uppercase tracking-[0.4em] text-white/50">
           <a href="#everything" className="hover:text-blue-400 hover:tracking-[0.5em] transition-all">Membership</a>
+          <a href="#hijack" className="hover:text-blue-400 hover:tracking-[0.5em] transition-all">The Hijack</a>
           <a href="#unlock" className="hover:text-indigo-400 hover:tracking-[0.5em] transition-all">Proprietary</a>
-          <a href="#buyback" className="hover:text-emerald-400 hover:tracking-[0.5em] transition-all">BuyBack</a>
           <a href="#nexus" className="hover:text-cyan-400 hover:tracking-[0.5em] transition-all">Nexus Store</a>
           <a href="#pricing" className="hover:text-white hover:tracking-[0.5em] transition-all">Pricing</a>
         </div>
         <button onClick={onLaunch} className="bg-white text-black px-12 py-4 rounded-[20px] text-[12px] font-black uppercase tracking-widest hover:bg-blue-600 hover:text-white transition-all shadow-[0_15px_35px_rgba(255,255,255,0.1)] active:scale-95 border-b-4 border-gray-300 hover:border-blue-700">LAUNCH SYSTEM DEMO</button>
       </nav>
 
-      {/* Hero Section - Maximum Flair */}
+      {/* Hero Section */}
       <section className="relative min-h-screen flex flex-col items-center justify-center px-10 text-center pt-48 pb-60 overflow-hidden">
         <div className="relative z-10 animate-in fade-in slide-in-from-bottom-20 duration-1000">
-          <button onClick={() => setClaimSpotOpen(true)} className="inline-flex items-center gap-3 px-8 py-3 rounded-[24px] bg-red-600/10 border border-red-500/20 text-red-500 text-[12px] font-black uppercase tracking-[0.5em] mb-16 animate-pulse shadow-[0_0_25px_rgba(239,68,68,0.3)] backdrop-blur-md hover:bg-red-600/20 transition-all cursor-pointer">
-            <AlertTriangle size={16} className="text-red-500" /> SYSTEM STATUS: 912 / 1000 NODES ALLOCATED
-          </button>
+          <div className="inline-flex items-center gap-4 px-6 py-2 rounded-full glass border border-blue-500/20 text-blue-400 text-[11px] font-black uppercase tracking-[0.4em] mb-12 shadow-[0_0_20px_rgba(59,130,246,0.2)]">
+            <ShieldCheck size={14} className="text-blue-500" /> SYSTEM STATUS: NODE 912/1000 - EARLY ACCESS PHASE
+          </div>
           
           <div className="flex flex-col items-center mb-24 space-y-4">
             <h1 className="text-[8rem] md:text-[14rem] font-black leading-[0.7] tracking-tighter uppercase drop-shadow-[0_0_120px_rgba(37,99,235,0.5)]">
@@ -1181,7 +1240,59 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
         </div>
       </section>
 
-      {/* New: Profit Leak Diagnostic Section */}
+      {/* Hardware Hijack Section - Communicating the Full Experience */}
+      <section id="hijack" className="py-60 bg-black relative overflow-hidden border-y border-white/5">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.08),transparent_70%)]"></div>
+        <div className="max-w-7xl mx-auto px-10">
+          <div className="grid lg:grid-cols-2 gap-32 items-center">
+            <div className="relative z-10">
+              <div className="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-blue-600 text-white text-[10px] font-black uppercase tracking-[0.4em] mb-8 shadow-2xl">
+                <MonitorSmartphone size={14} /> TOTAL SYSTEM OVERRIDE
+              </div>
+              <h3 className="text-6xl md:text-8xl font-black uppercase tracking-tighter mb-12 leading-[0.85]">THE <br/><span className="text-blue-500">HARDWARE HIJACK.</span></h3>
+              <p className="text-2xl text-white/40 font-medium mb-12 uppercase tracking-tighter leading-tight">
+                Stop treating your bench like a web-browser tab. <span className="text-white italic">Repair OS seizes your hardware's full potential.</span>
+              </p>
+              <div className="space-y-12">
+                 <div className="group">
+                    <h4 className="text-xl font-black text-white uppercase tracking-widest mb-4 flex items-center gap-4">
+                       <Zap className="text-blue-500" /> NATIVE PIXEL DENSITY
+                    </h4>
+                    <p className="text-white/30 text-sm font-bold uppercase tracking-widest leading-relaxed">
+                       This isn't a website. It's a high-fidelity desktop environment. Every pixel is calculated by our native kernel, utilizing WebGL and WASM for hardware-accelerated performance.
+                    </p>
+                 </div>
+                 <div className="group">
+                    <h4 className="text-xl font-black text-white uppercase tracking-widest mb-4 flex items-center gap-4">
+                       <Command className="text-indigo-500" /> BEYOND THE BROWSER
+                    </h4>
+                    <p className="text-white/30 text-sm font-bold uppercase tracking-widest leading-relaxed">
+                       Press F11 and watch your generic OS vanish. Repair OS replaces your desktop, creating an airtight, immersive cockpit where distractions are terminated and surgery begins.
+                    </p>
+                 </div>
+              </div>
+            </div>
+            <div className="relative group perspective-1000">
+               <div className="absolute -inset-20 bg-blue-600/20 blur-[150px] rounded-full animate-pulse"></div>
+               <div className="relative rounded-[60px] p-2 bg-gradient-to-br from-white/10 via-transparent to-white/10 border border-white/20 overflow-hidden shadow-[0_60px_100px_rgba(0,0,0,0.8)] transition-transform duration-700 group-hover:rotate-y-6">
+                  <div className="absolute inset-0 bg-[url('https://hlelnadzajmnxryzteww.supabase.co/storage/v1/object/public/RepairOS/desktopROS.png')] bg-cover bg-center grayscale group-hover:grayscale-0 transition-all duration-1000"></div>
+                  <div className="relative h-[500px] flex items-center justify-center bg-black/60 backdrop-blur-sm group-hover:backdrop-blur-none transition-all duration-700">
+                     <div className="flex flex-col items-center">
+                        <Monitor size={120} className="text-white/20 mb-8 group-hover:text-blue-500 group-hover:scale-110 transition-all duration-500" />
+                        <span className="text-[12px] font-black uppercase tracking-[0.8em] text-white/40 group-hover:text-white transition-colors">FULL COCKPIT IMMERSION</span>
+                     </div>
+                  </div>
+               </div>
+               <div className="absolute -bottom-10 -right-10 glass p-8 rounded-[32px] border-blue-500/40 animate-bounce" style={{ animationDuration: '4s' }}>
+                  <div className="text-3xl font-black text-white">F11</div>
+                  <div className="text-[10px] font-black uppercase tracking-widest text-blue-400">HIJACK ACTIVE</div>
+               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Profit Leak Diagnostic Section */}
       <section id="diagnostic" className="py-60 bg-black relative">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(239,68,68,0.05),transparent_70%)]"></div>
         <div className="max-w-7xl mx-auto px-10">
@@ -1204,13 +1315,8 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
         <SupportAgentChat isOpen={chatOpen} onClose={() => setChatOpen(false)} />
       </div>
 
-      {/* Scarcity / Claim Spot Modal Integration */}
       <ClaimSpotModal isOpen={claimSpotOpen} onClose={() => setClaimSpotOpen(false)} />
-
-      {/* How It Works Modal Integration */}
       <HowItWorksModal isOpen={howItWorksOpen} onClose={() => setHowItWorksOpen(false)} />
-
-      {/* Stress Test Modal Integration */}
       <StressTestModal isOpen={stressTestOpen} onClose={() => setStressTestOpen(false)} />
 
       {/* Membership Section */}
@@ -1282,100 +1388,9 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
         </div>
       </section>
 
-      {/* BuyBack Section */}
-      <section id="buyback" className="py-60 bg-white/[0.01] border-y border-white/5 relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-10">
-           <div className="grid lg:grid-cols-5 gap-24 items-center">
-              <div className="lg:col-span-3"> {/* Increased span to prevent 'K' clipping */}
-                 <div className="inline-flex items-center gap-4 px-8 py-3 rounded-full bg-emerald-500/10 border border-emerald-400/30 text-emerald-400 text-[11px] font-black uppercase tracking-[0.5em] mb-12 shadow-[0_0_20px_rgba(52,211,153,0.3)]">
-                    <TrendingUp size={18} className="text-emerald-400" /> PROFIT MAXIMIZATION
-                 </div>
-                 <h3 className="text-7xl md:text-9xl font-black uppercase tracking-tight mb-12 leading-[0.85] overflow-visible">THE <br/><span className="text-emerald-500 drop-shadow-[0_0_30px_rgba(16,185,129,0.4)]">BUYBACK</span> ENGINE.</h3>
-                 <p className="text-2xl text-white/50 font-medium leading-snug mb-12 uppercase tracking-tighter">Turn trade-ins into a goldmine. Our grading neural logic provides the safest margins in the industry.</p>
-              </div>
-              <div className="lg:col-span-2">
-                 <div className="flex flex-col gap-10 relative">
-                    <div className="absolute -inset-10 bg-emerald-500/5 blur-[100px] rounded-full"></div>
-                    <div className="relative group cursor-pointer overflow-hidden rounded-[48px] border border-emerald-500/20 shadow-2xl" onClick={() => setLbImage(IMAGES.buyback1)}>
-                       <img src={IMAGES.buyback1} className="relative w-full h-auto group-hover:scale-110 transition-all duration-1000" alt="BuyBack Step 1" />
-                       <div className="absolute inset-0 bg-emerald-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                    </div>
-                    <div className="relative group cursor-pointer overflow-hidden rounded-[48px] border border-emerald-500/20 shadow-2xl" onClick={() => setLbImage(IMAGES.buyback2)}>
-                       <img src={IMAGES.buyback2} className="relative w-full h-auto group-hover:scale-110 transition-all duration-1000" alt="BuyBack Step 2" />
-                       <div className="absolute inset-0 bg-emerald-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                    </div>
-                 </div>
-              </div>
-           </div>
-        </div>
-      </section>
-
-      {/* Nexus Store Showcase */}
-      <section id="nexus" className="py-60 bg-black relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-10">
-           <div className="grid lg:grid-cols-5 gap-32 items-center">
-              <div className="lg:col-span-2">
-                 <div className="inline-flex items-center gap-4 px-8 py-3 rounded-full bg-cyan-500/10 border border-cyan-400/30 text-cyan-400 text-[11px] font-black uppercase tracking-[0.5em] mb-12 shadow-[0_0_20px_rgba(34,211,238,0.3)]">
-                    <AppWindow size={18} className="text-cyan-400" /> NEXUS ECOSYSTEM
-                 </div>
-                 <h3 className="text-7xl md:text-9xl font-black uppercase tracking-tighter mb-12 leading-[0.85]">THE <br/><span className="text-cyan-400 drop-shadow-[0_0_30px_rgba(6,182,212,0.4)]">NEXUS STORE.</span></h3>
-                 <p className="text-3xl text-white/40 font-light leading-snug mb-12 tracking-tighter uppercase">Infinite modular power. Add capabilities to your workshop with a single click in our curated application vault.</p>
-              </div>
-              <div className="lg:col-span-3 relative group cursor-pointer" onClick={() => setLbImage(IMAGES.nexus)}>
-                 <div className="absolute -inset-20 bg-cyan-400/10 blur-[150px] rounded-full"></div>
-                 <div className="relative rounded-[72px] p-1 bg-gradient-to-br from-cyan-500/50 via-indigo-500/20 to-transparent border border-white/10 overflow-hidden shadow-2xl">
-                   <img src={IMAGES.nexus} className="relative rounded-[71px] shadow-[0_0_150px_rgba(6,182,212,0.2)] group-hover:scale-[1.03] transition-all duration-1000 grayscale group-hover:grayscale-0" alt="Nexus Store" />
-                 </div>
-              </div>
-           </div>
-        </div>
-      </section>
-
-      {/* New: Legacy Comparison Side-by-Side Audit */}
+      {/* Legacy Comparison Side-by-Side Audit */}
       <section id="comparison" className="bg-white/[0.01] border-y border-white/5 relative">
         <LegacyComparison />
-      </section>
-
-      {/* Operation Matrix Section */}
-      <section id="matrix" className="py-60 bg-black relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-10">
-           <div className="flex flex-col lg:flex-row items-center gap-40">
-              <div className="flex-1 order-2 lg:order-1">
-                 <div className="inline-flex items-center gap-4 px-8 py-3 rounded-full bg-blue-500/10 border border-blue-400/30 text-blue-400 text-[11px] font-black uppercase tracking-[0.5em] mb-12">
-                    <Workflow size={18} className="text-blue-400" /> MATRIX LOGIC
-                 </div>
-                 <h3 className="text-8xl md:text-[10rem] font-black uppercase tracking-tighter mb-12 leading-[0.75] text-white">THE <br/><span className="text-blue-500 drop-shadow-[0_0_30px_rgba(37,99,235,0.4)]">MATRIX.</span></h3>
-                 <p className="text-3xl text-white/30 font-medium leading-tight mb-16 uppercase tracking-tighter">Your workshop, perfectly synchronized. One brain, multiple limbs. Absolute control from intake to final billing.</p>
-              </div>
-              <div className="flex-1 order-1 lg:order-2 relative group cursor-pointer" onClick={() => setLbImage(IMAGES.tickets2)}>
-                 <div className="relative rounded-[72px] p-1 bg-gradient-to-br from-blue-500/50 via-transparent to-transparent border border-white/5 overflow-hidden shadow-2xl">
-                    <img src={IMAGES.tickets2} className="relative rounded-[71px] shadow-[0_0_100px_rgba(0,0,0,0.9)] opacity-70 group-hover:opacity-100 group-hover:scale-[1.05] transition-all duration-1000" alt="Kanban View" />
-                 </div>
-              </div>
-           </div>
-        </div>
-      </section>
-
-      {/* Operational Flow */}
-      <section id="operations" className="py-60 bg-white/[0.01] border-y border-white/5 relative">
-        <div className="max-w-7xl mx-auto px-10">
-          <div className="flex flex-col items-center text-center mb-40">
-            <h2 className="text-7xl md:text-9xl font-black uppercase tracking-tighter mb-8 leading-none">OPERATION: <span className="text-blue-500 drop-shadow-[0_0_30px_rgba(37,99,235,0.4)]">FLOOR.</span></h2>
-            <p className="text-2xl text-white/20 max-w-4xl font-black uppercase tracking-widest">Master the floor check-in experience. High-speed intake meets high-fidelity workflow.</p>
-          </div>
-          <div className="grid lg:grid-cols-2 gap-16 mb-20 max-w-[1400px] mx-auto items-stretch">
-            <div className="group relative cursor-pointer overflow-hidden rounded-[40px] md:rounded-[64px] border-4 border-blue-500/20 hover:border-blue-500/60 shadow-[0_0_50px_rgba(37,99,235,0.3)] transition-all duration-700 aspect-video h-full" onClick={() => setLbImage(IMAGES.checkin)}>
-               <img src={IMAGES.checkin} className="w-full h-full object-cover object-top transition-all duration-1000 group-hover:scale-105" alt="Step 1 Checkin" />
-               <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-               <div className="absolute top-10 left-10 bg-white text-black px-8 py-3 rounded-2xl font-black text-xs tracking-widest uppercase shadow-2xl">01 // INTAKE CORE</div>
-            </div>
-            <div className="group relative cursor-pointer overflow-hidden rounded-[40px] md:rounded-[64px] border-4 border-indigo-500/20 hover:border-indigo-500/60 shadow-[0_0_50px_rgba(129,140,248,0.3)] transition-all duration-700 aspect-video h-full" onClick={() => setLbImage(IMAGES.checkedIn)}>
-               <img src={IMAGES.checkedIn} className="w-full h-full object-cover object-top transition-all duration-1000 group-hover:scale-105" alt="Step 2 CheckedIn" />
-               <div className="absolute inset-0 bg-gradient-to-br from-indigo-600/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-               <div className="absolute top-10 left-10 bg-white text-black px-8 py-3 rounded-2xl font-black text-xs tracking-widest uppercase shadow-2xl">02 // QUEUE ACTIVE</div>
-            </div>
-          </div>
-        </div>
       </section>
 
       {/* Pricing and Scale */}
@@ -1533,7 +1548,7 @@ const VirtualDesktop: React.FC<{
         <div className="glass px-6 py-4 rounded-[40px] flex items-center gap-4 border border-white/10 shadow-[0_30px_80px_rgba(0,0,0,0.95)]">
           {APPS.map(app => (
             <button key={app.id} onClick={() => props.onOpenApp(app.id)} className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all relative group ${props.windows.some(w => w.id === app.id) ? 'bg-white/20 text-white scale-110 shadow-[0_0_20px_rgba(255,255,255,0.3)]' : 'text-white/40 hover:bg-white/10 hover:text-white hover:scale-105'}`}>
-              <div className="shrink-0">{React.cloneElement(app.icon as React.ReactElement<any>, { size: 28 })}</div>
+              <div className="shrink-0">{React.cloneElement(app.icon as any, { size: 28 })}</div>
               {props.windows.some(w => w.id === app.id) && <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-2 h-2 bg-blue-400 rounded-full shadow-[0_0_12px_rgba(59,130,246,1)]"></div>}
             </button>
           ))}
@@ -1639,156 +1654,3 @@ const App: React.FC = () => {
 };
 
 export default App;
-
-/**
- * REPAIR OS - SYSTEM DOCUMENTATION
- * (Maintenance Block for Engineering Standards Compliance)
- * 
- * CORE ARCHITECTURE (THE KERNEL):
- * 1. COMMAND_CORE: The kernel presiding over window management, Z-index stacking, and process isolation.
- * 2. NEURAL_DAEMON: The LLM integration layer allowing natural language interaction with shop data.
- * 3. FLOW_CONTROL: The ticketing and Kanban engine derived from optimized factory floor methodologies.
- * 4. WAREHOUSE_VAULT: The inventory sub-system with real-time stock-keeping units (SKU) synchronization.
- * 
- * DESIGN SPECIFICATIONS:
- * - CORE COLORSPACE: Adobe RGB / Rec.709 Hybrid for maximum color accuracy in technician diagnostics.
- * - TYPOGRAPHY: Inter Variable 4.0 + JetBrains Mono for schematic and SOP legibility.
- * - MOTION PHYSICS: Bezier-cubic easing (0.4, 0, 0.2, 1) for system window transitions.
- * - BLUR RADIUS: 20px-40px depending on viewport density and hardware acceleration capacity.
- * 
- * DEPLOYMENT & ENVIRONMENT:
- * Repair OS is distributed as a progressive web platform capable of running on any standards-compliant 
- * browser environment. The system utilizes modern React hooks (useState, useEffect, useMemo) to 
- * manage state transitions without unnecessary re-renders. Component level memoization ensures 
- * that bench terminals with lower CPU headroom maintain 60fps interaction speed.
- * 
- * EXTENSIBILITY (NEXUS STORE):
- * Through the Nexus App Store, third-party developers can create "Repair Modules" which are injected 
- * into the main desktop container via dynamic component resolution. The current version supports 
- * isolated module environments (Sandboxing) to prevent schematic data leaks.
- * 
- * COMPLIANCE & INTELLECTUAL PROPERTY:
- * Refer to the Legal Disclaimer within the UI for information on Patent Pending status and 
- * DaemonCore technology group ownership. Any unauthorized duplication of the L1-L4 Tech Flow 
- * methodology is subject to international copyright enforcement.
- * 
- * SYSTEM ARCHITECTURE NOTES:
- * The application is architected to handle high-frequency UI updates common in busy repair environments.
- * By decoupling the system state from individual view components, we achieve a high degree of 
- * modularity and testability. The use of a virtual windowing system allows technicians to 
- * maintain multiple workflows simultaneously without visual clutter or terminal context switching.
- * 
- * DATA SYNC LOGIC (DELTA SYNC):
- * A primary focus of the engineering team was the implementation of a conflict-resistant sync layer.
- * Using a proprietary delta-sync strategy, we minimize bandwidth usage while ensuring that all 
- * shop terminals across global locations remain perfectly synchronized.
- * 
- * SECURITY IMPLEMENTATION:
- * Beyond encryption, the system implements a strict Content Security Policy (CSP) and 
- * origin-based resource isolation. This prevents cross-site scripting (XSS) and 
- * unauthorized data exfiltration, ensuring that proprietary shop data remains within 
- * the authorized OS environment.
- * 
- * FUTURE ROADMAP (2025-2026):
- * - Mobile Bridge V2: Enhanced offline capabilities for field technicians and mobile workshops.
- * - Neural Diagnostics: Integration of predictive failure models for high-end consumer electronics.
- * - Global Supplier API: A unified procurement interface for the top 50 global parts vendors.
- * - Augmented Reality SOPs: Direct visual overlay for complex micro-soldering and rework tasks.
- * - Automated Bench Telemetry: Direct integration with multimeter and oscilloscope data streams.
- * - IoT Shop Control: Manage bench lighting, soldering iron temperature, and power via the OS.
- * - Global Repair Ledger: A decentralized record of device repair history to prevent market fraud.
- * 
- * TECHNICAL TROUBLESHOOTING:
- * - If the desktop fails to mount, verify the index.tsx root element ID matches the DOM root.
- * - Performance degradation can often be traced to high-resolution background assets; use WebP.
- * - AI latency depends on the Gemini API response times; check network throughput if delayed.
- * - Window focus issues are typically resolved by incrementing the global nextZ state.
- * 
- * INTERNAL MAINTENANCE LOG (VIRTUAL KERNEL LOGS):
- * [SYS] v2.0.0 - Initial Desktop Core Rewrite (React 19 migration)
- * [SYS] v2.0.5 - Integrated Daemon AI v3 (Gemini 3 Pro Logic)
- * [SYS] v2.1.0 - Expanded Feature Index and Production Domain Migration (repairos.app)
- * [SYS] v2.1.1 - Reference Error Hotfix (BuyBack component integrity verified)
- * [SYS] v2.1.2 - Final Link & UI Pass (register.repairos.app definitive gateway)
- * [SYS] v2.2.0 - Live Support Chat Integration (Gemini Flash optimized)
- * [SYS] v2.2.1 - Mounting lifecycle integrity fix for browser-only ESM environments.
- * [SYS] v2.2.2 - Syntax Conflict Resolution (Duplicate Imports and Stray Text Removed)
- * [SYS] v2.2.3 - Final Stabilization Pass (Virtualized Desktop Component Extraction)
- * [SYS] v2.2.5 - Unlocking Logic Core Synchronization (Carrier Bypass Module Focus)
- * [SYS] v2.2.6 - Symmetry Restored in Operational View (Aspect Ratio Fix for Floor Photos)
- * [SYS] v2.2.7 - Chatbot Knowledge Integrity Update (Browser/F11 Context Fix)
- * [SYS] v2.3.0 - High-Flair UI Transformation & Immersive Chat Logic Core
- * [SYS] v2.3.1 - Visual Correction Pass (Enlarged Ops Thumbnails, Buyback K fix, Chat button resize)
- * [SYS] v2.3.2 - Operational Fill Fix (Right-hand image bleed, Neon borders added)
- * [SYS] v2.3.3 - Gateway Transition Update (register.repairos.app migration)
- * [SYS] v2.3.4 - 'How It Works' Modal Implementation (F11 Fullscreen Visualizer)
- * [SYS] v2.3.5 - Final Gateway Correction (register.repairos.app definitive link)
- * [SYS] v2.3.6 - Scarcity & Capacity Warning (Limited Seating UX Logic)
- * [SYS] v2.3.7 - Node Capacity Ticker & Hardware Stress Test (Urgency & Tech Validation)
- * [SYS] v2.3.8 - Profit Leak Diagnostic & Legacy Audit (High-Impact Urgency)
- * [LOG] Engineering Standards Met. No critical heap fragmentation detected.
- * [LOG] UI Thread Priority: Real-time.
- * [LOG] Network Status: Synchronized with DaemonCore Global Cluster.
- * [LOG] Sub-system "Nexus" initialized at 0x4F92B.
- * [LOG] Sub-system "Tickets" initialized at 0x92A1C.
- * [LOG] Sub-system "Inventory" initialized at 0x11B3D.
- * [LOG] Sub-system "DaemonAI" initialized at 0xFF00E.
- * [LOG] Sandbox environment for third-party modules active.
- * [LOG] CSRF protection tokens regenerated.
- * [LOG] AES-256 handshake successful with local vault.
- * [LOG] Hardware Acceleration: ENABLED (WebGPU Fallback).
- * [LOG] Memory footprint optimized for ARM64 and x86_64 architectures.
- * [LOG] Virtual window manager at stack level 0.
- * [LOG] System-wide font smoothing active for schematic legibility.
- * [LOG] SOP database indexed (12,502 records).
- * [LOG] Carrier Bypass Protocol: V4.1 Secure (2 Dedicated Apps Online).
- * [LOG] POS buffer overflow protection: ACTIVE.
- * [LOG] Analytics engine telemetry routing: OK.
- * [LOG] Shop Manager audit logs: ENCRYPTED.
- * [LOG] Multi-touch gesture mapping for tablet floor use: ACTIVE.
- * [LOG] Driver level bridge for thermal printers: INITIALIZED.
- * [LOG] Low-latency SMS gateway: CONNECTED.
- * [LOG] Automated review scraper: IDLE.
- * [LOG] Profitability matrix calculation cycle: 150ms.
- * [LOG] Technician ranking gamification engine: ONLINE.
- * [LOG] Personnel clock-in synchronization frequency: 10s.
- * [LOG] Global settings override hash: MATCH.
- * [LOG] Custom CSS injection safety check: PASSED.
- * [LOG] WebSocket heartbeats: STABLE.
- * [LOG] Kernel entropy pool: 100%.
- * [LOG] Device intake pipeline buffer: 1024 objects.
- * [LOG] BuyBack grading algorithm: CALIBRATED.
- * [LOG] Estimate PDF generation engine: LOADED.
- * [LOG] Supplier API rate-limiting: 0% usage.
- * [LOG] Internal Wiki sync status: UP TO DATE.
- * [LOG] Remote approval portal SSL: VALID.
- * [LOG] Digital contract signature vault: MOUNTED.
- * [LOG] Repair AI Estimator neural weights: LOADED (v3.2.1).
- * [LOG] Stock alert trigger matrix: ARMED.
- * [LOG] Parts audit engine consistency: 100%.
- * [LOG] Staff ranking visual assets: RENDERED.
- * [LOG] Internal chat encryption: PGP SECURE.
- * [LOG] Campaign blaster marketing schedule: SYNCED.
- * [LOG] Wholesale manager portal status: ACTIVE.
- * [LOG] Driver vault repository: ACCESSIBLE.
- * [LOG] Kiosk mode UI lock: DISARMED.
- * [LOG] Barcode engine scanning frequency: 120fps.
- * [LOG] Custom domain mapping SSL: PENDING.
- * [LOG] 2FA mandatory enforcement: ENABLED.
- * [LOG] Automated tax calculation region: GLOBAL.
- * [LOG] Gift card pipeline ledger: ACCURATE.
- * [LOG] ZPL label printing support: READY.
- * [LOG] IMEI GSMA blacklist integration: ONLINE.
- * [LOG] Revenue heatmap visualization: CACHED.
- * [LOG] System uptime since initialization: 100.00%.
- * [LOG] Final module integrity check: PASSED.
- * [LOG] Boot sequence completion...
- * [LOG] DAEMON ONLINE.
- * [LOG] Administrator authenticated.
- * [LOG] Welcome to Repair OS.
- * 
- * ENGINEERING TEAM: DAEMONCORE ALPHA DIVISION
- * HEAD OF PRODUCT: @daemoncore
- * LEAD ENGINEER: senior_fe_agent
- * STATUS: FULLY OPERATIONAL
- */
