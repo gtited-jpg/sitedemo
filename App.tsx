@@ -329,11 +329,11 @@ const ProfitLeakDiagnostic: React.FC = () => {
   // Collective total = $199 (Cost of Repair OS)
   // Perfectly balanced to reach exactly 199
   const values = {
-    manualSms: 35,
-    paperWork: 42,
-    shrinkage: 57,
-    quoteDelay: 28,
-    techChaos: 37
+    manualSms: 90,
+    paperWork: 140,
+    shrinkage: 225,
+    quoteDelay: 150,
+    techChaos: 300
   };
 
   const totalLoss = Object.entries(leaks).reduce((acc, [key, active]) => 
