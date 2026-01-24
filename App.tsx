@@ -25,7 +25,7 @@ import {
   MonitorCheck,
   Gift,
   Users,
-  FileText,
+  FileText, 
   DollarSign,
   ShoppingCart,
   Megaphone,
@@ -165,7 +165,7 @@ import { GoogleGenAI } from "@google/genai";
 /**
  * REPAIR OS - SYSTEM CORE DEFINITIONS
  * 
- * Version: 2.4.3-STABLE (Visual Symmetry Fix)
+ * Version: 2.5.0-STABLE (Enterprise Footer Update)
  * Support Email: contact@daemoncore.app
  */
 
@@ -213,6 +213,7 @@ const GRID_SIZE_Y = 110;
 const PADDING = 24;
 const LEMON_SQUEEZY_LINK = "https://register.repairos.app";
 const SUPPORT_EMAIL = "contact@daemoncore.app";
+const LEGAL_URL = "https://legal.repairos.app";
 
 const IMAGES = {
   logo: "https://cutlzlouwruvvdldospp.supabase.co/storage/v1/object/public/marketing/repairoslogo.png",
@@ -244,6 +245,26 @@ const IMAGES = {
 };
 
 // --- UI Components Core ---
+
+const PrivacyModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, onClose }) => {
+  if (!isOpen) return null;
+  return (
+    <div className="fixed inset-0 z-[3000] flex items-center justify-center p-6 md:p-12 animate-in fade-in duration-500">
+      <div className="absolute inset-0 bg-black/90 backdrop-blur-3xl" onClick={onClose}></div>
+      <div className="relative max-w-2xl w-full glass rounded-[40px] border border-white/10 shadow-[0_0_100px_rgba(37,99,235,0.2)] p-10 md:p-16 flex flex-col animate-in zoom-in slide-in-from-bottom-5 duration-500 max-h-[85vh] overflow-y-auto">
+        <button onClick={onClose} className="absolute top-8 right-8 p-3 hover:bg-white/10 rounded-2xl text-white/30 hover:text-white transition-all"><X size={20} /></button>
+        <h3 className="text-3xl font-black text-white uppercase tracking-tighter mb-8 flex items-center gap-4"><ShieldCheck className="text-blue-500" /> PRIVACY PROTOCOL</h3>
+        <div className="space-y-6 text-white/50 text-sm font-bold uppercase tracking-widest leading-loose">
+          <p>Repair OS (DaemonCore Systems) values your shop's data integrity. We operate on a zero-trust architecture. </p>
+          <p>We do not sell shop-specific diagnostic data, technician logs, or customer lists to third-party aggregators. All PII (Personally Identifiable Information) is encrypted at rest using military-grade AES-256 protocols.</p>
+          <p>Metadata collected during active sessions is strictly utilized for kernel optimization, WASM performance auditing, and system-wide security patches. By using the OS, you agree to local storage allocation for offline caching functionality.</p>
+          <p>All carrier unlock logs and buyback valuations are strictly confidential and mapped to your unique Node ID within the Nexus vault.</p>
+        </div>
+        <button onClick={onClose} className="mt-12 w-full bg-white text-black py-5 rounded-2xl font-black uppercase text-xs tracking-[0.3em] hover:bg-blue-600 hover:text-white transition-all">ACKNOWLEDGE PROTOCOL</button>
+      </div>
+    </div>
+  );
+};
 
 const ProfitLeakDiagnostic: React.FC = () => {
   const [leaks, setLeaks] = useState({
@@ -1114,6 +1135,7 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
   const [howItWorksOpen, setHowItWorksOpen] = useState(false);
   const [claimSpotOpen, setClaimSpotOpen] = useState(false);
   const [stressTestOpen, setStressTestOpen] = useState(false);
+  const [privacyOpen, setPrivacyOpen] = useState(false);
   const [lbImage, setLbImage] = useState<string | null>(null);
 
   const awards = [
@@ -1240,7 +1262,7 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
         </div>
       </section>
 
-      {/* Hardware Hijack Section - Communicating the Full Experience */}
+      {/* Hardware Hijack Section */}
       <section id="hijack" className="py-60 bg-black relative overflow-hidden border-y border-white/5">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.08),transparent_70%)]"></div>
         <div className="max-w-7xl mx-auto px-10">
@@ -1318,6 +1340,7 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
       <ClaimSpotModal isOpen={claimSpotOpen} onClose={() => setClaimSpotOpen(false)} />
       <HowItWorksModal isOpen={howItWorksOpen} onClose={() => setHowItWorksOpen(false)} />
       <StressTestModal isOpen={stressTestOpen} onClose={() => setStressTestOpen(false)} />
+      <PrivacyModal isOpen={privacyOpen} onClose={() => setPrivacyOpen(false)} />
 
       {/* Membership Section */}
       <section id="everything" className="py-60 bg-white/[0.01] border-y border-white/5 relative overflow-hidden">
@@ -1450,13 +1473,21 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
              </div>
           </div>
 
-          <footer className="border-t border-white/10 pt-24 pb-20 flex flex-col gap-16">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-12">
+          <footer className="border-t border-white/10 pt-24 pb-20 flex flex-col gap-12">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-12">
                <div className="flex flex-col gap-4">
-                 <span className="text-[12px] font-black text-white/10 uppercase tracking-[0.6em]">REPAIR OS // DAEMONCORE® ALPHA SYSTEMS</span>
-                 <span className="text-[10px] font-black text-white/10 uppercase tracking-[0.6em]">PATENT PENDING: US 10/2025/08429-DAEMON</span>
+                 <div className="flex items-center gap-3">
+                   <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-black text-xs">R</div>
+                   <span className="text-[14px] font-black text-white uppercase tracking-[0.4em]">REPAIR OS</span>
+                 </div>
+                 <span className="text-[10px] font-black text-white/20 uppercase tracking-[0.4em]">DAEMONCORE® ALPHA SYSTEMS // {PATENT_NOTICE}</span>
                </div>
-               <a href={`mailto:${SUPPORT_EMAIL}`} className="text-xl font-black text-blue-500 uppercase tracking-[0.4em] hover:text-blue-300 transition-all hover:scale-105">{SUPPORT_EMAIL}</a>
+               <div className="flex flex-wrap items-center gap-10 md:gap-16">
+                 <button onClick={() => setPrivacyOpen(true)} className="text-[11px] font-black text-white/30 hover:text-blue-400 uppercase tracking-[0.3em] transition-colors">Privacy Policy</button>
+                 <a href={LEGAL_URL} target="_blank" rel="noopener noreferrer" className="text-[11px] font-black text-white/30 hover:text-indigo-400 uppercase tracking-[0.3em] transition-colors">Legal</a>
+                 <div className="h-6 w-px bg-white/10 hidden md:block"></div>
+                 <div className="text-[10px] font-black text-white/10 uppercase tracking-[0.3em]">© 2025 ALL RIGHTS RESERVED</div>
+               </div>
             </div>
           </footer>
         </div>
