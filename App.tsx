@@ -161,14 +161,18 @@ import {
   ChevronDown,
   Percent,
   Copy,
-  Ticket as TicketIcon
+  Ticket as TicketIcon,
+  MousePointer2,
+  UploadCloud,
+  Dna,
+  DatabaseZap as VaultIcon
 } from 'lucide-react';
 import { GoogleGenAI } from "@google/genai";
 
 /**
  * REPAIR OS - SYSTEM CORE DEFINITIONS
  * 
- * Version: 2.5.4-STABLE (Conversion & Realism Update)
+ * Version: 2.6.2-STABLE (Visual Mockup & Footer Update)
  */
 
 // --- Types & Interfaces ---
@@ -209,7 +213,7 @@ interface ChatMessage {
 
 // --- Constants & Global Assets ---
 
-const PATENT_NOTICE = "Patent Pending: US 10/2025/08429-DAEMON";
+const PATENT_NOTICE = "Patent Pending: US 10/2023/08429-DAEMON";
 const GRID_SIZE_X = 100;
 const GRID_SIZE_Y = 110;
 const PADDING = 24;
@@ -243,7 +247,120 @@ const IMAGES = {
   unlockSoftware: "https://hlelnadzajmnxryzteww.supabase.co/storage/v1/object/public/RepairOS/Screenshot%202025-12-27%20155945.png",
   nexus: "https://hlelnadzajmnxryzteww.supabase.co/storage/v1/object/public/RepairOS/Screenshot%202026-01-01%20050121.png",
   buyback1: "https://hlelnadzajmnxryzteww.supabase.co/storage/v1/object/public/RepairOS/Screenshot%202026-01-01%20050938.png",
-  buyback2: "https://hlelnadzajmnxryzteww.supabase.co/storage/v1/object/public/RepairOS/Screenshot%202026-01-01%20051032.png"
+  buyback2: "https://hlelnadzajmnxryzteww.supabase.co/storage/v1/object/public/RepairOS/Screenshot%202026-01-01%20051032.png",
+  heroScreen: "https://hlelnadzajmnxryzteww.supabase.co/storage/v1/object/public/RepairOS/Screenshot%202026-01-24%20194902.png"
+};
+
+// --- New Strategic Components ---
+
+const MigrationVisualizer: React.FC = () => {
+  const [active, setActive] = useState(false);
+  const sources = [
+    { name: 'ShopMonkey', icon: <Skull size={24} className="text-gray-500" /> },
+    { name: 'RepairShopr', icon: <TicketIcon size={24} className="text-gray-500" /> },
+    { name: 'Excel Sheets', icon: <Table size={24} className="text-emerald-600" /> },
+    { name: 'Paper Files', icon: <FileText size={24} className="text-gray-500" /> },
+  ];
+
+  return (
+    <div className="w-full py-32 bg-black relative overflow-hidden">
+      <div className="max-w-6xl mx-auto px-10 text-center relative z-10">
+        <div className="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-[10px] font-black uppercase tracking-[0.4em] mb-8">
+           <ArrowRightLeft size={14} /> ZERO-FRICTION IMPORT
+        </div>
+        <h3 className="text-5xl md:text-7xl font-black uppercase tracking-tighter mb-8 leading-none">THE MIGRATION <br/><span className="text-blue-500">PIPELINE.</span></h3>
+        <p className="text-xl text-white/40 max-w-2xl mx-auto font-medium mb-20 uppercase tracking-tighter">Switching is instant. Our automated vault ingestion streams your legacy data into Repair OS in seconds.</p>
+
+        <div className="relative h-[300px] flex items-center justify-between px-20">
+           {/* Source Pile */}
+           <div className="grid grid-cols-2 gap-4">
+              {sources.map((s, i) => (
+                <div key={i} className="w-20 h-20 glass rounded-2xl border border-white/5 flex flex-col items-center justify-center gap-2 group transition-all">
+                   {s.icon}
+                   <span className="text-[8px] font-black text-white/30 uppercase tracking-widest">{s.name}</span>
+                </div>
+              ))}
+           </div>
+
+           {/* Animated Data Conduit - Thicker and more visible */}
+           <div className="flex-1 relative mx-20 h-4 bg-white/5 rounded-full overflow-visible">
+              {/* Core Glow */}
+              <div className={`absolute inset-0 bg-gradient-to-r from-blue-600/0 via-blue-500/40 to-blue-600/0 blur-md transition-all duration-[1s] ${active ? 'opacity-100 scale-y-150' : 'opacity-20'}`}></div>
+              
+              {/* Dynamic Stream Path */}
+              <div className={`absolute top-1/2 -translate-y-1/2 left-0 h-1 bg-gradient-to-r from-transparent via-blue-400 to-transparent transition-all duration-700 ease-in-out ${active ? 'w-full opacity-100' : 'w-0 opacity-0'}`}></div>
+              
+              {/* Particle Stream */}
+              <div className="absolute inset-0 overflow-visible pointer-events-none">
+                 {[...Array(12)].map((_, i) => (
+                   <div 
+                     key={i} 
+                     className={`absolute top-1/2 -translate-y-1/2 w-8 h-1 bg-gradient-to-r from-transparent via-blue-300 to-transparent blur-[1px] animate-stream-fast`} 
+                     style={{ 
+                       animationDelay: `${i * 0.2}s`,
+                       opacity: active ? 1 : 0,
+                       transition: 'opacity 0.3s ease'
+                     }}
+                   ></div>
+                 ))}
+                 {/* Glowing Orbs */}
+                 {[...Array(5)].map((_, i) => (
+                    <div 
+                      key={`orb-${i}`}
+                      className="absolute top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-blue-400 blur-sm shadow-[0_0_15px_rgba(59,130,246,1)] animate-stream-orb"
+                      style={{ 
+                        animationDelay: `${i * 0.6}s`,
+                        opacity: active ? 0.8 : 0,
+                        transition: 'opacity 0.5s ease'
+                      }}
+                    ></div>
+                 ))}
+              </div>
+           </div>
+
+           {/* Repair OS Vault */}
+           <div className="relative">
+              <div className={`absolute -inset-10 bg-blue-600/20 blur-[60px] rounded-full transition-opacity duration-1000 ${active ? 'opacity-100' : 'opacity-0'}`}></div>
+              <div className="w-40 h-40 glass rounded-[40px] border-2 border-blue-500/30 flex flex-col items-center justify-center gap-4 relative z-10 shadow-[0_0_50px_rgba(37,99,235,0.2)]">
+                 <VaultIcon size={56} className={`${active ? 'text-blue-500 animate-pulse' : 'text-white/20'}`} />
+                 <span className="text-[10px] font-black text-blue-400 uppercase tracking-[0.4em]">ROS VAULT</span>
+              </div>
+           </div>
+        </div>
+
+        <a 
+          href={LEMON_SQUEEZY_LINK}
+          target="_blank"
+          onMouseEnter={() => setActive(true)}
+          onMouseLeave={() => setActive(false)}
+          className="inline-block mt-20 bg-white text-black px-16 py-6 rounded-[30px] font-black uppercase text-sm tracking-[0.3em] hover:bg-blue-600 hover:text-white transition-all shadow-2xl active:scale-95 border-b-4 border-gray-300 no-underline"
+        >
+          START DATA INGESTION
+        </a>
+      </div>
+
+      <style>{`
+        @keyframes stream-fast {
+          0% { left: -10%; opacity: 0; transform: translateY(-50%) scaleX(0.5); }
+          20% { opacity: 1; }
+          80% { opacity: 1; }
+          100% { left: 110%; opacity: 0; transform: translateY(-50%) scaleX(2); }
+        }
+        @keyframes stream-orb {
+          0% { left: -5%; opacity: 0; }
+          10% { opacity: 1; }
+          90% { opacity: 1; }
+          100% { left: 105%; opacity: 0; }
+        }
+        .animate-stream-fast {
+          animation: stream-fast 0.8s linear infinite;
+        }
+        .animate-stream-orb {
+          animation: stream-orb 1.2s linear infinite;
+        }
+      `}</style>
+    </div>
+  );
 };
 
 // --- UI Components Core ---
@@ -326,8 +443,6 @@ const ProfitLeakDiagnostic: React.FC = () => {
     techChaos: false
   });
 
-  // Collective total = $199 (Cost of Repair OS)
-  // Perfectly balanced to reach exactly 199
   const values = {
     manualSms: 90,
     paperWork: 150,
@@ -725,9 +840,9 @@ const HowItWorksModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ i
            
            <div className="space-y-8">
               {[
-                { i: <DownloadCloud className="text-blue-400" />, t: "NO DOWNLOADS REQUIRED", d: "Accessed 100% via your secure shop login. No local footprint." },
-                { i: <MonitorSmartphone className="text-indigo-400" />, t: "99% HARDWARE COMPATIBILITY", d: "Runs on any modern device: Tablets, Laptops, Desktops, & All-in-ones." },
-                { i: <Maximize2 className="text-emerald-400" />, t: "F11 IMMERSIVE MODE", d: "Hit F11 to replace your local OS environment with a high-fidelity workshop cockpit." }
+                { i: <DownloadCloud className="text-blue-400" />, iClass: "text-blue-400", t: "NO DOWNLOADS REQUIRED", d: "Accessed 100% via your secure shop login. No local footprint." },
+                { i: <MonitorSmartphone className="text-indigo-400" />, iClass: "text-indigo-400", t: "99% HARDWARE COMPATIBILITY", d: "Runs on any modern device: Tablets, Laptops, Desktops, & All-in-ones." },
+                { i: <Maximize2 className="text-emerald-400" />, iClass: "text-emerald-400", t: "F11 IMMERSIVE MODE", d: "Hit F11 to replace your local OS environment with a high-fidelity workshop cockpit." }
               ].map((item, idx) => (
                 <div key={idx} className="flex gap-6 items-start group">
                    <div className="w-14 h-14 shrink-0 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:scale-110 group-hover:border-blue-500/50 transition-all shadow-xl">{item.i}</div>
@@ -799,7 +914,6 @@ const DesktopIcon: React.FC<{
       style={{ left: PADDING + pos.col * GRID_SIZE_X, top: PADDING + pos.row * GRID_SIZE_Y }}
     >
       <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-white shadow-lg overflow-hidden ${app.imageIcon ? 'bg-black' : `bg-gradient-to-br ${app.color}`}`}>
-        {/* Using any cast to prevent TypeScript from complaining about unknown props in React.cloneElement */}
         {app.imageIcon ? <img src={app.imageIcon} className="w-full h-full object-cover" alt="" /> : React.cloneElement(app.icon as any, { size: 24 })}
       </div>
       <span className="text-[10px] font-bold text-white/90 text-center drop-shadow-md line-clamp-2 leading-tight drop-shadow-[0_0_5px_rgba(0,0,0,0.8)]">{app.name}</span>
@@ -825,7 +939,6 @@ const Window: React.FC<{
       <div className="h-12 bg-black/60 border-b border-white/5 flex items-center px-6 justify-between">
         <div className="flex items-center gap-3">
           <div className={`w-6 h-6 rounded-lg flex items-center justify-center text-white ${app.imageIcon ? 'bg-black' : `bg-gradient-to-br ${app.color}`}`}>
-            {/* Using any cast to prevent TypeScript from complaining about unknown props in React.cloneElement */}
             {app.imageIcon ? <img src={app.imageIcon} className="w-full h-full object-cover" alt="" /> : React.cloneElement(app.icon as any, { size: 12 })}
           </div>
           <span className="text-[11px] font-bold uppercase tracking-widest text-white/80">{app.name}</span>
@@ -854,7 +967,6 @@ const FeatureSplitView: React.FC<{
       <div className="flex flex-col lg:flex-row h-full font-poppins">
         <div className="w-full lg:w-[40%] p-10 lg:p-14 overflow-y-auto border-r border-white/5 bg-black/30 flex flex-col h-full">
           <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${colorClass} flex items-center justify-center mb-8 shadow-2xl`}>
-            {/* Using any cast to prevent TypeScript from complaining about unknown props in React.cloneElement */}
             {React.cloneElement(icon as any, { size: 32, className: "text-white" })}
           </div>
           <h2 className="text-4xl font-black text-white mb-6 uppercase tracking-tighter">{title}</h2>
@@ -1283,8 +1395,8 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
 
       {/* Hero Section */}
       <section className="relative min-h-screen flex flex-col items-center justify-center px-10 text-center pt-48 pb-60 overflow-hidden">
-        <div className="relative z-10 animate-in fade-in slide-in-from-bottom-20 duration-1000">
-          <div className="inline-flex items-center gap-4 px-6 py-2 rounded-full glass border border-blue-500/20 text-blue-400 text-[11px] font-black uppercase tracking-[0.4em] mb-12 shadow-[0_0_20px_rgba(59,130,246,0.2)]">
+        <div className="relative z-10 animate-in fade-in slide-in-from-bottom-20 duration-1000 w-full max-w-7xl">
+          <div className="inline-flex items-center gap-4 px-6 py-2 rounded-full glass border border-blue-500/20 text-blue-400 text-[11px] font-black uppercase tracking-[0.4em] mb-12 shadow-[0_0_20px_rgba(59,130,246,0.2)] mx-auto">
             <ShieldCheck size={14} className="text-blue-500" /> SYSTEM STATUS: NODE 912/1000 - EARLY ACCESS PHASE
           </div>
           
@@ -1299,35 +1411,49 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
             </div>
           </div>
 
-          <h2 className="text-5xl md:text-8xl font-black mb-24 max-w-7xl mx-auto leading-[0.95] uppercase tracking-tighter text-white/95">
+          <h2 className="text-4xl md:text-7xl font-black mb-24 max-w-7xl mx-auto leading-[0.95] uppercase tracking-tighter text-white/95">
             THE WORLD'S ONLY <br/>
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-indigo-500 drop-shadow-[0_0_15px_rgba(34,211,238,0.4)]">COMPLETE OPERATING SYSTEM</span> <br/>
             FOR THE REPAIR INDUSTRY.
           </h2>
 
-          <div className="flex flex-col items-center gap-16">
-            <div className="flex flex-col md:flex-row gap-6">
-              <button onClick={onLaunch} className="bg-blue-600 hover:bg-blue-500 text-white px-20 py-10 rounded-[50px] font-black text-3xl transition-all flex items-center gap-8 uppercase group shadow-[0_30px_70px_rgba(37,99,235,0.5)] active:scale-95 border-t-2 border-white/20">
-                IMMERSIVE LAUNCH <ArrowRight className="group-hover:translate-x-5 transition-transform" size={40} />
+          <div className="grid lg:grid-cols-2 gap-12 items-center mb-24">
+            <div className="flex flex-col items-center lg:items-end gap-12">
+               <button onClick={onLaunch} className="w-full max-w-lg bg-blue-600 hover:bg-blue-500 text-white px-10 py-12 rounded-[50px] font-black text-4xl transition-all flex items-center justify-center gap-8 uppercase group shadow-[0_30px_70px_rgba(37,99,235,0.5)] active:scale-95 border-t-2 border-white/20">
+                LAUNCH <ArrowRight className="group-hover:translate-x-5 transition-transform" size={40} />
               </button>
-              <div className="flex flex-col gap-4">
-                <button onClick={() => setHowItWorksOpen(true)} className="glass text-white px-16 py-6 rounded-[50px] font-black text-xl transition-all flex items-center gap-6 uppercase group hover:bg-white/10 active:scale-95 border border-white/10">
+              <div className="flex flex-col gap-4 w-full max-w-lg">
+                <button onClick={() => setHowItWorksOpen(true)} className="glass text-white px-10 py-6 rounded-[50px] font-black text-xl transition-all flex items-center justify-center gap-6 uppercase group hover:bg-white/10 active:scale-95 border border-white/10">
                   HOW IT WORKS <Globe className="group-hover:rotate-180 transition-transform duration-1000" size={28} />
                 </button>
-                <button onClick={() => setStressTestOpen(true)} className="bg-white/[0.05] hover:bg-white/[0.1] text-blue-400 px-16 py-4 rounded-[50px] font-black text-sm transition-all flex items-center justify-center gap-4 uppercase border border-blue-500/20 shadow-2xl active:scale-95">
+                <button onClick={() => setStressTestOpen(true)} className="bg-white/[0.05] hover:bg-white/[0.1] text-blue-400 px-10 py-4 rounded-[50px] font-black text-sm transition-all flex items-center justify-center gap-4 uppercase border border-blue-500/20 shadow-2xl active:scale-95">
                   <Scan size={18} /> HARDWARE STRESS TEST
                 </button>
               </div>
             </div>
             
-            <div className="flex flex-wrap justify-center gap-4 md:gap-6 max-w-6xl">
-              {awards.map((award, idx) => (
-                <div key={idx} className="flex items-center gap-4 px-6 py-4 glass rounded-[20px] border border-white/5 text-[9px] font-black uppercase tracking-[0.3em] text-white/30 hover:text-white hover:border-blue-500/50 hover:scale-[1.03] transition-all cursor-default shadow-xl group">
-                  <div className="text-blue-500/50 group-hover:text-blue-500 transition-colors drop-shadow-[0_0_10px_rgba(37,99,235,0.4)]">{award.icon}</div>
-                  {award.label}
-                </div>
-              ))}
+            {/* PC Mockup Section */}
+            <div className="relative group perspective-1000 hidden md:block">
+               <div className="absolute -inset-10 bg-blue-600/10 blur-[100px] rounded-full animate-pulse"></div>
+               <div className="relative rounded-[40px] p-2 bg-gradient-to-br from-white/10 via-transparent to-white/10 border border-white/20 overflow-hidden shadow-[0_60px_100px_rgba(0,0,0,0.8)] transition-all duration-700 group-hover:rotate-y-6">
+                  <div className="relative aspect-video rounded-[32px] overflow-hidden bg-black border border-white/10">
+                    <img src={IMAGES.heroScreen} className="w-full h-full object-cover grayscale-[0.2] group-hover:grayscale-0 transition-all duration-1000" alt="Repair OS Desktop Preview" />
+                    <div className="absolute inset-0 bg-blue-500/5 group-hover:bg-transparent transition-all"></div>
+                  </div>
+               </div>
+               {/* PC Stand Hook */}
+               <div className="w-40 h-8 bg-white/5 mx-auto rounded-b-[20px] border-x border-b border-white/10"></div>
+               <div className="w-64 h-2 bg-white/10 mx-auto rounded-full blur-sm"></div>
             </div>
+          </div>
+          
+          <div className="flex flex-wrap justify-center gap-4 md:gap-6 max-w-6xl mx-auto">
+            {awards.map((award, idx) => (
+              <div key={idx} className="flex items-center gap-4 px-6 py-4 glass rounded-[20px] border border-white/5 text-[9px] font-black uppercase tracking-[0.3em] text-white/30 hover:text-white hover:border-blue-500/50 hover:scale-[1.03] transition-all cursor-default shadow-xl group">
+                <div className="text-blue-500/50 group-hover:text-blue-500 transition-colors drop-shadow-[0_0_10px_rgba(37,99,235,0.4)]">{award.icon}</div>
+                {award.label}
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -1391,6 +1517,9 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
           <ProfitLeakDiagnostic />
         </div>
       </section>
+
+      {/* Migration Visualizer */}
+      <MigrationVisualizer />
 
       {/* Floating Chat Widget */}
       <div className="fixed bottom-12 right-12 z-[500] flex flex-col items-end gap-6">
@@ -1543,26 +1672,67 @@ const ShowCase: React.FC<{ onLaunch: () => void }> = ({ onLaunch }) => {
                 ))}
              </div>
           </div>
-
-          <footer className="border-t border-white/10 pt-24 pb-20 flex flex-col gap-12">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-12">
-               <div className="flex flex-col gap-4">
-                 <div className="flex items-center gap-3">
-                   <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-black text-xs">R</div>
-                   <span className="text-[14px] font-black text-white uppercase tracking-[0.4em]">REPAIR OS</span>
-                 </div>
-                 <span className="text-[10px] font-black text-white/20 uppercase tracking-[0.4em]">DAEMONCORE® ALPHA SYSTEMS // {PATENT_NOTICE}</span>
-               </div>
-               <div className="flex flex-wrap items-center gap-10 md:gap-16">
-                 <button onClick={() => setPrivacyOpen(true)} className="text-[11px] font-black text-white/30 hover:text-blue-400 uppercase tracking-[0.3em] transition-colors">Privacy Policy</button>
-                 <a href={LEGAL_URL} target="_blank" rel="noopener noreferrer" className="text-[11px] font-black text-white/30 hover:text-indigo-400 uppercase tracking-[0.3em] transition-colors">Legal</a>
-                 <div className="h-6 w-px bg-white/10 hidden md:block"></div>
-                 <div className="text-[10px] font-black text-white/10 uppercase tracking-[0.3em]">© 2025 ALL RIGHTS RESERVED</div>
-               </div>
-            </div>
-          </footer>
         </div>
       </section>
+
+      {/* Footer Section */}
+      <footer className="w-full bg-black border-t border-white/10 pt-32 pb-20 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-20 mb-32">
+            <div className="flex flex-col gap-8">
+              <div className="flex flex-col group cursor-pointer">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-2xl bg-blue-600 flex items-center justify-center text-white font-black text-xl shadow-[0_0_30px_rgba(37,99,235,0.4)]">R</div>
+                  <span className="text-3xl font-black tracking-tighter uppercase leading-none text-white">REPAIR<span className="text-blue-500">OS</span></span>
+                </div>
+                <span className="text-[9px] font-black uppercase tracking-[0.5em] text-white/20 mt-6 leading-relaxed">
+                  {PATENT_NOTICE} <br/> DAEMONCORE® ALPHA SYSTEMS
+                </span>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-8">
+              <h4 className="text-[11px] font-black text-white uppercase tracking-[0.5em] mb-4">SYSTEM ACCESS</h4>
+              <nav className="flex flex-col gap-4 text-[11px] font-black uppercase tracking-[0.3em] text-white/40">
+                <a href="#everything" className="hover:text-blue-400 transition-colors">OS Membership</a>
+                <a href="#hijack" className="hover:text-blue-400 transition-colors">Hardware Hijack</a>
+                <a href="#unlock" className="hover:text-blue-400 transition-colors">Proprietary Core</a>
+                <a href="#nexus" className="hover:text-blue-400 transition-colors">Nexus Ecosystem</a>
+              </nav>
+            </div>
+
+            <div className="flex flex-col gap-8">
+              <h4 className="text-[11px] font-black text-white uppercase tracking-[0.5em] mb-4">LEGAL PROTOCOL</h4>
+              <nav className="flex flex-col gap-4 text-[11px] font-black uppercase tracking-[0.3em] text-white/40">
+                <button onClick={() => setPrivacyOpen(true)} className="text-left hover:text-blue-400 transition-colors">Privacy Framework</button>
+                <a href={LEGAL_URL} target="_blank" rel="noopener noreferrer" className="hover:text-blue-400 transition-colors">Terms of Engagement</a>
+                <a href="#comparison" className="hover:text-blue-400 transition-colors">Benchmark Audit</a>
+              </nav>
+            </div>
+
+            <div className="flex flex-col gap-8">
+              <h4 className="text-[11px] font-black text-white uppercase tracking-[0.5em] mb-4">COMMAND SUPPORT</h4>
+              <div className="flex flex-col gap-6">
+                <a href={`mailto:${SUPPORT_EMAIL}`} className="text-[11px] font-black text-blue-400 uppercase tracking-[0.3em] hover:text-white transition-colors flex items-center gap-3">
+                  <Mail size={16} /> {SUPPORT_EMAIL}
+                </a>
+                <div className="pt-8 border-t border-white/5">
+                   <div className="text-[10px] font-black text-white/10 uppercase tracking-[0.4em]">© 2023 ALL RIGHTS RESERVED</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div className="flex flex-col md:flex-row justify-between items-center pt-20 border-t border-white/5 gap-10">
+             <div className="flex gap-10">
+                <div className="w-3 h-3 rounded-full bg-blue-600 animate-pulse"></div>
+                <div className="w-3 h-3 rounded-full bg-white/5"></div>
+                <div className="w-3 h-3 rounded-full bg-white/5"></div>
+             </div>
+             <div className="text-[9px] font-black text-white/5 uppercase tracking-[1em]">SYSTEM STABLE // NO ERRORS DETECTED</div>
+          </div>
+        </div>
+      </footer>
       
       {lbImage && <Lightbox src={lbImage} onClose={() => setLbImage(null)} />}
     </div>
